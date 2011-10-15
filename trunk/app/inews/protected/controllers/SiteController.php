@@ -29,6 +29,26 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
+		// echo date('Y-m-d H:i:s', strtotime('Fri, 14 Oct 2011 11:25:36 GMT'));
+		/*
+		$news = new News;
+						
+		$news->attributes = array(
+			'title' => 'test',
+			'headline' => 'test',
+			'thumbnail_url' => 'test',
+			'published_time' => 'test',
+			'content' => 'test',
+			'original_url' => 'test',
+			'category_id' => 1,
+			'created_time' => 'test'			
+		);
+		if (!$news->save()) echo 'not saved';*/
+		
+		$crawler = new Crawler();
+		// $crawler->getVnexpress();
+		$crawler->getDantri();
+		
 		$this->render('index');
 	}
 
