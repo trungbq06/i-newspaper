@@ -20,14 +20,14 @@ return array(
 
 	'modules'=>array(
 		// uncomment the following to enable the Gii tool
-		/*
+		
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-			'password'=>'Enter Your Password Here',
+			'password'=>'1',
 		 	// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters'=>array('127.0.0.1','::1'),
+			// 'ipFilters'=>array('127.0.0.1','::1'),
 		),
-		*/
+		
 	),
 
 	// application components
@@ -37,29 +37,26 @@ return array(
 			'allowAutoLogin'=>true,
 		),
 		// uncomment the following to enable URLs in path-format
-		/*
+		
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+			'showScriptName' => false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
-		*/
-		'db'=>array(
-			'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
-		),
 		// uncomment the following to use a MySQL database
-		/*
+		
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=testdrive',
+			'connectionString' => 'mysql:host=ilive.vn;dbname=inews',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '',
+			'password' => 'ilive123312',
 			'charset' => 'utf8',
 		),
-		*/
+		
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
             'errorAction'=>'site/error',
@@ -86,5 +83,27 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+		'site' => array(
+			'vnexpress' => array(
+				1		=> 'http://vnexpress.net/rss/gl/trang-chu.rss',
+				2		=> 'http://vnexpress.net/rss/gl/xa-hoi.rss',
+				3		=> 'http://vnexpress.net/rss/gl/the-gioi.rss',
+				4		=> 'http://vnexpress.net/rss/gl/kinh-doanh.rss',
+				5		=> 'http://vnexpress.net/rss/gl/van-hoa.rss',
+				6		=> 'http://vnexpress.net/rss/gl/the-thao.rss',
+				7		=> 'http://vnexpress.net/rss/gl/phap-luat.rss',
+				8		=> 'http://vnexpress.net/rss/gl/doi-song.rss',
+				9		=> 'http://vnexpress.net/rss/gl/khoa-hoc.rss',
+				10		=> 'http://vnexpress.net/rss/gl/vi-tinh.rss',
+				11		=> 'http://vnexpress.net/rss/gl/oto-xe-may.rss',
+				12		=> 'http://vnexpress.net/rss/gl/ban-doc-viet.rss',
+				12		=> 'http://vnexpress.net/rss/gl/ban-doc-viet-tam-su.rss',
+				12		=> 'http://vnexpress.net/rss/gl/cuoi.rss'
+			),
+			'dantri'	=> array(
+				1		=> 'http://dantri.com.vn/trangchu.rss',
+				2		=> 'http://dantri.com.vn/xa-hoi.rss'
+			)
+		)
 	),
 );
