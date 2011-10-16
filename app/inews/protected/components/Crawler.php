@@ -69,6 +69,7 @@ class Crawler {
      */
 
     public function getContent($content, $open, $close, $getFirst = false) {
+		if (empty($content)) return false;
         $found = true;
         $result = array();
         $index = 0;
@@ -140,7 +141,9 @@ class Crawler {
         return $this->removeExtraSpaces(str_replace("-->", "", $content));
     }
 	
-	public function stripTags($content, $open, $close) {
+	public function stripContent($content, $open, $close) {
+		if (empty($content)) return '';
+		
 		$toDel = $this->getContent($content, $open, $close, true);
 		$content = str_replace($toDel, '', $content);
 		
@@ -152,58 +155,78 @@ class Crawler {
 		$vnexpress = $params['site']['vnexpress'];
 		
 		foreach ($vnexpress as $c => $link) {
+			// echo $link.'<br/>';
 			$content = $this->getURLContents($link);
 			$items = $this->getContent($content, '<item>', '</item>');
-			foreach ($items as $item) {
+			// $i = 0;
+			// echo 'Total ' . count($items);
+			foreach ($items as $item) {				
+				// echo 'New i = ' . $i . '<br/>';
 				$data = array();
 				$data['title'] = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
-				$data['headline'] = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
-				$data['thumbnail_url'] = $this->getContent($data['headline'], '<IMG SRC="', '">', true) . '">';
+				$headline = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
+				$data['thumbnail_url'] = '';
+				$thumbnail = $this->getContent($headline, '<IMG SRC="', '">', true);
+				if (!empty($thumbnail))
+					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+				// $detailLink = 'http://ebank.vnexpress.net/gl/ebank/thi-truong/2011/10/ty-gia-ngan-hang-va-cho-den-di-nguoc-dong-1/';
 				$detail = $this->getURLContents($detailLink);
-				$tmp = $this->getContent($detail, '<div class="content">', '</div>', true);
+				// echo $detail;
+				$startTag = '<div class="content">';
+				if (strstr($detail, 'cpms_content="true">'))
+					$startTag = 'cpms_content="true">';
+				$tmp = $this->getContent($detail, $startTag, '</div>', true);
 				$tmp = str_replace('src="/', 'src="http://vnexpress.net/', $tmp);
+				// echo $tmp;				
+				// print_r($data);
+				// die();
 				if (!empty($tmp)) {
 					// $toDel = $this->getContent($tmp, '<BR>', '</H2>', true);
 					// echo 'Todel ' . $toDel;
 					// $tmp = str_replace($toDel, '', $tmp);
-					$tmp = $this->stripTags($tmp, '<BR>', '</H2>');
+					$tmp = $this->stripContent($tmp, '<BR>', '</H2>');
 					$toDel = $this->getContent($tmp, 'ShowTopicJS', ')', true);
 					$toDel = 'ShowTopicJS ' . $toDel . ');';
 					$tmp = str_replace($toDel, '', $tmp);
-					$tmp = $this->stripTags($tmp, '<TABLE cellSpacing=0 cellPadding=3 width="60%" align=center bgColor=#ffff80 border=0>', '</TABLE>');
-					$tmp = $this->stripTags($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
-					$tmp = $this->stripTags($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffcc border=1>', '</TABLE>');
-					$tmp = $this->stripTags($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffbb border=1>', '</TABLE>');
-					$tmp = $this->stripTags($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
+					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width="60%" align=center bgColor=#ffff80 border=0>', '</TABLE>');
+					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
+					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffcc border=1>', '</TABLE>');
+					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffbb border=1>', '</TABLE>');
+					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
 					
+					$data['headline'] = '';
+					$headline = $this->getContent($tmp, '<H2 class=Lead>', '</H2>', true);
+					if (!empty($headline))
+						$data['headline'] = $headline;
 					$data['content'] = $tmp;
 					$data['original_url'] = $detailLink;
 					$data['category_id'] = $c;
 					$data['site_id'] = 1;
 					$data['created_time'] = date('Y-m-d H:i:s');
 					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-					
+					// print_r($data);die();
 					$tmp = strip_tags($tmp, '<img><p><br><table><tr><td><div><h1><h2>');
 					// echo $tmp . '<br/><br/>';
 					if (!News::isExist(1, $detailLink)) {
+						// $i++;
 						$news = new News;
-						
 						$news->attributes = $data;
-						
-						/*$news->title = $data['title'];
-						$news->headline = $data['headline'];
-						$news->thumbnail_url = $data['thumbnail_url'];
-						$news->content = $tmp;
-						$news->original_url = $detailLink;
-						$news->category_id = $c;
-						$news->published_time = date('Y-m-d H:i:s', strtotime($data['published_time']));
-						$news->created_time = date('Y-m-d H:i:s');*/
 						try {
-							// var_dump($news);
-							if (!$news->save(false)) {
-								echo 'cannot save';
+							if ($news->save(false)) {
+								//Add first news to featured
+								// echo 'I = ' . $i . '<br/>';
+								if ($c == 1) {
+									// echo 'Add featured<br/>';
+									$lastId = $news->id;
+									$newsFeatured = new NewsFeatured;
+									$newsFeatured->attributes = array(
+										'news_id' 		=> $lastId,
+										'created_time' 	=> date('Y-m-d H:i:s')
+									);
+									$newsFeatured->save(false);
+								}
 							}
 						} catch (Exception $ex) {
 							var_dump($ex);
@@ -223,21 +246,81 @@ class Crawler {
 		foreach ($vnexpress as $c => $link) {
 			$content = $this->getURLContents($link);
 			$items = $this->getContent($content, '<item>', '</item>');
-			
+			// $i = 0;
+			// echo $link.'<br/>';
 			foreach ($items as $item) {
-				echo $item;die();
+				// echo $item;
 				$data = array();
 				$data['title'] = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
-				$data['headline'] = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
-				$data['thumbnail_url'] = $this->getContent($data['headline'], 'ImgFilePath=/', '&width', true);
+				$headline = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
+				// die($data['headline']);
+				$data['thumbnail_url'] = '';
+				$thumbnail = $this->getContent($headline, 'ImgFilePath=/', '&width', true);
+				if (!empty($thumbnail))
+					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
-				$detailLink = $this->getContent($item, '<link><![CDATA[', '</link>', true);
+				$detailLink = $this->getContent($item, '<link><![CDATA[', ']]></link>', true);
+				// echo $detailLink . '<br/>';
+				// $detailLink = 'http://dantri.com.vn/c702/s702-527697/top-ba-sao-nhi-va-cau-chuyen-doi-ban-tho-rua.htm';
 				$detail = $this->getURLContents($detailLink);
-				$tmp = $this->getContent($detail, '<div class="fon31 mt1">', "id='hidNextUsing'/></div>", true);
+				// echo $detail;
+				$tmp = $this->getContent($detail, '<div class="fon31 mt1">', "id='hidNextUsing'", true);
+				if (empty($tmp))
+					$tmp = $this->getContent($detail, 'ctl00_IDContent_BlogDetail1_hplTitle">', "id='hidNextUsing'", true);
+				if (empty($tmp))
+					$tmp = $this->getContent($detail, 'ctl00_IDContent_Tin_Chi_Tiet">', "id='hidNextUsing'", true);
+				$tmp .= "id='hidNextUsing'/>";
+				$startTag = '<div class="fon33 mt1">';
+				if (strstr($detail, '<div class="blogsapo">'))
+					$startTag = '<div class="blogsapo">';
+					
+				$data['headline'] = '';
+				$headline = $this->getContent($tmp, $startTag, '</div>', true);
+				if (!empty($headline))
+					$data['headline'] = $headline;
+				$data['headline'] = $this->stripContent($data['headline'], '<br>', '</a>');
+				// print_r($data);die();
+				// echo $tmp;die();
 				// $tmp = str_replace('src="/', 'src="http://vnexpress.net/', $tmp);
 				if (!empty($tmp)) {
-					
+					$tmp = $this->stripContent($tmp,'<br><a href=', '</b></a></div>');
+					$tmp = str_replace('<br><a href=</b></a>', '', $tmp);
+					// echo $tmp;
+					$data['content'] = $tmp;
+					$data['original_url'] = $detailLink;
+					$data['category_id'] = $c;
+					$data['site_id'] = 2;
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					// print_r($data);die();
+					$tmp = strip_tags($tmp, '<img><p><br><table><tr><td><div><h1><h2>');
+					// echo $tmp . '<br/><br/>';
+					if (!News::isExist(2, $detailLink)) {
+						// $i++;
+						$news = new News;
+						$news->attributes = $data;
+						try {
+							if ($news->save(false)) {
+								//Add first news to featured
+								if ($c == 1) {
+									// $lastId = Yii::app()->db->getLastInsertID();
+									$lastId = $news->id;
+									// die($lastId);
+									$newsFeatured = new NewsFeatured;
+									$newsFeatured->attributes = array(
+										'news_id' 		=> $lastId,
+										'created_time' 	=> date('Y-m-d H:i:s')
+									);
+									$newsFeatured->save(false);
+								}
+							}
+						} catch (Exception $ex) {
+							var_dump($ex);
+						}
+						// die('saved');
+					}
 				}
+				// die();
 			}
 		}
 	}

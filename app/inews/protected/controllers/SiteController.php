@@ -46,8 +46,8 @@ class SiteController extends Controller
 		if (!$news->save()) echo 'not saved';*/
 		
 		$crawler = new Crawler();
-		// $crawler->getVnexpress();
-		$crawler->getDantri();
+		$crawler->getVnexpress();
+		// $crawler->getDantri();
 		
 		$this->render('index');
 	}
