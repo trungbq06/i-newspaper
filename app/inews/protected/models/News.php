@@ -129,13 +129,14 @@ class News extends CActiveRecord
 		return !empty($news) ? true : false;
 	}
 	
-	public function getLatest($page = 1, $limit = 20) {
+	public function getLatest($siteId, $page = 1, $limit = 20) {
 		$params = Yii::app()->params;
 		
 		$offset = ($page - 1) * $limit;
 		$query = Yii::app()->db->createCommand()
 			->select('*')
 			->from('news')
+			->where('site_id = ' . $siteId)
 			->order('published_time DESC')
 			->limit($params['limit'])
 			->offset($offset);
