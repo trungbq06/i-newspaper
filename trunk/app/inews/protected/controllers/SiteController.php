@@ -45,10 +45,10 @@ class SiteController extends Controller
 		);
 		if (!$news->save()) echo 'not saved';*/
 		
-		$crawler = new Crawler();
-		$crawler->getVnexpress();
+		// $crawler = new Crawler();
+		// $crawler->getVnexpress();
 		// $crawler->getDantri();
-		
+		die('Hello world');
 		$this->render('index');
 	}
 
