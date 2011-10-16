@@ -37,7 +37,7 @@ return array(
 			'allowAutoLogin'=>true,
 		),
 		// uncomment the following to enable URLs in path-format
-		
+		/**/
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'showScriptName' => false,
@@ -46,7 +46,7 @@ return array(
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
-		),
+		),/**/
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
@@ -83,6 +83,7 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+		'limit'		=> 20,
 		'site' => array(
 			'vnexpress' => array(
 				1		=> 'http://vnexpress.net/rss/gl/trang-chu.rss',
@@ -97,12 +98,30 @@ return array(
 				10		=> 'http://vnexpress.net/rss/gl/vi-tinh.rss',
 				11		=> 'http://vnexpress.net/rss/gl/oto-xe-may.rss',
 				12		=> 'http://vnexpress.net/rss/gl/ban-doc-viet.rss',
-				12		=> 'http://vnexpress.net/rss/gl/ban-doc-viet-tam-su.rss',
-				12		=> 'http://vnexpress.net/rss/gl/cuoi.rss'
+				13		=> 'http://vnexpress.net/rss/gl/ban-doc-viet-tam-su.rss',
+				14		=> 'http://vnexpress.net/rss/gl/cuoi.rss'
 			),
 			'dantri'	=> array(
 				1		=> 'http://dantri.com.vn/trangchu.rss',
-				2		=> 'http://dantri.com.vn/xa-hoi.rss'
+				2		=> 'http://dantri.com.vn/xa-hoi.rss',
+				3		=> 'http://dantri.com.vn/Thegioi.rss',
+				6		=> 'http://dantri.com.vn/The-Thao.rss',
+				16		=> 'http://dantri.com.vn/giaoduc-khuyenhoc.rss',
+				17		=> 'http://dantri.com.vn/tamlongnhanai.rss',
+				4		=> 'http://dantri.com.vn/kinhdoanh.rss',
+				18		=> 'http://dantri.com.vn/giaitri.rss',
+				19		=> 'http://dantri.com.vn/skphapluat.rss',
+				20		=> 'http://dantri.com.vn/nhipsongtre.rss',
+				21		=> 'http://dantri.com.vn/tinhyeu-gioitinh.rss',
+				22		=> 'http://dantri.com.vn/suckhoe.rss',
+				23		=> 'http://dantri.com.vn/cong-nghe.rss',
+				24		=> 'http://dantri.com.vn/otoxemay.rss',
+				30		=> 'http://dantri.com.vn/diendan-bandoc.rss',
+				25		=> 'http://dantri.com.vn/dien-dan.rss',
+				26		=> 'http://dantri.com.vn/chuyenla.rss',
+				27		=> 'http://dantri.com.vn/blog.rss',
+				28		=> 'http://dantri.com.vn/nghe-nghiep.rss',
+				29		=> 'http://dantri.com.vn/games_asp_.rss',
 			)
 		)
 	),
