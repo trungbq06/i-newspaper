@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('Asian/Bangkok');
+date_default_timezone_set('Asia/Bangkok');
 // change the following paths if necessary
 $yii=dirname(__FILE__).'/../../framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
