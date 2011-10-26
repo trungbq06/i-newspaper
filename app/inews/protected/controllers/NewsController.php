@@ -95,5 +95,33 @@ class NewsController extends Controller
 		
 		echo json_encode($data);
 	}
+    
+	public function actionNext() {
+		$nId = isset($_GET['id']) ? intval($_GET['id']) : null;
+		$data = array(
+			'error'		=> 0,
+			'news'		=> array(
+				
+			)
+		);
+		if ($nId) {
+			$news = News::model()->findByPk($nId);
+			// var_dump($news);
+			if ($news) {
+				$data['news'] = array(
+					'id'				=> $news->id,
+					'title'				=> $news->title,
+					'thumbnail_url'		=> $news->thumbnail_url,
+					'headline'			=> $news->headline,
+					'created_time'		=> date('d/m/Y H:i:s', strtotime($news->created_time)),
+					'published_time'	=> date('d/m/Y H:i:s', strtotime($news->published_time)),
+					'content'			=> $news->content,
+					'category_id'		=> $news->category_id,
+				);
+			}
+		}
+		
+		echo json_encode($data);
+	}
 
 }

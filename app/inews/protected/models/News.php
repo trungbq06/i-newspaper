@@ -163,4 +163,22 @@ class News extends CActiveRecord
 		
 		return $news;
 	}
+    
+	public function getNext($siteId, $newsId, $page = 1, $limit = 20) {
+		$params = Yii::app()->params;
+		
+		$offset = ($page - 1) * $limit;
+		$query = Yii::app()->db->createCommand()
+			->select('n.*')
+			->from('news_featured nf')
+			->leftJoin('news n', 'n.id = nf.news_id')
+			->where('n.site_id = ' . $siteId)
+			->order('nf.created_time DESC')
+			->limit($params['limit'])
+			->offset($offset);
+		$news = $query->queryAll();
+		// var_dump($news);
+		
+		return $news;
+	}
 }

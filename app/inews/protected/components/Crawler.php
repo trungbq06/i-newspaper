@@ -104,8 +104,8 @@ class Crawler {
         }
         curl_setopt($handle, CURLOPT_HEADER, false);
         curl_setopt($handle, CURLOPT_FAILONERROR, true);  // this works
-        // curl_setopt($handle, CURLOPT_HTTPHEADER, Array("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.15) Gecko/20080623 Firefox/2.0.0.15")); // request as if Firefox
-        curl_setopt($handle, CURLOPT_HTTPHEADER, Array("Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16")); // request as if Firefox
+        curl_setopt($handle, CURLOPT_HTTPHEADER, Array("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.15) Gecko/20080623 Firefox/2.0.0.15")); // request as if Firefox
+        // curl_setopt($handle, CURLOPT_HTTPHEADER, Array("Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16")); // request as if Firefox
         curl_setopt($handle, CURLOPT_NOBODY, true);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, false);
         $connectable = curl_exec($handle);
@@ -157,7 +157,9 @@ class Crawler {
 		foreach ($vnexpress as $c => $link) {
 			// echo $link.'<br/>';
 			$content = $this->getURLContents($link);
+            // echo $content;
 			$items = $this->getContent($content, '<item>', '</item>');
+            // die(var_dump($items));
 			// $i = 0;
 			// echo 'Total ' . count($items);
 			foreach ($items as $item) {				
@@ -171,6 +173,9 @@ class Crawler {
 					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+                // $detailLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/10/thu-mon-ghi-ban-bang-cu-phat-bong/';
+                // $detailLink = 'http://vnexpress.net/gl/kinh-doanh/quoc-te/2011/10/can-canh-khach-san-tot-nhat-the-gioi/';
+                // $detailLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/';
 				// $detailLink = 'http://ebank.vnexpress.net/gl/ebank/thi-truong/2011/10/ty-gia-ngan-hang-va-cho-den-di-nguoc-dong-1/';
 				$detail = $this->getURLContents($detailLink);
 				// echo $detail;
@@ -187,6 +192,7 @@ class Crawler {
 					// echo 'Todel ' . $toDel;
 					// $tmp = str_replace($toDel, '', $tmp);
 					$tmp = $this->stripContent($tmp, '<BR>', '</H2>');
+					$tmp = $this->stripContent($tmp, '<script', '</script>');
 					$toDel = $this->getContent($tmp, 'ShowTopicJS', ')', true);
 					$toDel = 'ShowTopicJS ' . $toDel . ');';
 					$tmp = str_replace($toDel, '', $tmp);
@@ -196,6 +202,46 @@ class Crawler {
 					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffbb border=1>', '</TABLE>');
 					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
 					
+                    if (strstr($tmp, '<A href=')) {
+                        $newLink = $this->getContent($tmp, '<A href=', '</A>');
+                        // var_dump($newLink);die();
+                        if (!empty($newLink)) {
+                            foreach ($newLink as $oneLink) {
+                                $linkToReplace = $oneLink;
+                                $oneLink = $this->getContent($oneLink, '"', '"', true);
+                                // echo $oneLink;
+                                // $oneLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/page_3.asp';
+                                $tmpContent = $this->getURLContents($oneLink);
+                                // die($tmpContent);
+                                if (strstr($tmpContent, 'createPlayerEmbed')) {
+                                    // die('come');
+                                    $playerContent = $this->getContent($tmpContent, 'createPlayerEmbed(', ')', true);
+                                    $params = explode(',', $playerContent);
+                                    // var_dump($params);
+                                    $xmlPath = 'http://vnexpress.net' . urldecode("%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D" . $params[0] . "%26f%3D" . $params[4]);
+                                    $videoInfo = $this->getURLContents($xmlPath);
+                                    $videoUrl = $this->getContent($videoInfo, 'link="', '"', true);
+                                    $videoThumbnail = $this->getContent($videoInfo, 'descriptionImage="', '"', true);
+                                    $videoTag = '<video poster="' . $videoThumbnail . '" controls>
+                                    <source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
+                                    </video>';
+                                    // die('<A href=' . $linkToReplace . '</A>');
+                                    $tmp = str_replace('<A href=' . $linkToReplace . '</A>', $videoTag, $tmp);
+                                } else {
+                                    $startTag = '<div class="content">';
+                                    if (strstr($tmpContent, 'cpms_content="true">'))
+                                        $startTag = 'cpms_content="true">';
+                                    $concatContent .= $this->getContent($tmpContent, $startTag, '</div>', true);
+                                    $concatContent = str_replace('src="/', 'src="http://vnexpress.net/', $concatContent);
+                                    // die($concatContent);
+                                    // die('<A href=' . $linkToReplace . '</A>');
+                                    // die($tmp);
+                                    $tmp = str_replace('<A href=' . $linkToReplace . '</A>', $concatContent, $tmp);
+                                }                                        
+                            }
+                        }
+                    }
+                    
 					$data['headline'] = '';
 					$headline = $this->getContent($tmp, '<H2 class=Lead>', '</H2>', true);
 					if (!empty($headline))
@@ -207,7 +253,6 @@ class Crawler {
 					$data['created_time'] = date('Y-m-d H:i:s');
 					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
 					// print_r($data);die();
-					$tmp = strip_tags($tmp, '<img><p><br><table><tr><td><div><h1><h2>');
 					// echo $tmp . '<br/><br/>';
 					if (!News::isExist(1, $detailLink)) {
 						// $i++;
