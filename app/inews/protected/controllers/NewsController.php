@@ -67,6 +67,26 @@ class NewsController extends Controller
 		
 		echo json_encode($data);
 	}
+    
+    public function actionCat() {
+        $this->layout = false;
+        $cId = isset($_GET['id']) ? $_GET['id'] : null;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $data = array(
+            'error'     => 0,
+            'news'      => null
+        );        
+        $news = array();
+        if ($cId) {
+            $news = News::model()->getVideoCat($cId, $page, $limit);
+        }
+        
+        if (!empty($news))
+			$data['news'] = $news;
+		
+		echo json_encode($data);
+    }
 	
 	public function actionDetail() {
 		$nId = isset($_GET['id']) ? intval($_GET['id']) : null;

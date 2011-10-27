@@ -25,8 +25,11 @@ class Crawler {
             CURLOPT_ENCODING => "gzip",
         );
         curl_setopt_array($this->_curl, $options);
-
-        $contents = curl_exec($this->_curl);
+        try {
+            $contents = curl_exec($this->_curl);
+        } catch (Exception $ex) {
+            Yii::log($ex->getMessage());
+        }
 
         return $contents;
     }
@@ -141,10 +144,18 @@ class Crawler {
         return $this->removeExtraSpaces(str_replace("-->", "", $content));
     }
 	
-	public function stripContent($content, $open, $close) {
+    /**
+    * strip content in open - close tag
+    * @param true strip content with open - content - close
+    */
+	public function stripContent($content, $open, $close, $all = false) {
 		if (empty($content)) return '';
 		
 		$toDel = $this->getContent($content, $open, $close, true);
+        if ($all) {
+            $toDel = $open . $toDel . $close;
+            // echo $toDel.'<br/>';
+        }
 		$content = str_replace($toDel, '', $content);
 		
 		return $content;
@@ -173,6 +184,7 @@ class Crawler {
 					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+                // $detailLink = 'http://vnexpress.net/gl/vi-tinh/san-pham-moi/2011/10/nhung-cai-tien-noi-bat-nhat-cua-nen-tang-android-4-0/';
                 // $detailLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/10/thu-mon-ghi-ban-bang-cu-phat-bong/';
                 // $detailLink = 'http://vnexpress.net/gl/kinh-doanh/quoc-te/2011/10/can-canh-khach-san-tot-nhat-the-gioi/';
                 // $detailLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/';
@@ -192,7 +204,7 @@ class Crawler {
 					// echo 'Todel ' . $toDel;
 					// $tmp = str_replace($toDel, '', $tmp);
 					$tmp = $this->stripContent($tmp, '<BR>', '</H2>');
-					$tmp = $this->stripContent($tmp, '<script', '</script>');
+					// $tmp = $this->stripContent($tmp, '<script', '</script>');
 					$toDel = $this->getContent($tmp, 'ShowTopicJS', ')', true);
 					$toDel = 'ShowTopicJS ' . $toDel . ');';
 					$tmp = str_replace($toDel, '', $tmp);
@@ -201,6 +213,11 @@ class Crawler {
 					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffcc border=1>', '</TABLE>');
 					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffbb border=1>', '</TABLE>');
 					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
+                    $strip = $this->getContent($tmp, 'width=', ' ');
+                    foreach ($strip as $toStrip) {
+                        $tmp = str_replace('width='.$toStrip, 'width=320', $tmp);
+                    }
+                    $tmp = $this->stripContent($tmp, 'height=', ' ', true);
 					
                     if (strstr($tmp, '<A href=')) {
                         $newLink = $this->getContent($tmp, '<A href=', '</A>');
@@ -211,7 +228,12 @@ class Crawler {
                                 $oneLink = $this->getContent($oneLink, '"', '"', true);
                                 // echo $oneLink;
                                 // $oneLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/page_3.asp';
+                                // $oneLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/10/thu-mon-ghi-ban-bang-cu-phat-bong/page_1.asp';
                                 $tmpContent = $this->getURLContents($oneLink);
+                                if (empty($tmpContent)) {
+                                    $oneLink = str_replace('/Page', '/page', $oneLink);
+                                    $tmpContent = $this->getURLContents($oneLink);
+                                }
                                 // die($tmpContent);
                                 if (strstr($tmpContent, 'createPlayerEmbed')) {
                                     // die('come');
@@ -246,13 +268,18 @@ class Crawler {
 					$headline = $this->getContent($tmp, '<H2 class=Lead>', '</H2>', true);
 					if (!empty($headline))
 						$data['headline'] = $headline;
+                    
+                    $tmp = $this->stripContent($tmp, '<H1 ', '</H1>', true);
+					$tmp = $this->stripContent($tmp, '<H2 ', '</H2>', true);
+                    $tmp = str_replace('H1', 'H3', $tmp);                    
+                    $tmp = str_replace('H2', 'H3', $tmp);
 					$data['content'] = $tmp;
 					$data['original_url'] = $detailLink;
 					$data['category_id'] = $c;
 					$data['site_id'] = 1;
 					$data['created_time'] = date('Y-m-d H:i:s');
 					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-					// print_r($data);die();
+					print_r($data);die();
 					// echo $tmp . '<br/><br/>';
 					if (!News::isExist(1, $detailLink)) {
 						// $i++;
@@ -276,7 +303,7 @@ class Crawler {
 						} catch (Exception $ex) {
 							var_dump($ex);
 						}
-						// die('saved');
+						die('saved');
 					}
 					// die('come');
 				}

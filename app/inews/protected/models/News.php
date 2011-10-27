@@ -163,6 +163,23 @@ class News extends CActiveRecord
 		
 		return $news;
 	}
+	
+	public function getVideoCat($categoryId, $page = 1, $limit = 20) {
+		$params = Yii::app()->params;
+		
+		$offset = ($page - 1) * $limit;
+		$query = Yii::app()->db->createCommand()
+			->select('n.*')
+			->from('news n')
+			->where('n.category_id = ' . $categoryId)
+			->order('n.created_time DESC')
+			->limit($params['limit'])
+			->offset($offset);
+		$news = $query->queryAll();
+		var_dump($news);
+		
+		return $news;
+	}
     
 	public function getNext($siteId, $newsId, $page = 1, $limit = 20) {
 		$params = Yii::app()->params;
