@@ -80,7 +80,7 @@ class NewsController extends Controller
 			$news = News::model()->findByPk($nId);
 			// var_dump($news);
 			if ($news) {
-				$data['news'] = array(
+				$data['news'][] = array(
 					'id'				=> $news->id,
 					'title'				=> $news->title,
 					'thumbnail_url'		=> $news->thumbnail_url,
