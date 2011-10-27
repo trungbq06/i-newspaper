@@ -70,6 +70,7 @@ class NewsController extends Controller
     
     public function actionCat() {
         $this->layout = false;
+        $params = Yii::app()->params;
         $cId = isset($_GET['id']) ? $_GET['id'] : null;
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
