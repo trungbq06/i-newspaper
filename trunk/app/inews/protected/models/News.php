@@ -179,7 +179,7 @@ class News extends CActiveRecord
 			->limit($params['limit'])
 			->offset($offset);
 		$news = $query->queryAll();
-		var_dump($news);
+		// var_dump($news);
 		
 		return $news;
 	}
