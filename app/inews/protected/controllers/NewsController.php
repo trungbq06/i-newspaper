@@ -113,7 +113,8 @@ class NewsController extends Controller
 				);
 			}
 		}
-		
+        echo $news->content;die();
+		// var_dump($data);die();
 		echo json_encode($data);
 	}
     
