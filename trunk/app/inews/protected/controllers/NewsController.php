@@ -36,7 +36,6 @@ class NewsController extends Controller
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 		$limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
 		$siteId = isset($_GET['sid']) ? intval($_GET['sid']) : 1;
-		
 		$news = News::model()->getLatest($siteId, $page, $limit);
 		$data = array(
 			'error'		=> 0,
@@ -157,7 +156,7 @@ class NewsController extends Controller
     
     public function actionSearch() {
         $params = Yii::app()->params;
-        $keyword = isset($_GET['k']) ? Utility::safeInput($_GET['k']) : null;
+        $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
         
         $data = array(
