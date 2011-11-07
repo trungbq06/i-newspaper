@@ -145,8 +145,14 @@ class News extends CActiveRecord
 			->offset($offset);
 		$news = $query->queryAll();
 		// var_dump($news);
+        
+        $count = Yii::app()->db->createCommand()
+            ->select('COUNT(*)')
+			->from('news')
+			->where('site_id = ' . $siteId)
+            ->queryScalar();
 		
-		return $news;
+		return array('data' => $news, 'total' => $count);
 	}
 	
 	public function getFeatured($siteId, $page = 1, $limit = 20) {
@@ -163,8 +169,15 @@ class News extends CActiveRecord
 			->offset($offset);
 		$news = $query->queryAll();
 		// var_dump($news);
+        
+        $count = Yii::app()->db->createCommand()
+            ->select('COUNT(n.*)')
+			->from('news_featured nf')
+			->leftJoin('news n', 'n.id = nf.news_id')
+			->where('n.site_id = ' . $siteId)
+            ->queryScalar();
 		
-		return $news;
+		return array('data' => $news, 'total' => $count);
 	}
 	
 	public function getVideoCat($categoryId, $page = 1, $limit = 20) {
@@ -180,8 +193,14 @@ class News extends CActiveRecord
 			->offset($offset);
 		$news = $query->queryAll();
 		// var_dump($news);
+        
+        $count = Yii::app()->db->createCommand()
+            ->select('COUNT(n.*)')
+			->from('news n')
+			->where('n.category_id = ' . $categoryId)
+            ->queryScalar();
 		
-		return $news;
+		return array('data' => $news, 'total' => $count);
 	}
     
 	public function getNext($siteId, $newsId, $page = 1, $limit = 20) {
@@ -201,4 +220,23 @@ class News extends CActiveRecord
 		
 		return $news;
 	}
+    
+    public function searchText($keyword, $page = 1, $limit = 20) {
+        $query = Yii::app()->db->createCommand()
+            ->select("title, headline, content, thumbnail_url, category_id, published_time, created_time, MATCH(title_en) AGAINST ('$keyword') AS score")
+            ->from('news')
+            ->where("MATCH(title_en) AGAINST('$keyword')")
+            ->order("score DESC")
+            ->limit($limit)
+            ->offset($offset);
+        $news = $query->queryAll();
+        
+        $count = Yii::app()->db->createCommand()
+            ->select('COUNT(*)')
+            ->from('news')
+            ->where("MATCH(title_en) AGAINST('$keyword')")
+            ->queryScalar();
+        
+        return array('data' => $news, 'total' => $count);
+    }
 }
