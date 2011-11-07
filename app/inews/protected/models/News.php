@@ -180,7 +180,7 @@ class News extends CActiveRecord
 		return array('data' => $news, 'total' => $count);
 	}
 	
-	public function getVideoCat($categoryId, $page = 1, $limit = 20) {
+	public function getNewsCat($categoryId, $page = 1, $limit = 20) {
 		$params = Yii::app()->params;
 		
 		$offset = ($page - 1) * $limit;
@@ -195,7 +195,7 @@ class News extends CActiveRecord
 		// var_dump($news);
         
         $count = Yii::app()->db->createCommand()
-            ->select('COUNT(n.*)')
+            ->select('COUNT(n.id)')
 			->from('news n')
 			->where('n.category_id = ' . $categoryId)
             ->queryScalar();

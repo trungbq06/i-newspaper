@@ -39,11 +39,11 @@ class NewsController extends Controller
 		$news = News::model()->getLatest($siteId, $page, $limit);
 		$data = array(
 			'error'		=> 0,
-			'news' 		=> null,
+			'data' 		=> null,
             'total'     => 0
 		);
 		if (!empty($news)) {
-			$data['news'] = $news['data'];
+			$data['data'] = $news['data'];
 			$data['totalPage'] = ceil($news['total']/$limit);
         }
 		$this->layout = false;
@@ -61,11 +61,11 @@ class NewsController extends Controller
 		$news = News::model()->getFeatured($siteId, $page, $limit);
 		$data = array(
 			'error'		=> 0,
-			'news' 		=> null,
+			'data' 		=> null,
             'total'     => 0
 		);
 		if (!empty($news)) {
-			$data['news'] = $news['data'];
+			$data['data'] = $news['data'];
             $data['totalPage'] = ceil($news['total']/$limit);
         }
 		$this->layout = false;
@@ -81,16 +81,16 @@ class NewsController extends Controller
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $data = array(
             'error'     => 0,
-            'news'      => null,
+            'data'      => null,
             'total'     => 0
         );        
         $news = array();
         if ($cId) {
-            $news = News::model()->getVideoCat($cId, $page, $limit);
+            $news = News::model()->getNewsCat($cId, $page, $limit);
         }
         
         if (!empty($news)) {
-			$data['news'] = $news['data'];
+			$data['data'] = $news['data'];
             $data['totalPage'] = ceil($news['total']/$limit);
         }
 		
@@ -101,7 +101,7 @@ class NewsController extends Controller
 		$nId = isset($_GET['id']) ? intval($_GET['id']) : null;
 		$data = array(
 			'error'		=> 0,
-			'news'		=> array(
+			'data'		=> array(
 				
 			)
 		);
@@ -109,7 +109,7 @@ class NewsController extends Controller
 			$news = News::model()->findByPk($nId);
 			// var_dump($news);
 			if ($news) {
-				$data['news'][] = array(
+				$data['data'][] = array(
 					'id'				=> $news->id,
 					'title'				=> $news->title,
 					'thumbnail_url'		=> $news->thumbnail_url,
@@ -130,7 +130,7 @@ class NewsController extends Controller
 		$nId = isset($_GET['id']) ? intval($_GET['id']) : null;
 		$data = array(
 			'error'		=> 0,
-			'news'		=> array(
+			'data'		=> array(
 				
 			)
 		);
@@ -161,7 +161,7 @@ class NewsController extends Controller
         
         $data = array(
             'error'     => 0,
-            'news'      => null,
+            'data'      => null,
             'total'     => 0
         );
         $news = array();
@@ -170,7 +170,7 @@ class NewsController extends Controller
         }
         
         if (!empty($news)) {
-			$data['news'] = $news['data'];
+			$data['data'] = $news['data'];
             $data['totalPage'] = ceil($news['total']/$limit);
         }
         // var_dump($data);
