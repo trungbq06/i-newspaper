@@ -40,10 +40,13 @@ class NewsController extends Controller
 		$news = News::model()->getLatest($siteId, $page, $limit);
 		$data = array(
 			'error'		=> 0,
-			'news' 		=> null
+			'news' 		=> null,
+            'total'     => 0
 		);
-		if (!empty($news))
-			$data['news'] = $news;
+		if (!empty($news)) {
+			$data['news'] = $news['data'];
+			$data['totalPage'] = ceil($news['total']/$limit);
+        }
 		$this->layout = false;
 		
 		echo json_encode($data);
@@ -59,10 +62,13 @@ class NewsController extends Controller
 		$news = News::model()->getFeatured($siteId, $page, $limit);
 		$data = array(
 			'error'		=> 0,
-			'news' 		=> null
+			'news' 		=> null,
+            'total'     => 0
 		);
-		if (!empty($news))
-			$data['news'] = $news;
+		if (!empty($news)) {
+			$data['news'] = $news['data'];
+            $data['totalPage'] = ceil($news['total']/$limit);
+        }
 		$this->layout = false;
 		
 		echo json_encode($data);
@@ -76,15 +82,18 @@ class NewsController extends Controller
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $data = array(
             'error'     => 0,
-            'news'      => null
+            'news'      => null,
+            'total'     => 0
         );        
         $news = array();
         if ($cId) {
             $news = News::model()->getVideoCat($cId, $page, $limit);
         }
         
-        if (!empty($news))
-			$data['news'] = $news;
+        if (!empty($news)) {
+			$data['news'] = $news['data'];
+            $data['totalPage'] = ceil($news['total']/$limit);
+        }
 		
 		echo json_encode($data);
     }
@@ -145,5 +154,28 @@ class NewsController extends Controller
 		
 		echo json_encode($data);
 	}
+    
+    public function actionSearch() {
+        $params = Yii::app()->params;
+        $keyword = isset($_GET['k']) ? Utility::safeInput($_GET['k']) : null;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
+        
+        $data = array(
+            'error'     => 0,
+            'news'      => null,
+            'total'     => 0
+        );
+        $news = array();
+        if ($keyword) {
+            $news = News::model()->searchText($keyword);            
+        }
+        
+        if (!empty($news)) {
+			$data['news'] = $news['data'];
+            $data['totalPage'] = ceil($news['total']/$limit);
+        }
+        // var_dump($data);
+        echo json_encode($data);
+    }
 
 }

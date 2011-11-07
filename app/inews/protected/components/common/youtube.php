@@ -29,7 +29,7 @@
 */
 
 
-class youtube {
+class Youtube {
     
     var $conn = false;
     var $username = "";
