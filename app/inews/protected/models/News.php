@@ -141,7 +141,7 @@ class News extends CActiveRecord
 			->from('news')
 			->where('site_id = ' . $siteId)
 			->order('published_time DESC')
-			->limit($params['limit'])
+			->limit($limit)
 			->offset($offset);
 		$news = $query->queryAll();
 		// var_dump($news);
@@ -165,7 +165,7 @@ class News extends CActiveRecord
 			->leftJoin('news n', 'n.id = nf.news_id')
 			->where('n.site_id = ' . $siteId)
 			->order('nf.created_time DESC')
-			->limit($params['limit'])
+			->limit($limit)
 			->offset($offset);
 		$news = $query->queryAll();
 		// var_dump($news);
@@ -189,7 +189,7 @@ class News extends CActiveRecord
 			->from('news n')
 			->where('n.category_id = ' . $categoryId)
 			->order('n.created_time DESC')
-			->limit($params['limit'])
+			->limit($limit)
 			->offset($offset);
 		$news = $query->queryAll();
 		// var_dump($news);
@@ -213,7 +213,7 @@ class News extends CActiveRecord
 			->leftJoin('news n', 'n.id = nf.news_id')
 			->where('n.site_id = ' . $siteId)
 			->order('nf.created_time DESC')
-			->limit($params['limit'])
+			->limit($limit)
 			->offset($offset);
 		$news = $query->queryAll();
 		// var_dump($news);

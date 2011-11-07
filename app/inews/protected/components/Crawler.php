@@ -322,6 +322,9 @@ class Crawler {
 					if (!empty($headline))
 						$data['headline'] = $headline;
                     
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					
                     $tmp = $this->stripContent($tmp, '<H1 ', '</H1>', true);
 					$tmp = $this->stripContent($tmp, '<H2 ', '</H2>', true);
 					$tmp = $this->stripContent($tmp, '<script', '</script>', true);
