@@ -46,9 +46,9 @@ class ClipController extends Controller
             $clip = Clip::model()->getVideoCat($cId, $page, $limit);
         }
         
-        if (!empty($news)) {
-			$data['data'] = $news['data'];
-            $data['totalPage'] = ceil($news['total']/$limit);
+        if (!empty($clip)) {
+			$data['data'] = $clip['data'];
+            $data['totalPage'] = ceil($clip['total']/$limit);
         }
 		
 		echo json_encode($data);

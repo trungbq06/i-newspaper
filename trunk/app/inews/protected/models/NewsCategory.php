@@ -98,14 +98,12 @@ class NewsCategory extends CActiveRecord
 		return $data;
 	}
 	
-	public function getListHasVideo($siteId) {
+	public function getClipCategory() {
 		$data = Yii::app()->db->createCommand()
-			->select('nc.*')
-			->from('news_category nc')
-			->leftJoin('site_category sc', 'nc.id = sc.news_category_id')
-			->where('sc.site_id = ' . $siteId . ' AND nc.video = 1')
+			->select('cc.*')
+			->from('clip_category cc')
 			->queryAll();
-			
+		
 		return $data;
 	}
 }
