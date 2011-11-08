@@ -54,4 +54,33 @@ class ClipController extends Controller
 		echo json_encode($data);
 	}
 	
+	public function actionDetail() {
+		$cId = isset($_GET['id']) ? intval($_GET['id']) : null;
+		$data = array(
+			'error'		=> 0,
+			'data'		=> array(
+				
+			)
+		);
+		if ($cId) {
+			$clip = Clip::model()->findByPk($cId);
+			// var_dump($news);
+			if ($clip) {
+				$data['data'][] = array(
+					'id'				=> $clip->id,
+					'title'				=> $clip->title,
+					'thumbnail_url'		=> $clip->thumbnail_url,
+					'headline'			=> $clip->headline,
+					'created_time'		=> date('d/m/Y H:i:s', strtotime($clip->created_time)),
+					'published_time'	=> date('d/m/Y', strtotime($clip->published_time)),
+					'content'			=> $clip->content,
+					'category_id'		=> $clip->category_id,
+				);
+			}
+		}
+        // echo $clip->content;die();
+		// var_dump($data);die();
+		echo json_encode($data);
+	}
+	
 }
