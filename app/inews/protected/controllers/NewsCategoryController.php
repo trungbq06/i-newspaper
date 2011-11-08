@@ -44,14 +44,14 @@ class NewsCategoryController extends Controller
 		echo json_encode($data);
 	}
 	
-	public function actionGetListHasVideo() {
+	public function actionGetClipCategory() {
 		$siteId = isset($_GET['sid']) ? intval($_GET['sid']) : 1;
 		
 		$data = array(
 			'error'		=> 0,
 			'category'	=> array()
 		);
-		$category = NewsCategory::model()->getListHasVideo($siteId);
+		$category = NewsCategory::model()->getClipCategory();
 		if (!empty($category))
 			$data['category'] = $category;
 			

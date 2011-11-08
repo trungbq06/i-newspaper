@@ -164,6 +164,70 @@ class Crawler {
 		return $content;
 	}
 	
+	public function getVnexpressVideo() {
+		$baseUrl = 'http://vnexpress.net/video/ContentSearch.asp?ID=';
+		$category = NewsCategory::model()->getClipCategory();
+		
+		foreach ($category as $cat) {
+			// Get 10 page
+			for ($i = 1;$i < 10;$i++) {
+				$url = $baseUrl . $cat['id'] . '&page=' . $i;
+				// echo $url;die();
+				$content = $this->getURLContents($url);
+				$videos = $this->getContent($content, 'CRV_Content', '</div>');
+				foreach ($videos as $video) {
+					$data = array();
+					$data['category_id'] = $cat['id'];
+					$detail = $this->getContent($video, 'href="', '">', true);
+					$originalUrl = 'http://vnexpress.net' . $detail;
+					if (!Clip::model()->isExist($originalUrl)) {
+						// echo $detail;die();
+						$data['thumbnail_url'] = $this->getContent($video, 'src="', '"', true);
+						$detailContent = $this->getURLContents($originalUrl);
+						$title = $this->getContent($detailContent, 'NewsTitle', '/div>', true);
+						$data['title'] = $this->getContent($title, '>', '<', true);
+						$headline = $this->getContent($detailContent, 'NewsLead', '/div>', true);
+						$data['headline'] = $this->getContent($headline, '>', '<', true);
+						$time = $this->getContent($detailContent, 'NewsTime', '/div>', true);
+						$time = $this->getContent($time, '>', '<', true);
+						$time = explode('/', $time);
+						$time = $time[2] . '-' . $time[1] . '-' . $time[0];
+						$data['published_time'] = date('Y-m-d H:i:s', strtotime($time));
+						$data['created_time'] = date('Y-m-d H:i:s');
+						
+						$script = $this->getContent($detailContent, 'createPlayer(', ')', true);
+						$params = explode(',', $script);
+						$xmlPath = 'http://vnexpress.net/' . urldecode('%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D' . $params[0] . '%26f%3D' . $params[2]);
+						$playerContent = $this->getURLContents($xmlPath);
+						$data['streaming_url'] = $this->getContent($playerContent, 'link="', '"', true);
+						$data['title_en'] = Utility::unicode2Anscii($data['title']);
+						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);						
+						$data['original_url'] = $originalUrl;
+						$data['content'] = '';
+						
+						if ($data['streaming_url'] != '') {
+							$data['content'] = '<video poster="' . $data['thumbnail_url'] . '" controls>
+								<source src="' . $data['streaming_url'] . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
+								</video>';
+						}					
+					
+						// $i++;
+						$clip = new Clip;
+						$clip->attributes = $data;
+						try {
+							$clip->save(false);
+						} catch (Exception $ex) {
+							var_dump($ex);
+						}
+						// die('saved');
+					}
+				}
+			}
+		}
+		// $content = $this->getURLContents($videoPage);
+		// echo $content;
+	}
+	
 	public function getVnexpress() {
 		$params = Yii::app()->params;
 		$vnexpress = $params['site']['vnexpress'];
@@ -198,151 +262,152 @@ class Crawler {
                 // $detailLink = 'http://vnexpress.net/gl/kinh-doanh/quoc-te/2011/10/can-canh-khach-san-tot-nhat-the-gioi/';
                 // $detailLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/';
 				// $detailLink = 'http://ebank.vnexpress.net/gl/ebank/thi-truong/2011/10/ty-gia-ngan-hang-va-cho-den-di-nguoc-dong-1/';
-				$detail = $this->getURLContents($detailLink);
-				// echo $detail;die();
-				$startTag = '<div class="content">';
-				if (strstr($detail, 'cpms_content="true">'))
-					$startTag = 'cpms_content="true">';
-				$tmp = $this->getContent($detail, $startTag, '<div class="tag-parent">', true);
-				$tmp = str_replace('src="/', 'src="http://vnexpress.net/', $tmp);
-				// echo $tmp;die();
-				// print_r($data);
-				// die();
-				if (!empty($tmp)) {
-					// $toDel = $this->getContent($tmp, '<BR>', '</H2>', true);
-					// echo 'Todel ' . $toDel;
-					// $tmp = str_replace($toDel, '', $tmp);
-					$tmp = $this->stripContent($tmp, '<BR>', '</H2>');
-					// $tmp = $this->stripContent($tmp, '<script', '</script>');
-					$toDel = $this->getContent($tmp, 'ShowTopicJS', ')', true);
-					$toDel = 'ShowTopicJS ' . $toDel . ');';
-					$tmp = str_replace($toDel, '', $tmp);
-					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width="60%" align=center bgColor=#ffff80 border=0>', '</TABLE>');
-					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
-					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffcc border=1>', '</TABLE>');
-					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffbb border=1>', '</TABLE>');
-					$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
-                    $strip = $this->getContent($tmp, 'width=', ' ');
-                    foreach ($strip as $toStrip) {
-                        $tmp = str_replace('width='.$toStrip, 'width=290', $tmp);
-                    }
-                    $tmp = $this->stripContent($tmp, 'height=', ' ', true);
+				if (!News::isExist(1, $detailLink)) {
+					$detail = $this->getURLContents($detailLink);
+					// echo $detail;die();
+					$startTag = '<div class="content">';
+					if (strstr($detail, 'cpms_content="true">'))
+						$startTag = 'cpms_content="true">';
+					$tmp = $this->getContent($detail, $startTag, '<div class="tag-parent">', true);
+					$tmp = str_replace('src="/', 'src="http://vnexpress.net/', $tmp);
+					// echo $tmp;die();
+					// print_r($data);
+					// die();
+					if (!empty($tmp)) {
+						// $toDel = $this->getContent($tmp, '<BR>', '</H2>', true);
+						// echo 'Todel ' . $toDel;
+						// $tmp = str_replace($toDel, '', $tmp);
+						$tmp = $this->stripContent($tmp, '<BR>', '</H2>');
+						// $tmp = $this->stripContent($tmp, '<script', '</script>');
+						$toDel = $this->getContent($tmp, 'ShowTopicJS', ')', true);
+						$toDel = 'ShowTopicJS ' . $toDel . ');';
+						$tmp = str_replace($toDel, '', $tmp);
+						$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width="60%" align=center bgColor=#ffff80 border=0>', '</TABLE>');
+						$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
+						$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffcc border=1>', '</TABLE>');
+						$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 width=350 align=center bgColor=#ffffbb border=1>', '</TABLE>');
+						$tmp = $this->stripContent($tmp, '<TABLE cellSpacing=0 cellPadding=3 align=center bgColor=#ffff80 border=0>', '</TABLE>');
+						$strip = $this->getContent($tmp, 'width=', ' ');
+						foreach ($strip as $toStrip) {
+							$tmp = str_replace('width='.$toStrip, 'width=290', $tmp);
+						}
+						$tmp = $this->stripContent($tmp, 'height=', ' ', true);
+						
+						if (strstr($tmp, '<A href=')) {
+							$newLink = $this->getContent($tmp, '<A href=', '</A>');
+							// var_dump($newLink);die();
+							if (!empty($newLink)) {
+								foreach ($newLink as $oneLink) {
+									$linkToReplace = $oneLink;
+									$oneLink = $this->getContent($oneLink, '"', '"', true);
+									// echo $oneLink;
+									// $oneLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/page_3.asp';
+									// $oneLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/10/thu-mon-ghi-ban-bang-cu-phat-bong/page_1.asp';
+									if ((strstr($oneLink, '/Page') || strstr($oneLink, '/page')) && strstr($oneLink, 'http://vnexpress.net')) {
+										$tmpContent = $this->getURLContents($oneLink);
+										// die($tmpContent);
+										if (empty($tmpContent)) {
+											$oneLink = str_replace('/Page', '/page', $oneLink);
+											$tmpContent = $this->getURLContents($oneLink);
+										}
+										// die($tmpContent);
+										if (strstr($tmpContent, 'createPlayerEmbed')) {
+											// die('come');
+											$playerContent = $this->getContent($tmpContent, 'createPlayerEmbed(', ')', true);
+											$params = explode(',', $playerContent);
+											// var_dump($params);
+											$xmlPath = 'http://vnexpress.net' . urldecode("%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D" . $params[0] . "%26f%3D" . $params[4]);
+											$videoInfo = $this->getURLContents($xmlPath);
+											$videoUrl = $this->getContent($videoInfo, 'link="', '"', true);
+											$videoThumbnail = $this->getContent($videoInfo, 'descriptionImage="', '"', true);
+											$videoTag = '<video poster="' . $videoThumbnail . '" controls>
+											<source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
+											</video>';
+											// die('<A href=' . $linkToReplace . '</A>');
+											$tmp = str_replace('<A href=' . $linkToReplace . '</A>', $videoTag, $tmp);
+										} else {
+											$concatContent = '';
+											$startTag = '<div class="content">';
+											if (strstr($tmpContent, 'cpms_content="true">'))
+												$startTag = 'cpms_content="true">';
+											$concatContent .= $this->getContent($tmpContent, $startTag, '</div>', true);
+											$concatContent = str_replace('src="/', 'src="http://vnexpress.net/', $concatContent);
+											// Get youtube video link
+											if (strstr($concatContent, 'http://www.youtube.com/v/')) {
+												$data['youtube_video'] = 1;
+												$videoId = $this->getContent($concatContent, 'http://www.youtube.com/v/', '?', true);
+												$videoUrl = 'http://www.youtube.com/watch?v=' . $videoId;
+												// var_dump($this->_parser->get('http://www.youtube.com/watch?v=6uhhBDuxD5Y&feature=related'));                                        
+												$videoInfo = $this->_parser->get($videoUrl);
+												$videoUrl = '';
+												// var_dump($videoInfo);
+												if ($videoInfo->files['video/mp4'] != '')
+													$videoUrl = $videoInfo->files['video/mp4'];
+												if ($videoUrl != '') {
+													$videoTag = '<video poster="' . $videoInfo->thumbnails[0]->url . '" controls>
+													<source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
+													</video>';
+													$concatContent = $videoTag;
+												} else $concatContent = '';
+												// die($concatContent);
+												// die('<A href=' . $linkToReplace . '</A>');
+												// die($tmp);
+											}
+											$tmp = str_replace('<A href=' . $linkToReplace . '</A>', $concatContent, $tmp);
+										}          
+									} else {
+										$tmp = str_replace('<A href=' . $linkToReplace . '</A>', strip_tags("<A href=" . $linkToReplace . "</A>"), $tmp);
+									}
+								}
+							}
+						}
+						
+						if (strstr($tmp, 'createPlayerEmbed')) {
+							// die('come');
+							$playerContent = $this->getContent($tmp, 'createPlayerEmbed(', ')', true);
+							$params = explode(',', $playerContent);
+							// var_dump($params);
+							$xmlPath = 'http://vnexpress.net' . urldecode("%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D" . $params[0] . "%26f%3D" . $params[4]);
+							$videoInfo = $this->getURLContents($xmlPath);
+							$videoUrl = $this->getContent($videoInfo, 'link="', '"', true);
+							$videoThumbnail = $this->getContent($videoInfo, 'descriptionImage="', '"', true);
+							$videoTag = '<video poster="' . $videoThumbnail . '" controls>
+							<source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
+							</video>';
+							// die($tmp);
+							$stringToReplace = $this->getContent($tmp, '<span id="FlashPlayer', '</span>', true);
+							// die($stringToReplace);
+							$tmp = str_replace('<span id="FlashPlayer' . $stringToReplace . '</span>', $videoTag, $tmp);
+							// $tmp = $videoTag;
+						}
+						// die($tmp);
+						$data['headline'] = '';
+						$headline = '<H2' . $this->getContent($tmp, '<H2', '</H2>', true) . '</H2>';
+						$headline = strip_tags($headline);
+						if (!empty($headline))
+							$data['headline'] = $headline;
+						
+						$data['title_en'] = Utility::unicode2Anscii($data['title']);
+						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+						
+						$tmp = $this->stripContent($tmp, '<H1 ', '</H1>', true);
+						$tmp = $this->stripContent($tmp, '<H2 ', '</H2>', true);
+						$tmp = $this->stripContent($tmp, '<script', '</script>', true);
+						// die($tmp);
+						// $tmp = str_replace('H1', 'H3', $tmp);                    
+						// $tmp = str_replace('H2', 'H3', $tmp);
+						// die($tmp);
+						$tmp = str_replace("\n", '', $tmp);
+						// die($tmp);
+						$data['content'] = $tmp;
+						$data['original_url'] = $detailLink;
+						$data['category_id'] = $c;
+						$data['site_id'] = 1;
+						$data['created_time'] = date('Y-m-d H:i:s');
+						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+						// print_r($data);die();
+						// echo $tmp . '<br/><br/>';
 					
-                    if (strstr($tmp, '<A href=')) {
-                        $newLink = $this->getContent($tmp, '<A href=', '</A>');
-                        // var_dump($newLink);die();
-                        if (!empty($newLink)) {
-                            foreach ($newLink as $oneLink) {
-                                $linkToReplace = $oneLink;
-                                $oneLink = $this->getContent($oneLink, '"', '"', true);
-                                // echo $oneLink;
-                                // $oneLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/page_3.asp';
-                                // $oneLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/10/thu-mon-ghi-ban-bang-cu-phat-bong/page_1.asp';
-                                if ((strstr($oneLink, '/Page') || strstr($oneLink, '/page')) && strstr($oneLink, 'http://vnexpress.net')) {
-                                    $tmpContent = $this->getURLContents($oneLink);
-                                    // die($tmpContent);
-                                    if (empty($tmpContent)) {
-                                        $oneLink = str_replace('/Page', '/page', $oneLink);
-                                        $tmpContent = $this->getURLContents($oneLink);
-                                    }
-                                    // die($tmpContent);
-                                    if (strstr($tmpContent, 'createPlayerEmbed')) {
-                                        // die('come');
-                                        $playerContent = $this->getContent($tmpContent, 'createPlayerEmbed(', ')', true);
-                                        $params = explode(',', $playerContent);
-                                        // var_dump($params);
-                                        $xmlPath = 'http://vnexpress.net' . urldecode("%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D" . $params[0] . "%26f%3D" . $params[4]);
-                                        $videoInfo = $this->getURLContents($xmlPath);
-                                        $videoUrl = $this->getContent($videoInfo, 'link="', '"', true);
-                                        $videoThumbnail = $this->getContent($videoInfo, 'descriptionImage="', '"', true);
-                                        $videoTag = '<video poster="' . $videoThumbnail . '" controls>
-                                        <source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
-                                        </video>';
-                                        // die('<A href=' . $linkToReplace . '</A>');
-                                        $tmp = str_replace('<A href=' . $linkToReplace . '</A>', $videoTag, $tmp);
-                                    } else {
-                                        $concatContent = '';
-                                        $startTag = '<div class="content">';
-                                        if (strstr($tmpContent, 'cpms_content="true">'))
-                                            $startTag = 'cpms_content="true">';
-                                        $concatContent .= $this->getContent($tmpContent, $startTag, '</div>', true);
-                                        $concatContent = str_replace('src="/', 'src="http://vnexpress.net/', $concatContent);
-                                        // Get youtube video link
-                                        if (strstr($concatContent, 'http://www.youtube.com/v/')) {
-                                            $data['youtube_video'] = 1;
-                                            $videoId = $this->getContent($concatContent, 'http://www.youtube.com/v/', '?', true);
-                                            $videoUrl = 'http://www.youtube.com/watch?v=' . $videoId;
-                                            // var_dump($this->_parser->get('http://www.youtube.com/watch?v=6uhhBDuxD5Y&feature=related'));                                        
-                                            $videoInfo = $this->_parser->get($videoUrl);
-                                            $videoUrl = '';
-                                            // var_dump($videoInfo);
-                                            if ($videoInfo->files['video/mp4'] != '')
-                                                $videoUrl = $videoInfo->files['video/mp4'];
-                                            if ($videoUrl != '') {
-                                                $videoTag = '<video poster="' . $videoInfo->thumbnails[0]->url . '" controls>
-                                                <source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
-                                                </video>';
-                                                $concatContent = $videoTag;
-                                            } else $concatContent = '';
-                                            // die($concatContent);
-                                            // die('<A href=' . $linkToReplace . '</A>');
-                                            // die($tmp);
-                                        }
-                                        $tmp = str_replace('<A href=' . $linkToReplace . '</A>', $concatContent, $tmp);
-                                    }          
-                                } else {
-                                    $tmp = str_replace('<A href=' . $linkToReplace . '</A>', strip_tags("<A href=" . $linkToReplace . "</A>"), $tmp);
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (strstr($tmp, 'createPlayerEmbed')) {
-                        // die('come');
-                        $playerContent = $this->getContent($tmp, 'createPlayerEmbed(', ')', true);
-                        $params = explode(',', $playerContent);
-                        // var_dump($params);
-                        $xmlPath = 'http://vnexpress.net' . urldecode("%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D" . $params[0] . "%26f%3D" . $params[4]);
-                        $videoInfo = $this->getURLContents($xmlPath);
-                        $videoUrl = $this->getContent($videoInfo, 'link="', '"', true);
-                        $videoThumbnail = $this->getContent($videoInfo, 'descriptionImage="', '"', true);
-                        $videoTag = '<video poster="' . $videoThumbnail . '" controls>
-                        <source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
-                        </video>';
-                        // die($tmp);
-                        $stringToReplace = $this->getContent($tmp, '<span id="FlashPlayer', '</span>', true);
-                        // die($stringToReplace);
-                        $tmp = str_replace('<span id="FlashPlayer' . $stringToReplace . '</span>', $videoTag, $tmp);
-                        // $tmp = $videoTag;
-                    }
-                    // die($tmp);
-					$data['headline'] = '';
-					$headline = '<H2' . $this->getContent($tmp, '<H2', '</H2>', true) . '</H2>';
-                    $headline = strip_tags($headline);
-					if (!empty($headline))
-						$data['headline'] = $headline;
-                    
-					$data['title_en'] = Utility::unicode2Anscii($data['title']);
-					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
-					
-                    $tmp = $this->stripContent($tmp, '<H1 ', '</H1>', true);
-					$tmp = $this->stripContent($tmp, '<H2 ', '</H2>', true);
-					$tmp = $this->stripContent($tmp, '<script', '</script>', true);
-                    // die($tmp);
-                    // $tmp = str_replace('H1', 'H3', $tmp);                    
-                    // $tmp = str_replace('H2', 'H3', $tmp);
-                    // die($tmp);
-                    $tmp = str_replace("\n", '', $tmp);
-                    // die($tmp);
-					$data['content'] = $tmp;
-					$data['original_url'] = $detailLink;
-					$data['category_id'] = $c;
-					$data['site_id'] = 1;
-					$data['created_time'] = date('Y-m-d H:i:s');
-					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-					// print_r($data);die();
-					// echo $tmp . '<br/><br/>';
-					if (!News::isExist(1, $detailLink)) {
 						// $i++;
 						$news = new News;
 						$news->attributes = $data;
