@@ -206,11 +206,12 @@ class Crawler {
 						$data['content'] = '';
 						
 						if ($data['streaming_url'] != '') {
+							$data['streaming_url'] = str_replace(' ', '%20', $data['streaming_url']);
 							$data['content'] = '<video poster="' . $data['thumbnail_url'] . '" controls>
 								<source src="' . $data['streaming_url'] . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
 								</video>';
-						}					
-					
+						}
+
 						// $i++;
 						$clip = new Clip;
 						$clip->attributes = $data;

@@ -83,4 +83,27 @@ class ClipController extends Controller
 		echo json_encode($data);
 	}
 	
+	public function actionSearch() {
+        $params = Yii::app()->params;
+        $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
+        
+        $data = array(
+            'error'     => 0,
+            'data'      => null,
+            'total'     => 0
+        );
+        $clip = array();
+        if ($keyword) {
+            $clip = Clip::model()->searchText($keyword);            
+        }
+        
+        if (!empty($clip)) {
+			$data['data'] = $clip['data'];
+            $data['totalPage'] = ceil($clip['total']/$limit);
+        }
+        // var_dump($data);
+        echo json_encode($data);
+    }
+	
 }
