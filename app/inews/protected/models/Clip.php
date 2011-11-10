@@ -154,4 +154,23 @@ class Clip extends CActiveRecord
 		
 		return array('data' => $news, 'total' => $count);
 	}
+	
+	public function searchText($keyword, $page = 1, $limit = 20) {
+        $query = Yii::app()->db->createCommand()
+            ->select("id, title, headline, content, thumbnail_url, category_id, published_time, created_time, MATCH(title_en) AGAINST ('$keyword') AS score")
+            ->from('clip')
+            ->where("MATCH(title_en) AGAINST('$keyword')")
+            ->order("score DESC")
+            ->limit($limit)
+            ->offset($offset);
+        $clip = $query->queryAll();
+        
+        $count = Yii::app()->db->createCommand()
+            ->select('COUNT(*)')
+            ->from('clip')
+            ->where("MATCH(title_en) AGAINST('$keyword')")
+            ->queryScalar();
+        
+        return array('data' => $clip, 'total' => $count);
+    }
 }
