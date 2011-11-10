@@ -223,7 +223,7 @@ class News extends CActiveRecord
     
     public function searchText($keyword, $page = 1, $limit = 20) {
         $query = Yii::app()->db->createCommand()
-            ->select("title, headline, content, thumbnail_url, category_id, published_time, created_time, MATCH(title_en) AGAINST ('$keyword') AS score")
+            ->select("id, title, headline, content, thumbnail_url, category_id, published_time, created_time, MATCH(title_en) AGAINST ('$keyword') AS score")
             ->from('news')
             ->where("MATCH(title_en) AGAINST('$keyword')")
             ->order("score DESC")
