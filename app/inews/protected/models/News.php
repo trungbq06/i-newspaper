@@ -48,11 +48,11 @@ class News extends CActiveRecord
             array('title, title_en, headline, headline_en, content, content_en, thumbnail_url, category_id, site_id, published_time, created_time, original_url', 'required'),
             array('youtube_video', 'numerical', 'integerOnly'=>true),
             array('title, title_en, thumbnail_url, original_url', 'length', 'max'=>255),
-            array('headline, headline_en', 'length', 'max'=>500),
+            array('headline, headline_en, youtube_data', 'length', 'max'=>500),
             array('category_id, site_id', 'length', 'max'=>10),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, title, title_en, headline, headline_en, content, content_en, thumbnail_url, category_id, site_id, published_time, created_time, original_url, youtube_video', 'safe', 'on'=>'search'),
+            array('id, title, title_en, headline, headline_en, youtube_data, content, content_en, thumbnail_url, category_id, site_id, published_time, created_time, original_url, youtube_video', 'safe', 'on'=>'search'),
         );
     }
 
@@ -87,6 +87,7 @@ class News extends CActiveRecord
             'created_time' => 'Created Time',
             'original_url' => 'Original Url',
             'youtube_video' => 'Youtube Video',
+            'youtube_data' => 'Youtube Data',
         );
     }
 
@@ -115,6 +116,7 @@ class News extends CActiveRecord
         $criteria->compare('created_time',$this->created_time,true);
         $criteria->compare('original_url',$this->original_url,true);
         $criteria->compare('youtube_video',$this->youtube_video);
+        $criteria->compare('youtube_data',$this->youtube_data);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
