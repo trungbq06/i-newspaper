@@ -1,5 +1,5 @@
 <?php
-
+Yii::import('application.components.common.*');
 class NewsController extends Controller
 {
 	/**
@@ -116,14 +116,44 @@ class NewsController extends Controller
 					'headline'			=> $news->headline,
 					'created_time'		=> date('d/m/Y H:i:s', strtotime($news->created_time)),
 					'published_time'	=> date('d/m/Y H:i:s', strtotime($news->published_time)),
-					'content'			=> $news->content,
+					'content'			=> $this->parseVideo($news),
 					'category_id'		=> $news->category_id,
+					'original_url'		=> $news->original_url
 				);
 			}
 		}
-        // echo $news->content;die();
+		// echo urldecode('http://o-o.preferred.fpt-han1.v22.lscache8.c.youtube.com/videoplayback?sparams=id%2Cexpire%2Cip%2Cipbits%2Citag%2Csource%2Cratebypass%2Ccp&fexp=904520%2C916201%2C901100&itag=18&ip=183.0.0.0&signature=306A7373AB4D1A9753A5E32B3087B2B9DA95FABE.077D67CC3FE03F10CFDD54B80ADDC4D0E4EF869D&sver=3&ratebypass=yes&source=youtube&expire=1322231122&key=yt1&ipbits=8&cp=U0hRRVdUUV9FSkNOMV9PTlVDOmFXWjlyR0hSU3lV&id=35494260a24637d6');
+		// echo date('Y-m-d H:i:s', 1320793200);
+		// echo strtotime('+10 days', time());
+		// die();
+        // echo strip_tags($news->content, '<img>');die();
 		// var_dump($data);die();
 		echo json_encode($data);
+	}
+	
+	public function parseVideo($news) {
+		$content = $news->content;
+		if ($news->youtube_data != '') {
+			$parser = new Videopian();
+			$links = json_decode($news->youtube_data);
+			// var_dump($links);
+			foreach ($links as $key => $link) {
+				$videoInfo = $parser->get($link);
+				$videoUrl = '';
+				$replace = '';
+				if ($videoInfo->files['video/mp4'] != '')
+					$videoUrl = $videoInfo->files['video/mp4'];
+				if ($videoUrl != '') {
+					$videoTag = '<video poster="' . $videoInfo->thumbnails[0]->url . '" controls>
+					<source src="' . $videoUrl . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
+					</video>';
+					$replace = $videoTag;
+				}
+				$content = str_replace($key, $replace, $content);
+			}
+			
+			return $content;
+		} else return $content;
 	}
     
 	public function actionNext() {

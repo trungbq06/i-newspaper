@@ -204,7 +204,7 @@ class Crawler {
 						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);						
 						$data['original_url'] = $originalUrl;
 						$data['content'] = '';
-						
+						$data['thumbnail_url'] = str_replace(' ', '%20', $data['thumbnail_url']);
 						if ($data['streaming_url'] != '') {
 							$data['streaming_url'] = str_replace(' ', '%20', $data['streaming_url']);
 							$data['content'] = '<video poster="' . $data['thumbnail_url'] . '" controls>
@@ -252,6 +252,8 @@ class Crawler {
 					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+				$detailLink = 'http://vnexpress.net/gl/vi-tinh/2011/11/dien-thoai-sony-ericsson-dung-chip-loi-kep-lo-dien/';
+				// $detailLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/11/real-sap-chi-dam-de-mua-neymar/';
                 // $detailLink = 'http://vnexpress.net/gl/cuoi/video/2011/10/nhung-pha-tai-nan-hai-huoc/';
                 // $detailLink = 'http://vnexpress.net/gl/suc-khoe/2011/10/xon-xao-clip-em-be-bi-bac-si-tu-choi-chua-benh-vi-ngheo/';
                 // $detailLink = 'http://vnexpress.net/gl/doi-song/gia-dinh/2011/10/day-tre-cach-su-dung-dong-tien-hieu-qua/';
@@ -292,22 +294,26 @@ class Crawler {
 						foreach ($strip as $toStrip) {
 							$tmp = str_replace('width='.$toStrip, 'width=290', $tmp);
 						}
+
 						$tmp = $this->stripContent($tmp, 'height=', ' ', true);
-						
-						if (strstr($tmp, '<A href=')) {
-							$newLink = $this->getContent($tmp, '<A href=', '</A>');
+						$youtubeData = array();
+						if (strstr($tmp, 'href=')) {
+							$newLink = $this->getContent($tmp, 'href=', '</');
 							// var_dump($newLink);die();
 							if (!empty($newLink)) {
+								$k = 0;
 								foreach ($newLink as $oneLink) {
+									if (!strstr($oneLink, 'http')) continue;
 									$linkToReplace = $oneLink;
 									$oneLink = $this->getContent($oneLink, '"', '"', true);
-									// echo $oneLink;
+									// echo $oneLink;die();
 									// $oneLink = 'http://vnexpress.net/gl/van-hoa/2011/09/ve-dep-cua-tan-hoa-hau-hoan-vu/page_3.asp';
 									// $oneLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/10/thu-mon-ghi-ban-bang-cu-phat-bong/page_1.asp';
 									if ((strstr($oneLink, '/Page') || strstr($oneLink, '/page')) && strstr($oneLink, 'http://vnexpress.net')) {
+										// echo 'One link ' . $oneLink;
 										$tmpContent = $this->getURLContents($oneLink);
-										// die($tmpContent);
-										if (empty($tmpContent)) {
+										// echo strlen($tmpContent);die();
+										if (empty($tmpContent) || strlen($tmpContent) < 250) {
 											$oneLink = str_replace('/Page', '/page', $oneLink);
 											$tmpContent = $this->getURLContents($oneLink);
 										}
@@ -333,12 +339,21 @@ class Crawler {
 												$startTag = 'cpms_content="true">';
 											$concatContent .= $this->getContent($tmpContent, $startTag, '</div>', true);
 											$concatContent = str_replace('src="/', 'src="http://vnexpress.net/', $concatContent);
+											$strip = $this->getContent($concatContent, 'width=', ' ');
+											foreach ($strip as $toStrip) {
+												$tmp = str_replace('width='.$toStrip, 'width=290', $concatContent);
+											}
 											// Get youtube video link
 											if (strstr($concatContent, 'http://www.youtube.com/v/')) {
+												$k++;
 												$data['youtube_video'] = 1;
 												$videoId = $this->getContent($concatContent, 'http://www.youtube.com/v/', '?', true);
 												$videoUrl = 'http://www.youtube.com/watch?v=' . $videoId;
-												// var_dump($this->_parser->get('http://www.youtube.com/watch?v=6uhhBDuxD5Y&feature=related'));                                        
+												$key = 'YOUTUBE_VIDEO_' . $k;
+												$youtubeData[$key] = $videoUrl;
+												// var_dump($this->_parser->get('http://www.youtube.com/watch?v=6uhhBDuxD5Y&feature=related'));
+												// var_dump($this->_parser->get($videoUrl));die();
+												/*
 												$videoInfo = $this->_parser->get($videoUrl);
 												$videoUrl = '';
 												// var_dump($videoInfo);
@@ -353,8 +368,9 @@ class Crawler {
 												// die($concatContent);
 												// die('<A href=' . $linkToReplace . '</A>');
 												// die($tmp);
-											}
-											$tmp = str_replace('<A href=' . $linkToReplace . '</A>', $concatContent, $tmp);
+												*/
+												$tmp = str_replace('<A href=' . $linkToReplace . '</A>', $key, $tmp);
+											} else $tmp = str_replace('<A href=' . $linkToReplace . '</A>', $concatContent, $tmp);
 										}          
 									} else {
 										$tmp = str_replace('<A href=' . $linkToReplace . '</A>', strip_tags("<A href=" . $linkToReplace . "</A>"), $tmp);
@@ -387,7 +403,8 @@ class Crawler {
 						$headline = strip_tags($headline);
 						if (!empty($headline))
 							$data['headline'] = $headline;
-						
+						// die(var_dump($youtubeData));
+						$data['youtube_data'] = json_encode($youtubeData);
 						$data['title_en'] = Utility::unicode2Anscii($data['title']);
 						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
 						
@@ -406,7 +423,7 @@ class Crawler {
 						$data['site_id'] = 1;
 						$data['created_time'] = date('Y-m-d H:i:s');
 						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-						// print_r($data);die();
+						print_r($data);die();
 						// echo $tmp . '<br/><br/>';
 					
 						// $i++;
@@ -427,6 +444,7 @@ class Crawler {
 									$newsFeatured->save(false);
 								}
 							}
+							die();
 						} catch (Exception $ex) {
 							var_dump($ex);
 						}
