@@ -58,6 +58,9 @@ class Crawler {
         $paramsStr = implode(",", $params);
         $options = array(
             CURLOPT_URL => $url,
+			CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            // CURLOPT_POST => 1,
             CURLOPT_POST => count($params),
             CURLOPT_POSTFIELDS => $paramsStr
         );
@@ -164,6 +167,81 @@ class Crawler {
 		return $content;
 	}
 	
+	public function getExchange() {
+		$url = 'http://www.taichinhdientu.vn/services/infopage.aspx?svc=exchangerates';
+		$content = $this->getURLContents($url);
+		$day = date('Y-m-d');
+		$temp = $this->getContent($content, '<div id="exchange">', '</div>', true);
+		$temp = strip_tags($temp, '<table><thead><tbody><th><tr><td>');
+		$check = UtilityExchange::model()->findByAttributes(array('day' => $day));
+		if (empty($check)) {
+			$exchange = new UtilityExchange;
+			$exchange->day = $day;
+			$exchange->content = $temp;
+			$exchange->save(false);
+		}
+	}
+	
+	public function getGold() {
+		$url = 'http://www.taichinhdientu.vn/services/infopage.aspx?svc=goldrates';
+		$content = $this->getURLContents($url);
+		$day = date('Y-m-d');
+		$temp = $this->getContent($content, '<div id="gold_price">', '</div>', true);
+		$temp = strip_tags($temp, '<table><thead><tbody><th><tr><td>');
+		$check = UtilityGold::model()->findByAttributes(array('day' => $day));
+		if (empty($check)) {
+			$exchange = new UtilityGold;
+			$exchange->day = $day;
+			$exchange->content = $temp;
+			$exchange->save(false);
+		}
+	}
+	
+	public function getOil() {
+		$url = 'http://www.taichinhdientu.vn/services/infopage.aspx?svc=oilrates';
+		$content = $this->getURLContents($url);
+		$day = date('Y-m-d');
+		$temp = $this->getContent($content, '<div id="gold_price">', '</div>', true);
+		$temp = strip_tags($temp, '<table><thead><tbody><th><tr><td>');
+		$check = UtilityOil::model()->findByAttributes(array('day' => $day));
+		if (empty($check)) {
+			$exchange = new UtilityOil;
+			$exchange->day = $day;
+			$exchange->content = $temp;
+			$exchange->save(false);
+		}
+	}
+	
+	public function getWeather() {
+		$url = 'http://vov.vn/Services/Infopage.aspx?svc=weathers';
+		$content = $this->getURLContents($url);
+		$day = date('Y-m-d');
+		$temp = $this->getContent($content, '<div id="weather">', '</div>', true);
+		$temp = strip_tags($temp, '<table><thead><tbody><th><tr><td><img>');
+		$check = UtilityWeather::model()->findByAttributes(array('day' => $day));
+		if (empty($check)) {
+			$exchange = new UtilityWeather;
+			$exchange->day = $day;
+			$exchange->content = $temp;
+			$exchange->save(false);
+		}
+	}
+	
+	public function getLottery() {
+		$url = 'http://vov.vn/Services/Infopage.aspx?svc=lotteryresults';
+		// echo $content;die();
+		$day = date('Y-m-d');
+		$temp = $this->getContent($content, '<div id="weather">', '</div>', true);
+		$temp = strip_tags($temp, '<table><thead><tbody><th><tr><td><img>');
+		$check = UtilityWeather::model()->findByAttributes(array('day' => $day));
+		if (empty($check)) {
+			$exchange = new UtilityWeather;
+			$exchange->day = $day;
+			$exchange->content = $temp;
+			$exchange->save(false);
+		}
+	}
+	
 	public function getVnexpressVideo() {
 		$baseUrl = 'http://vnexpress.net/video/ContentSearch.asp?ID=';
 		$category = NewsCategory::model()->getClipCategory();
@@ -252,7 +330,7 @@ class Crawler {
 					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link>', '</link>', true);
-				$detailLink = 'http://vnexpress.net/gl/vi-tinh/2011/11/dien-thoai-sony-ericsson-dung-chip-loi-kep-lo-dien/';
+				// $detailLink = 'http://vnexpress.net/gl/vi-tinh/2011/11/dien-thoai-sony-ericsson-dung-chip-loi-kep-lo-dien/';
 				// $detailLink = 'http://vnexpress.net/gl/the-thao/bong-da/2011/11/real-sap-chi-dam-de-mua-neymar/';
                 // $detailLink = 'http://vnexpress.net/gl/cuoi/video/2011/10/nhung-pha-tai-nan-hai-huoc/';
                 // $detailLink = 'http://vnexpress.net/gl/suc-khoe/2011/10/xon-xao-clip-em-be-bi-bac-si-tu-choi-chua-benh-vi-ngheo/';
@@ -423,7 +501,7 @@ class Crawler {
 						$data['site_id'] = 1;
 						$data['created_time'] = date('Y-m-d H:i:s');
 						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-						print_r($data);die();
+						// print_r($data);die();
 						// echo $tmp . '<br/><br/>';
 					
 						// $i++;
@@ -444,7 +522,7 @@ class Crawler {
 									$newsFeatured->save(false);
 								}
 							}
-							die();
+							// die();
 						} catch (Exception $ex) {
 							var_dump($ex);
 						}

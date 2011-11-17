@@ -48,9 +48,14 @@ class SiteController extends Controller
         // die(strip_tags('<a class="" href="/gl/van-hoa/2011/03/khan-gia-hn-chim-trong-cam-xuc-cung-backstreet-boys/">Ðêm nh?c Backstreet Boys</a>'));
 		$crawler = new Crawler();
 		$crawler->getVnexpress();
+		$crawler->getExchange();
+		$crawler->getGold();
+		$crawler->getOil();
+		$crawler->getWeather();
+		// $crawler->getLottery();
 		// $crawler->getDantri();
 		
-		// $crawler->getVnexpressVideo();
+		$crawler->getVnexpressVideo();
 		
 		die('Hello world');
 		$this->render('index');
