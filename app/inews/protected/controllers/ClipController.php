@@ -48,6 +48,7 @@ class ClipController extends Controller
         
         if (!empty($clip)) {
 			$data['data'] = $clip['data'];
+			$data['total'] = $clip['total'];
             $data['totalPage'] = ceil($clip['total']/$limit);
         }
 		
@@ -101,6 +102,7 @@ class ClipController extends Controller
         
         if (!empty($clip)) {
 			$data['data'] = $clip['data'];
+			$data['total'] = $clip['total'];
             $data['totalPage'] = ceil($clip['total']/$limit);
         }
         // var_dump($data);

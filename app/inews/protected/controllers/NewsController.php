@@ -44,6 +44,7 @@ class NewsController extends Controller
 		);
 		if (!empty($news)) {
 			$data['data'] = $news['data'];
+			$data['total'] = $news['total'];
 			$data['totalPage'] = ceil($news['total']/$limit);
         }
 		$this->layout = false;
@@ -66,6 +67,7 @@ class NewsController extends Controller
 		);
 		if (!empty($news)) {
 			$data['data'] = $news['data'];
+			$data['total'] = $news['total'];
             $data['totalPage'] = ceil($news['total']/$limit);
         }
 		$this->layout = false;
@@ -92,6 +94,7 @@ class NewsController extends Controller
         
         if (!empty($news)) {
 			$data['data'] = $news['data'];
+			$data['total'] = $news['total'];
             $data['totalPage'] = ceil($news['total']/$limit);
         }
 		
@@ -203,6 +206,7 @@ class NewsController extends Controller
         
         if (!empty($news)) {
 			$data['data'] = $news['data'];
+			$data['total'] = $news['total'];
             $data['totalPage'] = ceil($news['total']/$limit);
         }
         // var_dump($data);
