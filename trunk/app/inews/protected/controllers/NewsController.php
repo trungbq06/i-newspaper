@@ -77,6 +77,7 @@ class NewsController extends Controller
         $this->layout = false;
         $params = Yii::app()->params;
         $cId = isset($_GET['id']) ? $_GET['id'] : null;
+		$siteId = isset($_GET['sid']) ? strip_tags($_GET['sid']) : 1;
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $data = array(
@@ -86,7 +87,7 @@ class NewsController extends Controller
         );        
         $news = array();
         if ($cId) {
-            $news = News::model()->getNewsCat($cId, $page, $limit);
+            $news = News::model()->getNewsCat($cId, $siteId, $page, $limit);
         }
         
         if (!empty($news)) {

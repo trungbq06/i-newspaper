@@ -182,14 +182,14 @@ class News extends CActiveRecord
 		return array('data' => $news, 'total' => $count);
 	}
 	
-	public function getNewsCat($categoryId, $page = 1, $limit = 20) {
+	public function getNewsCat($categoryId, $siteId, $page = 1, $limit = 20) {
 		$params = Yii::app()->params;
 		
 		$offset = ($page - 1) * $limit;
 		$query = Yii::app()->db->createCommand()
 			->select('n.*')
 			->from('news n')
-			->where('n.category_id = ' . $categoryId)
+			->where('n.category_id = ' . $categoryId . ' AND n.site_id='.$siteId)
 			->order('n.created_time DESC')
 			->limit($limit)
 			->offset($offset);
