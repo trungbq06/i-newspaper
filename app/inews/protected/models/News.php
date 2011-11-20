@@ -223,11 +223,11 @@ class News extends CActiveRecord
 		return $news;
 	}
     
-    public function searchText($keyword, $page = 1, $limit = 20) {
+    public function searchText($keyword, $siteId, $page = 1, $limit = 20) {
         $query = Yii::app()->db->createCommand()
             ->select("id, title, headline, content, thumbnail_url, category_id, published_time, created_time, MATCH(title_en) AGAINST ('$keyword') AS score")
             ->from('news')
-            ->where("MATCH(title_en) AGAINST('$keyword')")
+            ->where("MATCH(title_en) AGAINST('$keyword') AND site_id = $siteId")
             ->order("score DESC")
             ->limit($limit)
             ->offset($offset);
