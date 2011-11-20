@@ -536,9 +536,9 @@ class Crawler {
 	
 	public function getDantri() {
 		$params = Yii::app()->params;
-		$vnexpress = $params['site']['dantri'];
+		$dantri = $params['site']['dantri'];
 		
-		foreach ($vnexpress as $c => $link) {
+		foreach ($dantri as $c => $link) {
 			$content = $this->getURLContents($link);
 			$items = $this->getContent($content, '<item>', '</item>');
 			// $i = 0;
@@ -556,41 +556,58 @@ class Crawler {
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link><![CDATA[', ']]></link>', true);
 				// echo $detailLink . '<br/>';
+				// $detailLink = 'http://dantri.com.vn/c673/s673-539159/xin-thay-dung-khoc.htm';
+				// $detailLink = 'http://dantri.com.vn/c202/s202-539449/thu-tuc-tach-khau.htm';
+				// $detailLink = 'http://dantri.com.vn/c20/s20-539679/o-to-tai-bi-tau-hoa-dam-bay-xuong-ruong.htm';
+				// $detailLink = 'http://dantri.com.vn/c741/s741-539694/u23-viet-nam-dung-buoc-tai-ban-ket-truoc-indonesia.htm';
 				// $detailLink = 'http://dantri.com.vn/c702/s702-527697/top-ba-sao-nhi-va-cau-chuyen-doi-ban-tho-rua.htm';
-				$detail = $this->getURLContents($detailLink);
-				// echo $detail;
-				$tmp = $this->getContent($detail, '<div class="fon31 mt1">', "id='hidNextUsing'", true);
-				if (empty($tmp))
-					$tmp = $this->getContent($detail, 'ctl00_IDContent_BlogDetail1_hplTitle">', "id='hidNextUsing'", true);
-				if (empty($tmp))
-					$tmp = $this->getContent($detail, 'ctl00_IDContent_Tin_Chi_Tiet">', "id='hidNextUsing'", true);
-				$tmp .= "id='hidNextUsing'/>";
-				$startTag = '<div class="fon33 mt1">';
-				if (strstr($detail, '<div class="blogsapo">'))
-					$startTag = '<div class="blogsapo">';
-					
-				$data['headline'] = '';
-				$headline = $this->getContent($tmp, $startTag, '</div>', true);
-				if (!empty($headline))
-					$data['headline'] = $headline;
-				$data['headline'] = $this->stripContent($data['headline'], '<br>', '</a>');
-				// print_r($data);die();
-				// echo $tmp;die();
-				// $tmp = str_replace('src="/', 'src="http://vnexpress.net/', $tmp);
-				if (!empty($tmp)) {
-					$tmp = $this->stripContent($tmp,'<br><a href=', '</b></a></div>');
-					$tmp = str_replace('<br><a href=</b></a>', '', $tmp);
-					// echo $tmp;
-					$data['content'] = $tmp;
-					$data['original_url'] = $detailLink;
-					$data['category_id'] = $c;
-					$data['site_id'] = 2;
-					$data['created_time'] = date('Y-m-d H:i:s');
-					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-					// print_r($data);die();
-					// $tmp = strip_tags($tmp, '<img><p><br><table><tr><td><h1><h2>');
-					// echo $tmp . '<br/><br/>';
-					if (!News::isExist(2, $detailLink)) {
+				if (!News::isExist(2, $detailLink)) {
+					$detail = $this->getURLContents($detailLink);
+					// echo $detail;die();
+					$tmp = $this->getContent($detail, '<div class="fon31 mt1">', "id='hidNextUsing'", true);
+					// die($tmp);
+					if (empty($tmp))
+						$tmp = $this->getContent($detail, 'ctl00_IDContent_BlogDetail1_hplTitle">', "id='hidNextUsing'", true);
+					if (empty($tmp))
+						$tmp = $this->getContent($detail, 'ctl00_IDContent_Tin_Chi_Tiet">', "id='hidNextUsing'", true);
+					if (empty($tmp)) continue;
+					$tmp .= "id='hidNextUsing'/>";
+					// die($tmp) . '123';
+					$startTag = '<div class="fon33 mt1">';
+					if (strstr($detail, '<div class="blogsapo">'))
+						$startTag = '<div class="blogsapo">';
+					$data['headline'] = '';
+					$headline = $this->getContent($tmp, $startTag, '</div>', true);
+					if (!empty($headline))
+						$data['headline'] = $headline;
+					// $data['headline'] = $this->stripContent($data['headline'], '<br>', '</a>');
+					// echo $headline;die();
+					$tmp = str_replace($data['title'], '', $tmp);					
+					$tmp = str_replace($data['headline'], '', $tmp);
+					$stripHeadline = $this->getContent($data['headline'], '<br>', '</a>');
+					if (!empty($stripHeadline)) {
+						foreach ($stripHeadline as $headline) {
+							$data['headline'] = str_replace($headline, '', $data['headline']);
+						}
+					}
+					$data['headline'] = str_replace('<br></a>', '', $data['headline']);
+					// print_r($data);die();					
+					// echo $tmp;die();
+					// $tmp = str_replace('src="/', 'src="http://vnexpress.net/', $tmp);
+					if (!empty($tmp)) {
+						$tmp = $this->stripContent($tmp,'<br><a href=', '</b></a></div>');
+						$tmp = str_replace('<br><a href=</b></a>', '', $tmp);
+						// echo $tmp;
+						$data['content'] = $tmp;
+						$data['original_url'] = $detailLink;
+						$data['category_id'] = $c;
+						$data['site_id'] = 2;
+						$data['created_time'] = date('Y-m-d H:i:s');
+						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+						// print_r($data);die();
+						// $tmp = strip_tags($tmp, '<img><p><br><table><tr><td><h1><h2>');
+						// echo $tmp . '<br/><br/>';
+						
 						// $i++;
 						$news = new News;
 						$news->attributes = $data;
