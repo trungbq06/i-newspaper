@@ -191,6 +191,7 @@ class NewsController extends Controller
     public function actionSearch() {
         $params = Yii::app()->params;
         $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
+		$page = isset($_GET['page']) ? strip_tags($_GET['page']) : 1;
         $siteId = isset($_GET['sid']) ? strip_tags($_GET['sid']) : 1;
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
         
@@ -201,7 +202,7 @@ class NewsController extends Controller
         );
         $news = array();
         if ($keyword) {
-            $news = News::model()->searchText($keyword, $siteId);            
+            $news = News::model()->searchText($keyword, $siteId, $page, $limit);
         }
         
         if (!empty($news)) {
