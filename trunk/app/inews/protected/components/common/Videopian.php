@@ -1283,8 +1283,8 @@ class Videopian
         preg_match('#\|(.*)\|\|#U', $afterPipes, $matches);
         self::$video->files['video/x-flv'] = $matches[1];
 
-        require_once 'youtube.php';
- 		$tube = new youtube();
+        require_once 'Youtube.php';
+ 		$tube = new Youtube();
   		$links = $tube->get(self::$url);		
         if(self::$video->files['video/x-flv']=="")
         {		
