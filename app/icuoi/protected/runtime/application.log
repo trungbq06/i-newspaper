@@ -1,0 +1,1119 @@
+2011/11/20 17:23:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('favicon.ico')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/favicon.ico
+2011/11/20 17:23:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('favicon.ico')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/favicon.ico
+2011/11/20 17:23:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('favicon.ico')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/favicon.ico
+2011/11/20 17:27:50 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2003] Can't connect to MySQL server on 'ilive.vn' (10061)' in E:\i-newspaper\framework\db\CDbConnection.php:364
+Stack trace:
+#0 E:\i-newspaper\framework\db\CDbConnection.php(313): CDbConnection->open()
+#1 E:\i-newspaper\framework\db\CDbConnection.php(291): CDbConnection->setActive(true)
+#2 E:\i-newspaper\framework\base\CModule.php(380): CDbConnection->init()
+#3 E:\i-newspaper\framework\base\CApplication.php(429): CModule->getComponent('db')
+#4 E:\i-newspaper\framework\db\ar\CActiveRecord.php(612): CApplication->getDb()
+#5 E:\i-newspaper\framework\db\ar\CActiveRecord.php(2288): CActiveRecord->getDbConnection()
+#6 E:\i-newspaper\framework\db\ar\CActiveRecord.php(372): CActiveRecordMetaData->__construct(Object(NewsCategory))
+#7 E:\i-newspaper\app\icuoi\protected\models\NewsCategory.php(19): CActiveRecord::model('NewsCategory')
+#8 E:\i-newspaper\app\icuoi\protected\components\Crawler.php(171): NewsCategory::model()
+#9 E:\i-newspaper\app\icuoi\protected\controllers\SiteController.php(59): Crawler->getTruyencuoi()
+#10 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): SiteController->actionIndex()
+#11 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#12 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#13 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('')
+#15 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('site')
+#16 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#17 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#18 {main} REQUEST_URI=/site
+2011/11/21 21:44:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_up.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_up.gif
+2011/11/21 21:44:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_up.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_up.gif
+2011/11/21 21:44:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_up.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_up.gif
+2011/11/21 21:44:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_down.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_down.gif
+2011/11/21 21:44:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_up.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_up.gif
+2011/11/21 21:44:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_up.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_up.gif
+2011/11/21 21:44:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_down.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_down.gif
+2011/11/21 21:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_up.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_up.gif
+2011/11/21 21:44:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:44:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:44:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/icon/24/vote_up.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/icon/24/vote_up.gif
+2011/11/21 21:44:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:34 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:44:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:44:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:44:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:52:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:52:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:52:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 21:52:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 21:52:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 21:52:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image-joke.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image-joke.jpg
+2011/11/21 21:52:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 21:55:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/home/no-image.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/home/no-image.jpg
+2011/11/21 22:07:31 [error] [php] Missing argument 2 for News::isExist(), called in E:\i-newspaper\app\icuoi\protected\components\Crawler.php on line 186 and defined (E:\i-newspaper\app\icuoi\protected\models\News.php:126)
+Stack trace:
+#0 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): SiteController->actionIndex()
+#1 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams()
+#2 E:\i-newspaper\framework\web\CController.php(278): SiteController->runAction()
+#3 E:\i-newspaper\framework\web\CController.php(257): SiteController->runActionWithFilters()
+#4 E:\i-newspaper\framework\web\CWebApplication.php(277): SiteController->run()
+#5 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController()
+#6 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#7 E:\i-newspaper\app\icuoi\index.php(13): CWebApplication->run()
+REQUEST_URI=/site
+in E:\i-newspaper\app\icuoi\protected\models\News.php (126)
+in E:\i-newspaper\app\icuoi\protected\components\Crawler.php (186)
+in E:\i-newspaper\app\icuoi\protected\controllers\SiteController.php (59)
+2011/11/21 22:12:08 [warning] [php] come here
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:08 [warning] [php] checking
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:08 [warning] [php] clip_category
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:08 [warning] [php] id
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:08 [warning] [php] clip_category
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:08 [warning] [php] name
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:08 [warning] [php] clip_category
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:08 [warning] [php] url
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] come here
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] checking
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] clip_category
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] id
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] clip_category
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] name
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] clip_category
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:12:12 [warning] [php] url
+in E:\i-newspaper\app\icuoi\index.php (13)
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/3/images/small/0_BdGU4NYlOaw.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/3/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/3/images/small/0_BdGU4NYlOaw.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_yNFXhO0STYw.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_yNFXhO0STYw.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_Bi0T4X7HEi4.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_Bi0T4X7HEi4.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_nVml6_Ivr44.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_nVml6_Ivr44.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_pW71AxJKPcM.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_pW71AxJKPcM.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_zTUeM858Gko.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_zTUeM858Gko.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_-weE2VEcYOo.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_-weE2VEcYOo.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_oF4ysoD_5YY.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_oF4ysoD_5YY.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_KAxgpHWtLC0.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_KAxgpHWtLC0.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_nfaAHg2uAFo.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_nfaAHg2uAFo.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_DmtNcjCvAo0.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_DmtNcjCvAo0.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/89/images/small/0_a4cmrMJul1g.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/89/image...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/89/images/small/0_a4cmrMJul1g.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/4/images/small/0_I0ihVE09N6k.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/4/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/4/images/small/0_I0ihVE09N6k.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/3/images/small/0_0l1qNhsFHsI.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/3/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/3/images/small/0_0l1qNhsFHsI.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_uo5tCHdlMKU.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_uo5tCHdlMKU.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_BxfATJH7pAk.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_BxfATJH7pAk.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/4/images/small/vt4X7zFfv4k.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/4/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/4/images/small/vt4X7zFfv4k.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/89/images/small/0_stHGrAEYnGk.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/89/image...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/89/images/small/0_stHGrAEYnGk.jpg
+2011/11/21 22:34:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_6Txm4lrTdcc.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_6Txm4lrTdcc.jpg
+2011/11/21 22:34:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_yNFXhO0STYw.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_yNFXhO0STYw.jpg
+2011/11/21 22:34:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/3/images/small/0_BdGU4NYlOaw.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/3/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/3/images/small/0_BdGU4NYlOaw.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_yNFXhO0STYw.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_yNFXhO0STYw.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_nVml6_Ivr44.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_nVml6_Ivr44.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_pW71AxJKPcM.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_pW71AxJKPcM.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_oF4ysoD_5YY.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_oF4ysoD_5YY.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_zTUeM858Gko.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_zTUeM858Gko.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_Bi0T4X7HEi4.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_Bi0T4X7HEi4.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_-weE2VEcYOo.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_-weE2VEcYOo.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_nfaAHg2uAFo.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_nfaAHg2uAFo.jpg
+2011/11/21 22:35:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/97883/images/small/0_KAxgpHWtLC0.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/97883/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/97883/images/small/0_KAxgpHWtLC0.jpg
+2011/11/21 22:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/css/combined.min.css".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/css/combined.min.css
+2011/11/21 22:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/page/vote-down.png".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/page/vote-down.png
+2011/11/21 22:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/page/no-avatar.png".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/page/no-avatar.png
+2011/11/21 22:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "custom/themes/vart/images/logo.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('custom/themes/v...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/custom/themes/vart/images/logo.gif
+2011/11/21 22:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/page/vote-up.png".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/page/vote-up.png
+2011/11/21 22:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/common.combined.min.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/common.co...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/common.combined.min.js?v=1
+2011/11/21 22:36:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/loading.gif".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/loading.gif
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/view-node.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/view-node...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/view-node.js
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_Yu9fZUaCi6M.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_Yu9fZUaCi6M.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/vart/images/button/down.jpeg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('themes/vart/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/themes/vart/images/button/down.jpeg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/89/images/small/0_9-4IFUak_U0.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/89/image...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/89/images/small/0_9-4IFUak_U0.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/111161/images/small/0_oF4ysoD_5YY.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/111161/i...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/111161/images/small/0_oF4ysoD_5YY.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_qn67EvYPuXA.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_qn67EvYPuXA.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_trx11ClYYUw.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_trx11ClYYUw.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_oBel6gTK7L4.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_oBel6gTK7L4.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/4/images/small/0_BoV6Kui605o.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/4/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/4/images/small/0_BoV6Kui605o.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_ueEBDnFsxxg.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_ueEBDnFsxxg.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/3/images/small/2_1317333.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/3/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/3/images/small/2_1317333.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_JOaL8_ztmpM.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_JOaL8_ztmpM.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_VZCgN7eIf7M.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_VZCgN7eIf7M.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/1316/images/small/1_WWPT.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/1316/ima...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/1316/images/small/1_WWPT.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/0_HieM2fCfzhI.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/0_HieM2fCfzhI.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/12383/images/small/0_dOEaiC78s6E.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/12383/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/12383/images/small/0_dOEaiC78s6E.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/3/images/small/0_Bf66r0nQa0Y.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/3/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/3/images/small/0_Bf66r0nQa0Y.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "js/cl/view-node.js".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('js/cl/view-node...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/js/cl/view-node.js
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/89/images/small/0_f8vl-2AT2t0.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/89/image...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/89/images/small/0_f8vl-2AT2t0.jpg
+2011/11/21 22:36:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/16150/images/small/1_WNR0.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/16150/im...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/16150/images/small/1_WNR0.jpg
+2011/11/21 22:36:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/89/images/small/1_HRG.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/89/image...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/89/images/small/1_HRG.jpg
+2011/11/21 22:36:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/4/images/small/EeRxvcj0Lss.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/4/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/4/images/small/EeRxvcj0Lss.jpg
+2011/11/21 22:36:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/3/images/small/0_PXc6ncfEkX0.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/3/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/3/images/small/0_PXc6ncfEkX0.jpg
+2011/11/21 22:36:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "ufiles/4/images/small/1_-2e.jpg".' in E:\i-newspaper\framework\web\CWebApplication.php:281
+Stack trace:
+#0 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('ufiles/4/images...')
+#1 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#2 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#3 {main} REQUEST_URI=/ufiles/4/images/small/1_-2e.jpg
+2011/11/21 22:55:07 [error] [exception.Videopian_Exception] exception 'Videopian_Exception' with message 'The media you are trying to get is not a video' in E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php:303
+Stack trace:
+#0 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(190): Videopian::getPageMetadata()
+#1 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(93): Videopian::get('http://www.yout...')
+#2 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(77): ClipController->parseVideo(Object(Clip))
+#3 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): ClipController->actionDetail()
+#4 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#5 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#6 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('detail')
+#8 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('clip/detail')
+#9 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#10 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#11 {main} REQUEST_URI=/clip/detail?id=22
+2011/11/21 23:10:38 [error] [exception.Videopian_Exception] exception 'Videopian_Exception' with message 'The information file for the video you are trying to get is unavailable (HTTP/1.0 400 Bad Request)' in E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php:164
+Stack trace:
+#0 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(1190): Videopian::checkAvailability('http://gdata.yo...')
+#1 [internal function]: Videopian::getYoutube()
+#2 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(199): call_user_func(Array)
+#3 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(93): Videopian::get('http://www.yout...')
+#4 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(77): ClipController->parseVideo(Object(Clip))
+#5 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): ClipController->actionDetail()
+#6 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#7 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#8 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('detail')
+#10 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('clip/detail')
+#11 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#12 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#13 {main} REQUEST_URI=/clip/detail?id=49
+2011/11/21 23:11:23 [error] [exception.Videopian_Exception] exception 'Videopian_Exception' with message 'The information file for the video you are trying to get is unavailable (HTTP/1.0 400 Bad Request)' in E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php:164
+Stack trace:
+#0 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(1190): Videopian::checkAvailability('http://gdata.yo...')
+#1 [internal function]: Videopian::getYoutube()
+#2 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(199): call_user_func(Array)
+#3 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(93): Videopian::get('http://www.yout...')
+#4 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(77): ClipController->parseVideo(Object(Clip))
+#5 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): ClipController->actionDetail()
+#6 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#7 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#8 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('detail')
+#10 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('clip/detail')
+#11 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#12 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#13 {main} REQUEST_URI=/clip/detail?id=52
+2011/11/21 23:11:26 [error] [exception.Videopian_Exception] exception 'Videopian_Exception' with message 'The information file for the video you are trying to get is unavailable (HTTP/1.0 400 Bad Request)' in E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php:164
+Stack trace:
+#0 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(1190): Videopian::checkAvailability('http://gdata.yo...')
+#1 [internal function]: Videopian::getYoutube()
+#2 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(199): call_user_func(Array)
+#3 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(93): Videopian::get('http://www.yout...')
+#4 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(77): ClipController->parseVideo(Object(Clip))
+#5 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): ClipController->actionDetail()
+#6 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#7 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#8 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('detail')
+#10 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('clip/detail')
+#11 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#12 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#13 {main} REQUEST_URI=/clip/detail?id=53
+2011/11/21 23:11:29 [error] [exception.Videopian_Exception] exception 'Videopian_Exception' with message 'The information file for the video you are trying to get is unavailable (HTTP/1.0 400 Bad Request)' in E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php:164
+Stack trace:
+#0 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(1190): Videopian::checkAvailability('http://gdata.yo...')
+#1 [internal function]: Videopian::getYoutube()
+#2 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(199): call_user_func(Array)
+#3 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(93): Videopian::get('http://www.yout...')
+#4 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(77): ClipController->parseVideo(Object(Clip))
+#5 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): ClipController->actionDetail()
+#6 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#7 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#8 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('detail')
+#10 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('clip/detail')
+#11 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#12 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#13 {main} REQUEST_URI=/clip/detail?id=55
+2011/11/21 23:11:31 [error] [exception.Videopian_Exception] exception 'Videopian_Exception' with message 'The information file for the video you are trying to get is unavailable (HTTP/1.0 400 Bad Request)' in E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php:164
+Stack trace:
+#0 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(1190): Videopian::checkAvailability('http://gdata.yo...')
+#1 [internal function]: Videopian::getYoutube()
+#2 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(199): call_user_func(Array)
+#3 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(93): Videopian::get('http://www.yout...')
+#4 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(77): ClipController->parseVideo(Object(Clip))
+#5 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): ClipController->actionDetail()
+#6 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#7 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#8 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('detail')
+#10 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('clip/detail')
+#11 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#12 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#13 {main} REQUEST_URI=/clip/detail?id=57
+2011/11/21 23:13:13 [error] [exception.Videopian_Exception] exception 'Videopian_Exception' with message 'The information file for the video you are trying to get is unavailable (HTTP/1.0 400 Bad Request)' in E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php:164
+Stack trace:
+#0 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(1190): Videopian::checkAvailability('http://gdata.yo...')
+#1 [internal function]: Videopian::getYoutube()
+#2 E:\i-newspaper\app\icuoi\protected\components\common\Videopian.php(199): call_user_func(Array)
+#3 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(94): Videopian::get('http://www.yout...')
+#4 E:\i-newspaper\app\icuoi\protected\controllers\ClipController.php(77): ClipController->parseVideo(Object(Clip))
+#5 E:\i-newspaper\framework\web\actions\CInlineAction.php(50): ClipController->actionDetail()
+#6 E:\i-newspaper\framework\web\CController.php(300): CInlineAction->runWithParams(Array)
+#7 E:\i-newspaper\framework\web\CController.php(278): CController->runAction(Object(CInlineAction))
+#8 E:\i-newspaper\framework\web\CController.php(257): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 E:\i-newspaper\framework\web\CWebApplication.php(277): CController->run('detail')
+#10 E:\i-newspaper\framework\web\CWebApplication.php(136): CWebApplication->runController('clip/detail')
+#11 E:\i-newspaper\framework\base\CApplication.php(158): CWebApplication->processRequest()
+#12 E:\i-newspaper\app\icuoi\index.php(13): CApplication->run()
+#13 {main} REQUEST_URI=/clip/detail?id=53
