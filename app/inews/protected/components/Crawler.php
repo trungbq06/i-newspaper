@@ -604,6 +604,8 @@ class Crawler {
 						$data['site_id'] = 2;
 						$data['created_time'] = date('Y-m-d H:i:s');
 						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+						$data['title_en'] = Utility::unicode2Anscii($data['title']);
+						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
 						// print_r($data);die();
 						// $tmp = strip_tags($tmp, '<img><p><br><table><tr><td><h1><h2>');
 						// echo $tmp . '<br/><br/>';
@@ -636,7 +638,7 @@ class Crawler {
 			}
 		}
 	}
-
+	
     public function cacheMedia($limit) {
         $config = Vega_App::getInstance()->coreConfig;
         $crawlerDao = Vega_Dao::factory('Crawler');
