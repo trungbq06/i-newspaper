@@ -13,7 +13,7 @@ class UtilityController extends Controller {
 	public function actionGetLotteryCity() {
 		$data = UtilityLotteryCity::model()->findAll();
 		foreach ($data as $one) {
-			$result = array(
+			$result[] = array(
 				'id' => $one->id,
 				'name' => $one->name
 			);
@@ -39,7 +39,7 @@ class UtilityController extends Controller {
 	public function actionGetTvChannel() {
 		$data = UtilityTvChannel::model()->findAll();
 		foreach ($data as $one) {
-			$result = array(
+			$result[] = array(
 				'id' => $one->id,
 				'name' => $one->name
 			);
