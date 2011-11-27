@@ -1,17 +1,19 @@
 <?php
 
 /**
- * This is the model class for table "utility_weather".
+ * This is the model class for table "utility_tv_calendar".
  *
- * The followings are the available columns in table 'utility_weather':
- * @property string $day
+ * The followings are the available columns in table 'utility_tv_calendar':
+ * @property string $id
+ * @property string $created_day
+ * @property string $channel_id
  * @property string $content
  */
-class UtilityWeather extends CActiveRecord
+class UtilityTvCalendar extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
-	 * @return UtilityWeather the static model class
+	 * @return UtilityCalendarTv the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -23,7 +25,7 @@ class UtilityWeather extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'utility_weather';
+		return 'utility_tv_calendar';
 	}
 
 	/**
@@ -34,10 +36,11 @@ class UtilityWeather extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('content', 'required'),
+			array('created_day, channel_id, content', 'required'),
+			array('channel_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('day, content', 'safe', 'on'=>'search'),
+			array('id, created_day, channel_id, content', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +61,9 @@ class UtilityWeather extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'day' => 'Day',
+			'id' => 'ID',
+			'created_day' => 'Created Day',
+			'channel_id' => 'Channel',
 			'content' => 'Content',
 		);
 	}
@@ -74,7 +79,9 @@ class UtilityWeather extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('day',$this->day,true);
+		$criteria->compare('id',$this->id,true);
+		$criteria->compare('created_day',$this->created_day,true);
+		$criteria->compare('channel_id',$this->channel_id,true);
 		$criteria->compare('content',$this->content,true);
 
 		return new CActiveDataProvider($this, array(
@@ -82,4 +89,9 @@ class UtilityWeather extends CActiveRecord
 		));
 	}
 	
+	public function isExist($channelId, $day) {
+		$data = UtilityTvCalendar::model()->findByAttributes(array('channel_id' => $channelId, 'created_day' => $day));
+		
+		return (!empty($data)) ? true : false;
+	}
 }

@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'utility_lottery':
  * @property string $city
- * @property string $day
+ * @property string $created_day
  * @property string $content
  */
 class UtilityLottery extends CActiveRecord
@@ -38,7 +38,7 @@ class UtilityLottery extends CActiveRecord
 			array('content', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('city, day, content', 'safe', 'on'=>'search'),
+			array('city, created_day, content', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,7 +60,7 @@ class UtilityLottery extends CActiveRecord
 	{
 		return array(
 			'city' => 'City',
-			'day' => 'Day',
+			'created_day' => 'Day',
 			'content' => 'Content',
 		);
 	}
@@ -77,11 +77,25 @@ class UtilityLottery extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('city',$this->city,true);
-		$criteria->compare('day',$this->day,true);
+		$criteria->compare('created_day',$this->created_day,true);
 		$criteria->compare('content',$this->content,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	
+	public function isExist($cityId, $day) {
+		$data = UtilityLottery::model()->findByAttributes(array('city_id' => $cityId, 'created_day' => $day));
+		
+		return (!empty($data)) ? true : false;
+	}
+	
+	public function getResult($cityId) {
+		$result = Yii::app()->db->createCommand(
+			"SELECT created_day, content FROM utility_lottery WHERE city_id = $cityId ORDER BY created_day DESC LIMIT 1"
+		)->queryRow();
+		
+		return $result;
 	}
 }
