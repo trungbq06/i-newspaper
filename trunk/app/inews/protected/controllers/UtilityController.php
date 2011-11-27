@@ -26,9 +26,12 @@ class UtilityController extends Controller {
 		$id = isset($_GET['id']) ? intval($_GET['id']) : null;
 		if ($id) {
 			$data = UtilityLottery::model()->getResult($id);
-			$result[] = array(
-				'data' => 'Kết quả ngày ' . date('d/m/Y', strtotime($data['created_day'])) . '<br/>' . $data['content']
-			);
+
+			if (!empty($data)) {
+				$result[] = array(
+					'data' => 'Kết quả ngày ' . date('d/m/Y', strtotime($data['created_day'])) . '<br/>' . $data['content']
+				);
+			} else $result[] = array('data' => null);
 			echo json_encode($result);
 		}
 	}
