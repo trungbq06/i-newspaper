@@ -4,7 +4,7 @@ class UtilityController extends Controller {
 	
 	public function actionGetCinema() {
 		$data = UtilityCinemaSchedule::model()->findByPk(date('Y-m-d'));
-		$result[] = array(
+		$result = array(
 			'data' => $data->content
 		);
 		echo json_encode($result);
@@ -13,7 +13,7 @@ class UtilityController extends Controller {
 	public function actionGetLotteryCity() {
 		$data = UtilityLotteryCity::model()->findAll();
 		foreach ($data as $one) {
-			$result[] = array(
+			$result = array(
 				'id' => $one->id,
 				'name' => $one->name
 			);
@@ -28,10 +28,10 @@ class UtilityController extends Controller {
 			$data = UtilityLottery::model()->getResult($id);
 
 			if (!empty($data)) {
-				$result[] = array(
+				$result = array(
 					'data' => 'Kết quả ngày ' . date('d/m/Y', strtotime($data['created_day'])) . '<br/>' . $data['content']
 				);
-			} else $result[] = array('data' => null);
+			} else $result = array('data' => null);
 			echo json_encode($result);
 		}
 	}
@@ -39,7 +39,7 @@ class UtilityController extends Controller {
 	public function actionGetTvChannel() {
 		$data = UtilityTvChannel::model()->findAll();
 		foreach ($data as $one) {
-			$result[] = array(
+			$result = array(
 				'id' => $one->id,
 				'name' => $one->name
 			);
@@ -52,7 +52,7 @@ class UtilityController extends Controller {
 		if ($id) {
 			$data = UtilityTvCalendar::model()->findByAttributes(array('created_day' => date('Y-m-d'), 'channel_id' => $id));
 			
-			$result[] = array(
+			$result = array(
 				'data' => $data->content
 			);
 			
@@ -62,7 +62,7 @@ class UtilityController extends Controller {
 	
 	public function actionGetExchange() {
 		$data = UtilityExchange::model()->findByPk(date('Y-m-d'));
-		$result[] = array(
+		$result = array(
 			'data' => $data->content
 		);
 		echo json_encode($result);
@@ -70,7 +70,7 @@ class UtilityController extends Controller {
 	
 	public function actionGetGold() {
 		$data = UtilityGold::model()->findByPk(date('Y-m-d'));
-		$result[] = array(
+		$result = array(
 			'data' => $data->content
 		);
 		echo json_encode($result);
@@ -78,7 +78,7 @@ class UtilityController extends Controller {
 	
 	public function actionGetOil() {
 		$data = UtilityOil::model()->findByPk(date('Y-m-d'));
-		$result[] = array(
+		$result = array(
 			'data' => $data->content
 		);
 		echo json_encode($result);
@@ -86,7 +86,7 @@ class UtilityController extends Controller {
 	
 	public function actionGetWeather() {
 		$data = UtilityWeather::model()->findByPk(date('Y-m-d'));
-		$result[] = array(
+		$result = array(
 			'data' => $data->content
 		);
 		echo json_encode($result);
