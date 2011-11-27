@@ -35,11 +35,11 @@ class NewsCategoryController extends Controller
 		
 		$data = array(
 			'error'		=> 0,
-			'category'	=> array()
+			'data'	=> array()
 		);
 		$category = NewsCategory::model()->getList($siteId);
 		if (!empty($category))
-			$data['category'] = $category;
+			$data['data'] = $category;
 			
 		echo json_encode($data);
 	}
@@ -49,11 +49,11 @@ class NewsCategoryController extends Controller
 		
 		$data = array(
 			'error'		=> 0,
-			'category'	=> array()
+			'data'	=> array()
 		);
 		$category = NewsCategory::model()->getClipCategory();
 		if (!empty($category))
-			$data['category'] = $category;
+			$data['data'] = $category;
 			
 		echo json_encode($data);
 	}
