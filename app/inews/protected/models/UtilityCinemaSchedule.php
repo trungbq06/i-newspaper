@@ -1,17 +1,17 @@
 <?php
 
 /**
- * This is the model class for table "utility_weather".
+ * This is the model class for table "utility_cinema_schedule".
  *
- * The followings are the available columns in table 'utility_weather':
- * @property string $day
+ * The followings are the available columns in table 'utility_cinema_schedule':
+ * @property string $created_day
  * @property string $content
  */
-class UtilityWeather extends CActiveRecord
+class UtilityCinemaSchedule extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
-	 * @return UtilityWeather the static model class
+	 * @return UtilityCinemaSchedule the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -23,7 +23,7 @@ class UtilityWeather extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'utility_weather';
+		return 'utility_cinema_schedule';
 	}
 
 	/**
@@ -34,10 +34,10 @@ class UtilityWeather extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('content', 'required'),
+			array('created_day, content', 'required'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('day, content', 'safe', 'on'=>'search'),
+			array('created_day, content', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +58,7 @@ class UtilityWeather extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'day' => 'Day',
+			'created_day' => 'Created Day',
 			'content' => 'Content',
 		);
 	}
@@ -74,12 +74,11 @@ class UtilityWeather extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('day',$this->day,true);
+		$criteria->compare('created_day',$this->created_day,true);
 		$criteria->compare('content',$this->content,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-	
 }

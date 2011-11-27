@@ -54,18 +54,21 @@ class Crawler {
     }
 
     //Post content one Url
-    public function postURLContents($url, $params) {
-        $paramsStr = implode(",", $params);
+    public function postURLContents($url, $params) {        
+		foreach ( $params as $key => $value)
+		{
+			$post_items[] = $key . '=' . $value;
+		}
+		$paramsStr = implode ('&', $post_items);
         $options = array(
             CURLOPT_URL => $url,
 			CURLOPT_HEADER => false,
             CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_POST => 1,
+            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_POST => count($params),
             CURLOPT_POSTFIELDS => $paramsStr
         );
         curl_setopt_array($this->_curl, $options);
-
         $contents = curl_exec($this->_curl);
 
         return $contents;
@@ -167,6 +170,82 @@ class Crawler {
 		return $content;
 	}
 	
+	public function getLotteryCity() {
+		$content = $this->getURLContents('http://comment.dantri.com.vn/defaultkqsx.aspx');
+		$content = $this->getContent($content, 'id="UtilitySonPCKQSX_ddlCity">', '</select>', true);
+		$content = $this->getContent($content, 'value="', '"');
+		
+		foreach ($content as $c) {
+			$city = new UtilityLotteryCity();
+			$city->name = $c;
+			$city->save();
+		}
+	}
+	
+	public function getTvChannel() {
+		$content = $this->getURLContents('http://itv.vn/Lichphatsong.aspx');
+		$content = $this->getContent($content, 'background-color:#C9C9C9;">', '</select>', true);
+		$content = $this->getContent($content, '<option', 'option');
+		
+		foreach ($content as $c) {
+			$channel = new UtilityTvChannel();
+			$channel->name = $this->getContent($c, '>', '</', true);
+			$channel->id = $this->getContent($c, '"', '"', true);
+			$channel->save();
+		}
+	}
+	
+	public function getTvCalendar() {
+		$url = 'http://itv.vn/Lichphatsong.aspx';
+		$channel = UtilityTvChannel::model()->findAll();
+		$params = array(
+			'hdnChannel' => 2,
+			'hdnDate' => date('d/m/Y'),
+			'hdnIsAjax' => 0
+		);
+		foreach ($channel as $c) {
+			$params['hdnChannel'] = $c->id;
+			$content = $this->postURLContents($url, $params);
+			// echo $content;
+			$data = '<table  cellpadding="0" cellspacing="0" border="0" bordercolor="#C3C3C3">';
+		    $data .= '<tr><td style="width:60px;height:19px;padding-left:5px;" align="left" class="Schedule_Text2">Giờ</td>';
+		    $data .= '<td style="width:253px;height:19px;" align="left" class="Schedule_Text2">Chương trình</td></tr>';
+			$times = $this->getContent($content, 'Times="', '"');
+			$programs = $this->getContent($content, 'Programs="', '"');
+			for ($i = 0;$i < count($times);$i++) {
+				$data .= '<tr><td>' . $times[$i] . '</td><td>' . $programs[$i] . '</td></tr>';
+			}
+			$data .= '</table>';
+			$day = date('Y-m-d');
+			if (!UtilityTvCalendar::model()->isExist($c->id, $day)) {
+				$tvCalendar = new UtilityTvCalendar;
+				$tvCalendar->created_day = $day;
+				$tvCalendar->channel_id = $c->id;
+				$tvCalendar->updated_time = date('Y-m-d H:i:s');
+				$tvCalendar->content = $data;
+				$tvCalendar->save();
+			}
+		}
+		
+	}
+	
+	public function getCinemaSchedule() {
+		$url = 'http://comment.dantri.com.vn/defaultcinema.aspx';
+		$content = $this->getURLContents($url);
+		$day = $this->getContent($content, 'UtilitySonPCCinemaes_lblDate">', '</span>', true);
+		$day = explode('/', $day);
+		$day = $day[2] . '-' . $day[1] . '-' . $day[0];
+		
+		$detail = $this->getContent($content, '<div id="content0">', '</div>', true);
+		// echo $detail;
+		if (!UtilityCinemaSchedule::model()->findByPk($day)) {
+			$schedule = new UtilityCinemaSchedule;
+			$schedule->created_day = $day;
+			$schedule->content = $detail;
+			$schedule->save();
+		}
+	}
+	
 	public function getExchange() {
 		$url = 'http://www.taichinhdientu.vn/services/infopage.aspx?svc=exchangerates';
 		$content = $this->getURLContents($url);
@@ -228,17 +307,35 @@ class Crawler {
 	}
 	
 	public function getLottery() {
-		$url = 'http://vov.vn/Services/Infopage.aspx?svc=lotteryresults';
-		// echo $content;die();
-		$day = date('Y-m-d');
-		$temp = $this->getContent($content, '<div id="weather">', '</div>', true);
-		$temp = strip_tags($temp, '<table><thead><tbody><th><tr><td><img>');
-		$check = UtilityWeather::model()->findByAttributes(array('day' => $day));
-		if (empty($check)) {
-			$exchange = new UtilityWeather;
-			$exchange->day = $day;
-			$exchange->content = $temp;
-			$exchange->save(false);
+		$url = 'http://ketquaday.vn/';
+		$content = $this->getURLContents($url);
+		$city = $this->getContent($content, '<div class="main_table', '</div>');
+		$results = $this->getContent($content, '<table border="0" width="100%" align="center">', '</table>');
+		$regions = $this->getContent($content, '<h2>', '</h2>');
+		$main = $this->getContent($content, '<div class="main_table">', '</div>', true);
+		$day = $this->getContent($main, ',', '</b>', true);
+		$day = explode('/', $day);
+		$day = $day[2] . '-' . $day[1] . '-' . $day[0];
+
+		$i = 0;
+		foreach ($city as $c) {
+			$name = $this->getContent($c, '<span class="txt_name">', '</span>', true);
+			$r = '<table>' . $results[$i] . '</table>';
+			$lottery = new UtilityLottery;
+			$lottery->created_day = $day;
+			if ($regions[$i] == 'kết quả xổ số miền bắc') {
+				$name = 'Miền Bắc';
+			}
+			
+			$cityDetail = UtilityLotteryCity::model()->findByAttributes(array('name' => trim($name)));
+			$cityId = $cityDetail->id;
+			if (!UtilityLottery::model()->isExist($cityId, $day)) {
+				$lottery->city_id = $cityId;
+				$lottery->content = $r;
+				$lottery->save();
+			}
+			
+			$i++;
 		}
 	}
 	
@@ -253,52 +350,54 @@ class Crawler {
 				// echo $url;die();
 				$content = $this->getURLContents($url);
 				$videos = $this->getContent($content, 'CRV_Content', '</div>');
-				foreach ($videos as $video) {
-					$data = array();
-					$data['category_id'] = $cat['id'];
-					$detail = $this->getContent($video, 'href="', '">', true);
-					$originalUrl = 'http://vnexpress.net' . $detail;
-					if (!Clip::model()->isExist($originalUrl)) {
-						// echo $detail;die();
-						$data['thumbnail_url'] = $this->getContent($video, 'src="', '"', true);
-						$detailContent = $this->getURLContents($originalUrl);
-						$title = $this->getContent($detailContent, 'NewsTitle', '/div>', true);
-						$data['title'] = $this->getContent($title, '>', '<', true);
-						$headline = $this->getContent($detailContent, 'NewsLead', '/div>', true);
-						$data['headline'] = $this->getContent($headline, '>', '<', true);
-						$time = $this->getContent($detailContent, 'NewsTime', '/div>', true);
-						$time = $this->getContent($time, '>', '<', true);
-						$time = explode('/', $time);
-						$time = $time[2] . '-' . $time[1] . '-' . $time[0];
-						$data['published_time'] = date('Y-m-d H:i:s', strtotime($time));
-						$data['created_time'] = date('Y-m-d H:i:s');
-						
-						$script = $this->getContent($detailContent, 'createPlayer(', ')', true);
-						$params = explode(',', $script);
-						$xmlPath = 'http://vnexpress.net/' . urldecode('%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D' . $params[0] . '%26f%3D' . $params[2]);
-						$playerContent = $this->getURLContents($xmlPath);
-						$data['streaming_url'] = $this->getContent($playerContent, 'link="', '"', true);
-						$data['title_en'] = Utility::unicode2Anscii($data['title']);
-						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);						
-						$data['original_url'] = $originalUrl;
-						$data['content'] = '';
-						$data['thumbnail_url'] = str_replace(' ', '%20', $data['thumbnail_url']);
-						if ($data['streaming_url'] != '') {
-							$data['streaming_url'] = str_replace(' ', '%20', $data['streaming_url']);
-							$data['content'] = '<video poster="' . $data['thumbnail_url'] . '" controls>
-								<source src="' . $data['streaming_url'] . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
-								</video>';
-						}
+				if (!empty($videos)) {
+					foreach ($videos as $video) {
+						$data = array();
+						$data['category_id'] = $cat['id'];
+						$detail = $this->getContent($video, 'href="', '">', true);
+						$originalUrl = 'http://vnexpress.net' . $detail;
+						if (!Clip::model()->isExist($originalUrl)) {
+							// echo $detail;die();
+							$data['thumbnail_url'] = $this->getContent($video, 'src="', '"', true);
+							$detailContent = $this->getURLContents($originalUrl);
+							$title = $this->getContent($detailContent, 'NewsTitle', '/div>', true);
+							$data['title'] = $this->getContent($title, '>', '<', true);
+							$headline = $this->getContent($detailContent, 'NewsLead', '/div>', true);
+							$data['headline'] = $this->getContent($headline, '>', '<', true);
+							$time = $this->getContent($detailContent, 'NewsTime', '/div>', true);
+							$time = $this->getContent($time, '>', '<', true);
+							$time = explode('/', $time);
+							$time = $time[2] . '-' . $time[1] . '-' . $time[0];
+							$data['published_time'] = date('Y-m-d H:i:s', strtotime($time));
+							$data['created_time'] = date('Y-m-d H:i:s');
+							
+							$script = $this->getContent($detailContent, 'createPlayer(', ')', true);
+							$params = explode(',', $script);
+							$xmlPath = 'http://vnexpress.net/' . urldecode('%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D' . $params[0] . '%26f%3D' . $params[2]);
+							$playerContent = $this->getURLContents($xmlPath);
+							$data['streaming_url'] = $this->getContent($playerContent, 'link="', '"', true);
+							$data['title_en'] = Utility::unicode2Anscii($data['title']);
+							$data['headline_en'] = Utility::unicode2Anscii($data['headline']);						
+							$data['original_url'] = $originalUrl;
+							$data['content'] = '';
+							$data['thumbnail_url'] = str_replace(' ', '%20', $data['thumbnail_url']);
+							if ($data['streaming_url'] != '') {
+								$data['streaming_url'] = str_replace(' ', '%20', $data['streaming_url']);
+								$data['content'] = '<video poster="' . $data['thumbnail_url'] . '" controls>
+									<source src="' . $data['streaming_url'] . '" type=\'video/mp4; codecs="avc1.4D401E, mp4a.40.2"\' />
+									</video>';
+							}
 
-						// $i++;
-						$clip = new Clip;
-						$clip->attributes = $data;
-						try {
-							$clip->save(false);
-						} catch (Exception $ex) {
-							var_dump($ex);
+							// $i++;
+							$clip = new Clip;
+							$clip->attributes = $data;
+							try {
+								$clip->save(false);
+							} catch (Exception $ex) {
+								var_dump($ex);
+							}
+							// die('saved');
 						}
-						// die('saved');
 					}
 				}
 			}
