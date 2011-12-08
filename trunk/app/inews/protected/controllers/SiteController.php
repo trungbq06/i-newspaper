@@ -56,12 +56,12 @@ class SiteController extends Controller
 		// $crawler->getDantri();
 		
 		// $crawler->getVnexpressVideo();
-		// $crawler->getLotteryCity();
-		// $crawler->getCalendarTV();
+		// $crawler->getTvCalendar();
 		// $crawler->getLottery();
 		// $crawler->getCinemaSchedule();
-		// $crawler->getTvChannel();
 		// $crawler->getTvCalendar();
+		// $crawler->getLotteryCity();
+		// $crawler->getTvChannel();
 		
 		die('Hello world');
 		$this->render('index');
