@@ -222,7 +222,7 @@ class Crawler {
 				$tvCalendar->created_day = $day;
 				$tvCalendar->channel_id = $c->id;
 				$tvCalendar->updated_time = date('Y-m-d H:i:s');
-				$tvCalendar->content = $data;
+				$tvCalendar->content = str_replace('<table', '<table width="100%"', $data);
 				$tvCalendar->save();
 			}
 		}
@@ -256,7 +256,7 @@ class Crawler {
 		if (empty($check)) {
 			$exchange = new UtilityExchange;
 			$exchange->day = $day;
-			$exchange->content = $temp;
+			$exchange->content = str_replace('<table', '<table width="100%"', $temp);
 			$exchange->save(false);
 		}
 	}
@@ -271,7 +271,7 @@ class Crawler {
 		if (empty($check)) {
 			$exchange = new UtilityGold;
 			$exchange->day = $day;
-			$exchange->content = $temp;
+			$exchange->content = str_replace('<table', '<table width="100%"', $temp);
 			$exchange->save(false);
 		}
 	}
@@ -286,7 +286,7 @@ class Crawler {
 		if (empty($check)) {
 			$exchange = new UtilityOil;
 			$exchange->day = $day;
-			$exchange->content = $temp;
+			$exchange->content = str_replace('<table', '<table width="100%"', $temp);
 			$exchange->save(false);
 		}
 	}
@@ -301,7 +301,7 @@ class Crawler {
 		if (empty($check)) {
 			$exchange = new UtilityWeather;
 			$exchange->day = $day;
-			$exchange->content = $temp;
+			$exchange->content = str_replace('<table', '<table width="100%"', $temp);
 			$exchange->save(false);
 		}
 	}
@@ -320,7 +320,7 @@ class Crawler {
 		$i = 0;
 		foreach ($city as $c) {
 			$name = $this->getContent($c, '<span class="txt_name">', '</span>', true);
-			$r = '<table>' . $results[$i] . '</table>';
+			$r = '<table width="100%">' . $results[$i] . '</table></td></tr></table>';
 			$lottery = new UtilityLottery;
 			$lottery->created_day = $day;
 			if ($regions[$i] == 'kết quả xổ số miền bắc') {
