@@ -76,7 +76,8 @@ class ClipController extends Controller
 					'published_time'	=> date('d/m/Y', strtotime($clip->published_time)),
 					'content'			=> $clip->content,
 					'category_id'		=> $clip->category_id,
-					'original_url'		=> $clip->original_url
+					'original_url'		=> $clip->original_url,
+					'streaming_url'		=> $clip->streaming_url
 				);
 			}
 		}
