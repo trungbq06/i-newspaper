@@ -111,6 +111,7 @@ class NewsController extends Controller
 		);
 		if ($nId) {
 			$news = News::model()->findByPk($nId);
+			$cat = NewsCategory::model()->findByPk($news->category_id);
 			// var_dump($news);
 			if ($news) {
 				$data['data'][] = array(
@@ -122,7 +123,8 @@ class NewsController extends Controller
 					'published_time'	=> date('d/m/Y H:i:s', strtotime($news->published_time)),
 					'content'			=> $this->parseVideo($news),
 					'category_id'		=> $news->category_id,
-					'original_url'		=> $news->original_url
+					'original_url'		=> $news->original_url,
+					'category_name'		=> $cat->name
 				);
 			}
 		}
