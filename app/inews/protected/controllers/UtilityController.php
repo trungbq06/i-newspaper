@@ -4,9 +4,14 @@ class UtilityController extends Controller {
 	
 	public function actionGetCinema() {
 		$data = UtilityCinemaSchedule::model()->findByPk(date('Y-m-d'));
+		$content = $data->content;
+		$content = str_replace('border="1"', '', $content);
+		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
 		$result = array(
-			'data' => $data->content
+			'data' => $content
 		);
+		// echo $content;die();
+		// echo $data->content;die();
 		echo json_encode($result);
 	}
 	
@@ -31,7 +36,14 @@ class UtilityController extends Controller {
 				$result = array(
 					'data' => 'Kết quả ngày ' . date('d/m/Y', strtotime($data['created_day'])) . '<br/>' . $data['content']
 				);
+				$content = $result['data'];
+				$content = str_replace('border="1"', '', $content);
+				$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+				$result = array(
+					'data' => $content
+				);
 			} else $result = array('data' => null);
+			// echo $data['content'];die();			
 			echo json_encode($result);
 		}
 	}
@@ -52,43 +64,68 @@ class UtilityController extends Controller {
 		if ($id) {
 			$data = UtilityTvCalendar::model()->findByAttributes(array('created_day' => date('Y-m-d'), 'channel_id' => $id));
 			
+			$content = $data->content;
+			$content = str_replace('border="1"', '', $content);
+			$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
 			$result = array(
-				'data' => $data->content
+				'data' => $content
 			);
-			
+			// echo $content;die();
+			// echo $data->content;die();
 			echo json_encode($result);
 		}
 	}
 	
 	public function actionGetExchange() {
 		$data = UtilityExchange::model()->findByPk(date('Y-m-d'));
+		$content = $data->content;
+		$content = str_replace('border="1"', '', $content);
+		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
 		$result = array(
-			'data' => $data->content
+			'data' => $content
 		);
+		// echo $content;die();
+		// echo $data->content;die();
 		echo json_encode($result);
 	}
 	
 	public function actionGetGold() {
 		$data = UtilityGold::model()->findByPk(date('Y-m-d'));
+		$content = $data->content;
+		$content = str_replace('border="1"', '', $content);
+		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
 		$result = array(
-			'data' => $data->content
+			'data' => $content
 		);
+		// echo $content;die();
+		// echo $data->content;die();
 		echo json_encode($result);
 	}
 	
 	public function actionGetOil() {
 		$data = UtilityOil::model()->findByPk(date('Y-m-d'));
+		$content = $data->content;
+		$content = str_replace('border="1"', '', $content);
+		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
 		$result = array(
-			'data' => $data->content
+			'data' => $content
 		);
+		// echo $content;die();
+		// echo $data->content;die();
 		echo json_encode($result);
 	}
 	
 	public function actionGetWeather() {
 		$data = UtilityWeather::model()->findByPk(date('Y-m-d'));
+		
+		$content = $data->content;
+		$content = str_replace('border="1"', '', $content);
+		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
 		$result = array(
-			'data' => $data->content
+			'data' => $content
 		);
+		// echo $content;die();
+		// echo $data->content;die();
 		echo json_encode($result);
 	}
 	
