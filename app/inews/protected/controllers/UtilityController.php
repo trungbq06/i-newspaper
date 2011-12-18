@@ -6,7 +6,14 @@ class UtilityController extends Controller {
 		$data = UtilityCinemaSchedule::model()->findByPk(date('Y-m-d'));
 		$content = $data->content;
 		$content = str_replace('border="1"', '', $content);
-		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+		$style = '<style type="text/css">
+table {border-collapse: collapse;font-size: 14px;border: 1px solid #E3DEE0;border-radius: 5px;padding: 0;}
+table thead td {background-color: #BD284A;color: #fff;padding: 2px 0;font-weight: bold;}
+table td {border: 1px solid #E3DEE0;}
+</style>
+		';
+		$content = str_replace('<table', '<table cellpadding=0', $content);
+		$content = $style . $content;
 		$result = array(
 			'data' => $content
 		);
@@ -38,12 +45,19 @@ class UtilityController extends Controller {
 				);
 				$content = $result['data'];
 				$content = str_replace('border="1"', '', $content);
-				$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+				$style = '<style type="text/css">
+		table {border-collapse: collapse;font-size: 14px;border: 1px solid #E3DEE0;border-radius: 5px;padding: 0;}
+		table thead td {background-color: #BD284A;color: #fff;padding: 2px 0;font-weight: bold;}
+		table td {border: 1px solid #E3DEE0;}
+		</style>
+				';
+				$content = str_replace('<table', '<table cellpadding=0', $content);
+				$content = $style . $content;
 				$result = array(
 					'data' => $content
 				);
 			} else $result = array('data' => null);
-			// echo $data['content'];die();			
+			// echo $content;die();
 			echo json_encode($result);
 		}
 	}
@@ -66,7 +80,14 @@ class UtilityController extends Controller {
 			
 			$content = $data->content;
 			$content = str_replace('border="1"', '', $content);
-			$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+			$style = '<style type="text/css">
+	table {border-collapse: collapse;font-size: 14px;border: 1px solid #E3DEE0;border-radius: 5px;padding: 0;}
+	table thead td {background-color: #BD284A;color: #fff;padding: 2px 0;font-weight: bold;}
+	table td {border: 1px solid #E3DEE0;}
+	</style>
+			';
+			$content = str_replace('<table', '<table cellpadding=0', $content);
+			$content = $style . $content;
 			$result = array(
 				'data' => $content
 			);
@@ -80,7 +101,14 @@ class UtilityController extends Controller {
 		$data = UtilityExchange::model()->findByPk(date('Y-m-d'));
 		$content = $data->content;
 		$content = str_replace('border="1"', '', $content);
-		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+		$style = '<style type="text/css">
+table {border-collapse: collapse;font-size: 14px;border: 1px solid #E3DEE0;border-radius: 5px;padding: 0;}
+table thead td {background-color: #BD284A;color: #fff;padding: 2px 0;font-weight: bold;}
+table td {border: 1px solid #E3DEE0;}
+</style>
+		';
+		$content = str_replace('<table', '<table cellpadding=0', $content);
+		$content = $style . $content;
 		$result = array(
 			'data' => $content
 		);
@@ -93,7 +121,14 @@ class UtilityController extends Controller {
 		$data = UtilityGold::model()->findByPk(date('Y-m-d'));
 		$content = $data->content;
 		$content = str_replace('border="1"', '', $content);
-		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+		$style = '<style type="text/css">
+table {border-collapse: collapse;font-size: 14px;border: 1px solid #E3DEE0;border-radius: 5px;padding: 0;}
+table thead td {background-color: #BD284A;color: #fff;padding: 2px 0;font-weight: bold;}
+table td {border: 1px solid #E3DEE0;}
+</style>
+		';
+		$content = str_replace('<table', '<table cellpadding=0', $content);
+		$content = $style . $content;
 		$result = array(
 			'data' => $content
 		);
@@ -106,7 +141,14 @@ class UtilityController extends Controller {
 		$data = UtilityOil::model()->findByPk(date('Y-m-d'));
 		$content = $data->content;
 		$content = str_replace('border="1"', '', $content);
-		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+		$style = '<style type="text/css">
+table {border-collapse: collapse;font-size: 14px;border: 1px solid #E3DEE0;border-radius: 5px;padding: 0;}
+table thead td {background-color: #BD284A;color: #fff;padding: 2px 0;font-weight: bold;}
+table td {border: 1px solid #E3DEE0;}
+</style>
+		';
+		$content = str_replace('<table', '<table cellpadding=0', $content);
+		$content = $style . $content;
 		$result = array(
 			'data' => $content
 		);
@@ -120,7 +162,14 @@ class UtilityController extends Controller {
 		
 		$content = $data->content;
 		$content = str_replace('border="1"', '', $content);
-		$content = str_replace('<td', '<td style="border: 1px solid #E3DEE0;"', $content);
+		$style = '<style type="text/css">
+table {border-collapse: collapse;font-size: 14px;border: 1px solid #E3DEE0;border-radius: 5px;padding: 0;}
+table thead td {background-color: #BD284A;color: #fff;padding: 2px 0;font-weight: bold;}
+table td {border: 1px solid #E3DEE0;}
+</style>
+		';
+		$content = str_replace('<table', '<table cellpadding=0', $content);
+		$content = $style . $content;
 		$result = array(
 			'data' => $content
 		);
