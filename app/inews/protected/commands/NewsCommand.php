@@ -10,7 +10,6 @@ class NewsCommand extends CConsoleCommand {
 		$crawler->getOil();
 		$crawler->getWeather();
 		$crawler->getLottery();
-		$crawler->getDantri();
 		
 		$crawler->getVnexpressVideo();
 		$crawler->getTvCalendar();
