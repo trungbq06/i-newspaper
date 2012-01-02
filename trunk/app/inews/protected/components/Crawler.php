@@ -700,6 +700,9 @@ class Crawler {
 					if (!empty($tmp)) {
 						$tmp = $this->stripContent($tmp,'<br><a href=', '</b></a></div>');
 						$tmp = str_replace('<br><a href=</b></a>', '', $tmp);
+						$tmp = str_replace('width=29000%', 'width=100%', $tmp);
+						$tmp = str_replace('<img', '<img width=290', $tmp);
+						$tmp = str_replace('<IMG', '<IMG width=290', $tmp);
 						// echo $tmp;
 						$data['content'] = $tmp;
 						$data['original_url'] = $detailLink;
