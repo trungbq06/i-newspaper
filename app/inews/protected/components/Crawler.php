@@ -471,7 +471,7 @@ class Crawler {
 						foreach ($strip as $toStrip) {
 							$tmp = str_replace('width='.$toStrip, 'width=290', $tmp);
 						}
-
+						$tmp = str_replace('width=29000%', 'width=100%', $tmp);
 						$tmp = $this->stripContent($tmp, 'height=', ' ', true);
 						$youtubeData = array();
 						if (strstr($tmp, 'href=')) {
