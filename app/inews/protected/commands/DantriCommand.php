@@ -1,6 +1,6 @@
 <?php
 
-class NewsCommand extends CConsoleCommand {
+class DantriCommand extends CConsoleCommand {
 
 	public function actionIndex($args = array()) {
 		$crawler = new Crawler();
