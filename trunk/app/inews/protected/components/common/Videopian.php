@@ -1252,7 +1252,8 @@ class Videopian
 
         $files_data = 'http://www.youtube.com/get_video_info?&video_id='.self::$id;
 		try {
-			$files = file_get_contents($files_data);
+			// $files = file_get_contents($files_data);
+			$files = self::getContentByCurl($files_data);
 		} catch (Exception $ex) {
 			return null;
 		}
