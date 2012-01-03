@@ -1251,7 +1251,11 @@ class Videopian
         self::$video->files = array();
 
         $files_data = 'http://www.youtube.com/get_video_info?&video_id='.self::$id;
-        $files = file_get_contents($files_data);
+		try {
+			$files = file_get_contents($files_data);
+		} catch (Exception $ex) {
+			return null;
+		}
 
         if (0 === strpos($files, 'status=fail'))
         {
