@@ -199,7 +199,7 @@ class News extends CActiveRecord
         $count = Yii::app()->db->createCommand()
             ->select('COUNT(n.id)')
 			->from('news n')
-			->where('n.category_id = ' . $categoryId)
+			->where('n.category_id = ' . $categoryId . ' AND n.site_id='.$siteId)
             ->queryScalar();
 		
 		return array('data' => $news, 'total' => $count);
