@@ -84,6 +84,7 @@ return array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
 		'limit'		=> 5,
+		'page_limit' => 10,
 		'site' => array(
 			'vnexpress' => array(
 				1		=> 'http://vnexpress.net/rss/gl/trang-chu.rss',
