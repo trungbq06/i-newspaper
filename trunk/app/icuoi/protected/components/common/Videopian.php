@@ -1191,7 +1191,7 @@ class Videopian
         self::$video->xml_url = $file_data;
 
         # XML
-        $xml = new SimpleXMLElement(file_get_contents($file_data, false, $context));
+        $xml = new SimpleXMLElement(self::getContentByCurl($file_data, 1));
         $xml->registerXPathNamespace('a', 'http://www.w3.org/2005/Atom');
         $xml->registerXPathNamespace('media', 'http://search.yahoo.com/mrss/');
         $xml->registerXPathNamespace('yt', 'http://gdata.youtube.com/schemas/2007');
@@ -1251,7 +1251,7 @@ class Videopian
         self::$video->files = array();
 
         $files_data = 'http://www.youtube.com/get_video_info?&video_id='.self::$id;
-        $files = file_get_contents($files_data);
+        $files = self::getContentByCurl($files_data, 1);
 
         if (0 === strpos($files, 'status=fail'))
         {
