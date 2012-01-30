@@ -242,4 +242,29 @@ class News extends CActiveRecord
         
         return array('data' => $news, 'total' => $count);
     }
+	
+	public function fixNews() {
+		/*
+		$query = Yii::app()->db->createCommand("SELECT * FROM news WHERE content like '%width=29000%'");
+		$result = $query->queryAll();
+		
+		foreach ($result as $one) {
+			$content = str_replace('width=29000%', 'width=100%', $one['content']);
+			$content = str_replace("'", "''", $content);
+			echo "Updating ". $one['id'] . "<br/>";
+			$sql = Yii::app()->db->createCommand("UPDATE news SET content = '$content' WHERE id = " . $one['id'])->execute();
+		}
+		*/
+		
+		$query = Yii::app()->db->createCommand("SELECT * FROM news WHERE content like '%<IMG%'");
+		$result = $query->queryAll();
+		echo "Total " . count($result);
+		foreach ($result as $one) {
+			$content = str_replace('<IMG', '<IMG width=290', $one['content']);
+			$content = str_replace('<img', '<img width=290', $content);
+			$content = str_replace("'", "''", $content);
+			echo "Updating ". $one['id'] . "<br/>";
+			$sql = Yii::app()->db->createCommand("UPDATE news SET content = '$content' WHERE id = " . $one['id'])->execute();
+		}
+	}
 }
