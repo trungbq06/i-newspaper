@@ -51,7 +51,7 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=ilive.vn;dbname=inews',
+			'connectionString' => 'mysql:host=123.30.188.115;dbname=inews',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'ilive123312',
@@ -106,24 +106,91 @@ return array(
 			'dantri'	=> array(
 				1		=> 'http://dantri.com.vn/trangchu.rss',
 				2		=> 'http://dantri.com.vn/xa-hoi.rss',
+				
+				31		=> 'http://dantri.com.vn/chinh-tri.rss',
+				32		=> 'http://dantri.com.vn/phongsu.rss',
+				33		=> 'http://dantri.com.vn/moi-truong.rss',
+				
 				3		=> 'http://dantri.com.vn/Thegioi.rss',
+				34		=> 'http://dantri.com.vn/donga.rss',
+				35		=> 'http://dantri.com.vn/eu.rss',
+				36		=> 'http://dantri.com.vn/tgchaumy.rss',
+				37		=> 'http://dantri.com.vn/tgdiemnong.rss',
+				38		=> 'http://dantri.com.vn/kieubao.rss',
+				39		=> 'http://dantri.com.vn/tet-viet-xa-xu.rss',
+				
 				6		=> 'http://dantri.com.vn/The-Thao.rss',
+				40		=> 'http://www.dantri.com.vn/bongtrongnuoc.rss',				
+				41		=> 'http://www.dantri.com.vn/bongquocte.rss',				
+				42		=> 'http://www.dantri.com.vn/cupchauau.rss',				
+				43		=> 'http://www.dantri.com.vn/bongdaanh.rss',				
+				44		=> 'http://www.dantri.com.vn/bongdaitalia.rss',				
+				45		=> 'http://www.dantri.com.vn/bongdataybannha.rss',				
+				46		=> 'http://www.dantri.com.vn/tennis_duaxe.rss',				
+				47		=> 'http://www.dantri.com.vn/cacmonkhac.rss',				
+				48		=> 'http://www.dantri.com.vn/sea-games-26.rss',				
+				
 				16		=> 'http://dantri.com.vn/giaoduc-khuyenhoc.rss',
+				49		=> 'http://www.dantri.com.vn/tuyensinh.rss',
+				50		=> 'http://www.dantri.com.vn/duhoc.rss',
+				51		=> 'http://www.dantri.com.vn/guong-sang.rss',
+				52		=> 'http://www.dantri.com.vn/khuyen-hoc.rss',
+				53		=> 'http://www.dantri.com.vn/nhantaidatviet.rss',
+				54		=> 'http://www.dantri.com.vn/john-linh.rss',
+				55		=> 'http://www.dantri.com.vn/tuyen-sinh.rss',
+				
 				17		=> 'http://dantri.com.vn/tamlongnhanai.rss',
+				56		=> 'http://www.dantri.com.vn/danh-sach-ung-ho.rss',
+				57		=> 'http://www.dantri.com.vn/ket-chuyen.rss',
+				58		=> 'http://www.dantri.com.vn/hoan-canh.rss',
+				
 				4		=> 'http://dantri.com.vn/kinhdoanh.rss',
+				59		=> 'http://www.dantri.com.vn/chungkhoan.rss',
+				60		=> 'http://www.dantri.com.vn/thitruong.rss',
+				61		=> 'http://www.dantri.com.vn/doanhnghiep.rss',
+				62		=> 'http://www.dantri.com.vn/quocte.rss',
+				
 				18		=> 'http://dantri.com.vn/giaitri.rss',
+				63		=> 'http://www.dantri.com.vn/van-hoa.rss',				
+				64		=> 'http://www.dantri.com.vn/amnhac.rss',				
+				65		=> 'http://www.dantri.com.vn/phim.rss',				
+				66		=> 'http://www.dantri.com.vn/thoitrang.rss',				
+				67		=> 'http://www.dantri.com.vn/anchoi.rss',				
+				
 				19		=> 'http://dantri.com.vn/skphapluat.rss',
-				20		=> 'http://dantri.com.vn/nhipsongtre.rss',
+				20		=> 'http://dantri.com.vn/nhipsongtre.rss',				
+				68		=> 'http://dantri.com.vn/nguoiviettre.rss',				
+				
 				21		=> 'http://dantri.com.vn/tinhyeu-gioitinh.rss',
-				22		=> 'http://dantri.com.vn/suckhoe.rss',
+				69		=> 'http://dantri.com.vn/tinhyeu.rss',
+				70		=> 'http://dantri.com.vn/giadinh.rss',
+				71		=> 'http://dantri.com.vn/goctamhon.rss',
+				
+				22		=> 'http://dantri.com.vn/suckhoe.rss',				
+				72		=> 'http://dantri.com.vn/gioitinh.rss',				
+				73		=> 'http://dantri.com.vn/tu-van.rss',				
+				74		=> 'http://dantri.com.vn/lam-dep.rss',				
+				
 				23		=> 'http://dantri.com.vn/cong-nghe.rss',
+				75		=> 'http://dantri.com.vn/vitinh.rss',
+				76		=> 'http://dantri.com.vn/dienthoai.rss',
+				77		=> 'http://dantri.com.vn/thuthuat.rss',
+				
 				24		=> 'http://dantri.com.vn/otoxemay.rss',
+				78		=> 'http://dantri.com.vn/thi-truong.rss',
+				79		=> 'http://dantri.com.vn/nguoivaxe.rss',
+				80		=> 'http://dantri.com.vn/vanhoaxe.rss',
+				
 				30		=> 'http://dantri.com.vn/diendan-bandoc.rss',
-				25		=> 'http://dantri.com.vn/dien-dan.rss',
+				81		=> 'http://dantri.com.vn/tu-van-phap-luat.rss',
+				82		=> 'http://dantri.com.vn/hoi-amc.rss',
+				83		=> 'http://dantri.com.vn/goc-anh.rss',
+				
+				// 25		=> 'http://dantri.com.vn/dien-dan.rss',
 				26		=> 'http://dantri.com.vn/chuyenla.rss',
-				27		=> 'http://dantri.com.vn/blog.rss',
-				28		=> 'http://dantri.com.vn/nghe-nghiep.rss',
-				29		=> 'http://dantri.com.vn/games_asp_.rss',
+				// 27		=> 'http://dantri.com.vn/blog.rss',
+				// 28		=> 'http://dantri.com.vn/nghe-nghiep.rss',
+				// 29		=> 'http://dantri.com.vn/games_asp_.rss',
 			)
 		)
 	),

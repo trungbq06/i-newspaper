@@ -40,7 +40,7 @@ class NewsCategory extends CActiveRecord
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, active', 'safe', 'on'=>'search'),
+			array('id, name, parent_id, active', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +64,7 @@ class NewsCategory extends CActiveRecord
 			'id' => 'ID',
 			'name' => 'Name',
 			'active' => 'Active',
+			'parent_id' => 'Parent Id'
 		);
 	}
 
@@ -81,6 +82,7 @@ class NewsCategory extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('active',$this->active);
+		$criteria->compare('parent_id',$this->parent_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -92,9 +94,16 @@ class NewsCategory extends CActiveRecord
 			->select('nc.*')
 			->from('news_category nc')
 			->leftJoin('site_category sc', 'nc.id = sc.news_category_id')
-			->where('sc.site_id = ' . $siteId)
+			->where('nc.parent_id=0 AND nc.active = 1 AND sc.site_id = ' . $siteId)
 			->queryAll();
-			
+		foreach ($data as &$one) {
+			$one['has_sub_cat'] = 0;
+			$tmp = Yii::app()->db->createCommand("SELECT COUNT(id) AS total 
+					FROM news_category nc
+					INNER JOIN site_category sc ON sc.news_category_id = nc.id
+					WHERE nc.parent_id = " . $one['id'])->queryAll();
+			if ($tmp[0]['total'] > 0) $one['has_sub_cat'] = 1;
+		}
 		return $data;
 	}
 	
