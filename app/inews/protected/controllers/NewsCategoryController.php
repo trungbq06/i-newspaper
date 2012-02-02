@@ -44,6 +44,21 @@ class NewsCategoryController extends Controller
 		echo json_encode($data);
 	}
 	
+	public function actionGetChildList() {
+		$id = isset($_GET['id']) ? intval($_GET['id']) : 1;
+		$siteId = isset($_GET['sid']) ? intval($_GET['sid']) : 1;
+		
+		$data = array(
+			'error'		=> 0,
+			'data'	=> array()
+		);
+		$category = NewsCategory::model()->getChildList($id, $siteId);
+		if (!empty($category))
+			$data['data'] = $category;
+			
+		echo json_encode($data);
+	}
+	
 	public function actionGetClipCategory() {
 		$siteId = isset($_GET['sid']) ? intval($_GET['sid']) : 1;
 		
