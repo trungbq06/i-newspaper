@@ -60,7 +60,7 @@ class NewsCategoryController extends Controller
 			);
 			$newCategory[0] = $tmp;
 			foreach ($category as $one) $newCategory[] = $one;
-			$data['data'] = $category;
+			$data['data'] = $newCategory;
 		}
 			
 		echo json_encode($data);
