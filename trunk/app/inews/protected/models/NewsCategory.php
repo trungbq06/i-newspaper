@@ -107,6 +107,17 @@ class NewsCategory extends CActiveRecord
 		return $data;
 	}
 	
+	public function getChildList($id, $siteId) {
+		$data = Yii::app()->db->createCommand()
+			->select('nc.*')
+			->from('news_category nc')
+			->leftJoin('site_category sc', 'nc.id = sc.news_category_id')
+			->where('nc.active = 1 AND sc.site_id = ' . $siteId . ' AND nc.parent_id = ' . $id)
+			->queryAll();
+		
+		return $data;
+	}
+	
 	public function getClipCategory() {
 		$data = Yii::app()->db->createCommand()
 			->select('cc.*')
