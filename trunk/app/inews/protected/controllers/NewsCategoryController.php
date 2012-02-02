@@ -53,8 +53,15 @@ class NewsCategoryController extends Controller
 			'data'	=> array()
 		);
 		$category = NewsCategory::model()->getChildList($id, $siteId);
-		if (!empty($category))
+		if (!empty($category)) {
+			$tmp = array(
+				'id' => $id,
+				'name' => 'Tất cả'
+			);
+			$newCategory[0] = $tmp;
+			foreach ($category as $one) $newCategory[] = $one;
 			$data['data'] = $category;
+		}
 			
 		echo json_encode($data);
 	}
