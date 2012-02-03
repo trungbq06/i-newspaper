@@ -346,6 +346,103 @@ class Crawler {
         echo $featured;
     }
 	
+	public function getDothi() {
+		$link = 'http://dothi.net/rss/0/trang-chu.rss';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 7;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+			$headline = $this->getContent($item, '<description>', '</description>', true);
+            $data['headline'] = strip_tags($headline);
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();            
+            $newsContent = $this->getContent($detail, '<div class="padT4 padB4 titleDdtail clor9 f-11">', '<div class="padT4 padB4">', true);
+            $newsContent = $this->stripContent($newsContent, '<div class="fRight">', '</div>');
+            $newsContent = str_replace('<div class="fRight"></div>', '', $newsContent);
+            $newsContent = $this->stripContent($newsContent, '<div class="fRight">', '</div>');
+            $newsContent = str_replace('<div class="fRight"></div>', '', $newsContent);
+            $newsContent = $this->stripContent($newsContent, '<span class="fLeft">', '</span>');
+            $data['thumbnail_url'] = $this->getContent($newsContent, 'src="', '"', true);
+            // echo $data['thumbnail_url'];die();
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+			if (!News::isExist($siteId, $detailLink)) {
+				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+            die();
+		}
+	}
+	
+	public function getKhoahoc() {
+		$link = 'http://www.khoahoc.com.vn/congnghemoi/cong-nghe-moi/rss.aspx';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 6;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+			$headline = $this->getContent($item, '<description>', '</description>', true);
+            $headline = str_replace('&lt;', '<', $headline);
+            $headline = str_replace('&gt;', '>', $headline);
+            $data['headline'] = strip_tags($headline);
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();
+            $thumbnail = $this->getContent($detail, '<div id="ctl00_CPH1_TinChiTiet1_divImage"', '</div>', true);
+            $data['thumbnail_url'] = 'http://www.khoahoc.com.vn' . $this->getContent($headline, 'src="', '"', true);
+            $newsContent = $this->getContent($detail, '<div id="divContent" style="text-align:justify">', '</div>', true);
+            $newsContent = str_replace('src="', 'src="http://www.khoahoc.com.vn', $newsContent);
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+			if (!News::isExist($siteId, $detailLink)) {
+				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+		}
+	}
+	
 	public function getNgoisao() {
 		$link = 'http://ngoisao.net/rss/hau-truong.rss';
 		$contents = $this->getURLContents($link);
@@ -359,7 +456,7 @@ class Crawler {
 			$title = $this->getContent($item, '<title>', '</title>', true);
             $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
 			$description = $this->getContent($item, '<description>', '</description>', true);
-            $data['description'] = trim(strip_tags($this->getContent($description, '<![CDATA[', ']]>', true)));
+            $data['headline'] = trim(strip_tags($this->getContent($description, '<![CDATA[', ']]>', true)));
 			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 			$detailLink = $this->getContent($item, '<link>', '</link>', true);
 			$detail = $this->getURLContents($detailLink);
@@ -375,6 +472,8 @@ class Crawler {
 			// echo $newsContent;die();
 			if (!News::isExist($siteId, $detailLink)) {
 				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
 				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
                 $data['site_id'] = $siteId;
                 // die($data['published_time']);
@@ -402,7 +501,7 @@ class Crawler {
 			// echo $item;die();
 			$title = $this->getContent($item, '<title>', '</title>', true);
             $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
-			$data['description'] = $this->getContent($item, '<description>', '</description>', true);
+			$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
 			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 			$detailLink = $this->getContent($item, '<link>', '</link>', true);
             $detailLink = trim($this->getContent($detailLink, '<![CDATA[', ']]>', true));
