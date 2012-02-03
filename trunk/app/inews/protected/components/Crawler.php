@@ -338,6 +338,57 @@ class Crawler {
 			$i++;
 		}
 	}
+    
+    public function getKenh14() {
+        $url = 'http://kenh14.vn/thoi-trang.chn';
+        $contents = $this->getURLContents($url);
+        $featured = $this->getContent($contents, '<div class="featurewrapper', '<div class="listnews">', true);
+        echo $featured;
+    }
+	
+	public function getVnEconomy() {
+		$link = 'http://vneconomy.vn/rss/trang-chu';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 4;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$title = $this->getContent($item, '<title>', '</title>', true);
+            $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+			$data['description'] = $this->getContent($item, '<description>', '</description>', true);
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+            $detailLink = trim($this->getContent($detailLink, '<![CDATA[', ']]>', true));
+			$detail = $this->getURLContents($detailLink);
+            $thumbnail = $this->getContent($detail, '<div id="ctl00_CPH1_TinChiTiet1_divImage"', '</div>', true);
+            $data['thumbnail_url'] = $this->getContent($thumbnail, '<img src="', '"', true);
+            $newsContent = $this->getContent($detail, '600px;line-height:22px">', '</div>', true);
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+			if (!News::isExist($siteId, $detailLink)) {
+				$data['content'] = $newsContent;
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				$mediaUrl = $this->getContent($newsContent, 'value="file=', '&amp;', true);
+				if (!empty($mediaUrl)) $data['media'] = $mediaUrl;
+				else $data['media'] = '';
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+		}
+	}
 	
 	public function getVOAEnglish() {
 		$link = 'http://www.voanews.com/templates/Articles.rss?sectionPath=/learningenglish/home';
