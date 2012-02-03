@@ -378,9 +378,7 @@ class Crawler {
                 // die($data['published_time']);
 				$data['created_time'] = date('Y-m-d H:i:s');
 				$data['original_url'] = $detailLink;
-				$mediaUrl = $this->getContent($newsContent, 'value="file=', '&amp;', true);
-				if (!empty($mediaUrl)) $data['media'] = $mediaUrl;
-				else $data['media'] = '';
+				
 				$news = new News;
 				$news->attributes = $data;
 				if ($news->save(false)) {
