@@ -47,13 +47,14 @@ class SiteController extends Controller
 		// echo urldecode('xmlPath=%2FService%2FFlashVideo%2FPlayListVideoPage.asp%3Fid%3D59398%26f%3D153');die();
         // die(strip_tags('<a class="" href="/gl/van-hoa/2011/03/khan-gia-hn-chim-trong-cam-xuc-cung-backstreet-boys/">Ðêm nh?c Backstreet Boys</a>'));
 		$crawler = new Crawler();
-		$crawler->getVnexpress();
-		$crawler->getExchange();
-		$crawler->getGold();
-		$crawler->getOil();
-		$crawler->getWeather();
-		$crawler->getLottery();
+		// $crawler->getVnexpress();
+		// $crawler->getExchange();
+		// $crawler->getGold();
+		// $crawler->getOil();
+		// $crawler->getWeather();
+		// $crawler->getLottery();
 		// $crawler->getDantri();
+		$crawler->getVOAEnglish();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
