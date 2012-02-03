@@ -346,6 +346,56 @@ class Crawler {
         echo $featured;
     }
 	
+	public function getCafeF() {
+		$link = 'http://cafef.vn/Tin-moi.rss';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 8;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$title = $this->getContent($item, '<title>', '</title>', true);
+            $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+			$headline = $this->getContent($item, '<description>', '</description>', true);
+            $data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();
+            $newsContent = $this->getContent($detail, 'class="KenhF_Content_News3">', '<div style="margin-bottom: 10px;">', true);
+            if (empty($newsContent)) {
+                $newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
+            }
+            $data['thumbnail_url'] = $this->getContent($headline, 'src="', '"', true);
+            // echo $data['thumbnail_url'];die();
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+            // print_r($data);die();
+			if (!News::isExist($siteId, $detailLink)) {
+				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+            // die();
+		}
+	}
+	
 	public function getDothi() {
 		$link = 'http://dothi.net/rss/0/trang-chu.rss';
 		$contents = $this->getURLContents($link);
