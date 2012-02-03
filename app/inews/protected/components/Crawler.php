@@ -339,6 +339,39 @@ class Crawler {
 		}
 	}
 	
+	public function getVOAEnglish() {
+		$link = 'http://www.voanews.com/templates/Articles.rss?sectionPath=/learningenglish/home';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+			$data['description'] = $this->getContent($item, '<description>', '</description>', true);
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+			$detail = $this->getURLContents($detailLink);
+			$newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+			if (!Voa::isExist($detailLink)) {
+				$data['content'] = $newsContent;
+				$data['published_time'] = gmdate('Y-m-d H:i:s', strtotime($data['published_time']));
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				$mediaUrl = $this->getContent($newsContent, 'value="file=', '&amp;', true);
+				if (!empty($mediaUrl)) $data['media'] = $mediaUrl;
+				else $data['media'] = '';
+				$voa = new Voa;
+				$voa->attributes = $data;
+				if ($voa->save(false)) {
+					
+				}
+			}
+		}
+	}
+	
 	public function getVnexpressVideo() {
 		$baseUrl = 'http://vnexpress.net/video/ContentSearch.asp?ID=';
 		$category = NewsCategory::model()->getClipCategory();
@@ -647,7 +680,7 @@ class Crawler {
 			// $i = 0;
 			// echo $link.'<br/>';
 			foreach ($items as $item) {
-				// echo $item;
+				// echo $item;die();
 				$data = array();
 				$data['title'] = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
 				$headline = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
