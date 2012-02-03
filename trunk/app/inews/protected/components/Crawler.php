@@ -346,6 +346,50 @@ class Crawler {
         echo $featured;
     }
 	
+	public function getNgoisao() {
+		$link = 'http://ngoisao.net/rss/hau-truong.rss';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 5;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$title = $this->getContent($item, '<title>', '</title>', true);
+            $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+			$description = $this->getContent($item, '<description>', '</description>', true);
+            $data['description'] = trim(strip_tags($this->getContent($description, '<![CDATA[', ']]>', true)));
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();
+            $thumbnail = $this->getContent($detail, '<div id="ctl00_CPH1_TinChiTiet1_divImage"', '</div>', true);
+            $data['thumbnail_url'] = 'http://ngoisao.net' . $this->getContent($description, '<img src="', '">', true);
+            $newsContent = $this->getContent($detail, '</H2>', '<div class="detailNS">', true);
+            $newsContent = str_replace('src="', 'src="http://ngoisao.net', $newsContent);
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+			if (!News::isExist($siteId, $detailLink)) {
+				$data['content'] = $newsContent;
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+		}
+	}
+	
 	public function getVnEconomy() {
 		$link = 'http://vneconomy.vn/rss/trang-chu';
 		$contents = $this->getURLContents($link);
