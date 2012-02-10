@@ -494,7 +494,7 @@ class Crawler {
 					
 				}
 			}
-            die();
+            // die();
 		}
 	}
 	

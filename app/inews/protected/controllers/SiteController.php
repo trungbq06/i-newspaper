@@ -59,9 +59,9 @@ class SiteController extends Controller
 		// $crawler->getVnEconomy();
 		// $crawler->getNgoisao();
 		// $crawler->getKhoahoc();
-		// $crawler->getDothi();
+		$crawler->getDothi();
 		// $crawler->getCafeF();
-		$crawler->get2Sao();
+		// $crawler->get2Sao();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
