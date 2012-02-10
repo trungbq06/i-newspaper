@@ -157,7 +157,7 @@ class News extends CActiveRecord
 		return array('data' => $news, 'total' => $count);
 	}
 	
-	public function getFeatured($siteId, $page = 1, $limit = 20) {
+	public function getFeatured($siteId, $catId, $page = 1, $limit = 5) {
 		$params = Yii::app()->params;
 		
 		$offset = ($page - 1) * $limit;
@@ -165,7 +165,7 @@ class News extends CActiveRecord
 			->select('n.*')
 			->from('news_featured nf')
 			->leftJoin('news n', 'n.id = nf.news_id')
-			->where('n.site_id = ' . $siteId)
+			->where('n.site_id = ' . $siteId . ' AND n.category_id = ' . $catId)
 			->order('nf.created_time DESC')
 			->limit($limit)
 			->offset($offset);
@@ -173,23 +173,25 @@ class News extends CActiveRecord
 		// var_dump($news);
         
         $count = Yii::app()->db->createCommand()
-            ->select('COUNT(n.*)')
+            ->select('COUNT(n.id)')
 			->from('news_featured nf')
 			->leftJoin('news n', 'n.id = nf.news_id')
-			->where('n.site_id = ' . $siteId)
+			->where('n.site_id = ' . $siteId . ' AND n.category_id = ' . $catId)
             ->queryScalar();
 		
 		return array('data' => $news, 'total' => $count);
 	}
 	
-	public function getNewsCat($categoryId, $siteId, $page = 1, $limit = 20) {
+	public function getNewsCat($categoryId, $siteId, $excludeId = array(), $page = 1, $limit = 20) {
 		$params = Yii::app()->params;
-		
+		$where = '';
+        if (!empty($excludeId)) $where = " AND n.id NOT IN (" . implode(',', $excludeId) . ")";
+
 		$offset = ($page - 1) * $limit;
 		$query = Yii::app()->db->createCommand()
 			->select('n.*')
 			->from('news n')
-			->where('n.category_id = ' . $categoryId . ' AND n.site_id='.$siteId)
+			->where('n.category_id = ' . $categoryId . ' AND n.site_id='.$siteId . $where)
 			->order('n.created_time DESC')
 			->limit($limit)
 			->offset($offset);
@@ -199,7 +201,7 @@ class News extends CActiveRecord
         $count = Yii::app()->db->createCommand()
             ->select('COUNT(n.id)')
 			->from('news n')
-			->where('n.category_id = ' . $categoryId . ' AND n.site_id='.$siteId)
+			->where('n.category_id = ' . $categoryId . ' AND n.site_id='.$siteId . $where)
             ->queryScalar();
 		
 		return array('data' => $news, 'total' => $count);

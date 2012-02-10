@@ -56,10 +56,11 @@ class NewsController extends Controller
 	{
 		$params = Yii::app()->params;
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
+		$limit = 5;
 		$siteId = isset($_GET['sid']) ? intval($_GET['sid']) : 1;
+		$catId = isset($_GET['cid']) ? intval($_GET['cid']) : 1;
 		
-		$news = News::model()->getFeatured($siteId, $page, $limit);
+		$news = News::model()->getFeatured($siteId, $catId, $page, $limit);
 		$data = array(
 			'error'		=> 0,
 			'data' 		=> null,
@@ -89,7 +90,14 @@ class NewsController extends Controller
         );        
         $news = array();
         if ($cId) {
-            $news = News::model()->getNewsCat($cId, $siteId, $page, $limit);
+            $newsFeatured = News::model()->getFeatured($siteId, $cId, 1, 5);
+            $excludeId = array();
+            if (!empty($newsFeatured['data'])) {
+                foreach ($newsFeatured['data'] as $one) {
+                    $excludeId[] = $one['id'];
+                }
+            }
+            $news = News::model()->getNewsCat($cId, $siteId, $excludeId, $page, $limit);
         }
         
         if (!empty($news)) {
