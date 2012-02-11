@@ -184,9 +184,10 @@ class News extends CActiveRecord
 	
 	public function getNewsCat($categoryId, $siteId, $excludeId = array(), $page = 1, $limit = 20) {
 		$params = Yii::app()->params;
+		if (isset($params['not_release'])) $excludeId = array();
 		$where = '';
         if (!empty($excludeId)) $where = " AND n.id NOT IN (" . implode(',', $excludeId) . ")";
-
+		
 		$offset = ($page - 1) * $limit;
 		$query = Yii::app()->db->createCommand()
 			->select('n.*')
