@@ -109,6 +109,11 @@ class NewsController extends Controller
 		echo json_encode($data);
     }
 	
+	public function actionFixNews() {
+		$this->layout = false;
+		News::model()->fixNews();
+	}
+	
 	public function actionDetail() {
 		$nId = isset($_GET['id']) ? intval($_GET['id']) : null;
 		$data = array(
@@ -142,6 +147,7 @@ class NewsController extends Controller
 		// die();
         // echo strip_tags($news->content, '<img>');die();
 		// var_dump($data);die();
+		echo ($data['data'][0]['content']);die();
 		echo json_encode($data);
 	}
 	
