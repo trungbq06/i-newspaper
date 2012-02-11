@@ -978,9 +978,11 @@ class Crawler {
 				$data = array();
 				$data['title'] = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
 				$headline = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
-				// die($data['headline']);
+				// die($headline);
 				$data['thumbnail_url'] = '';
 				$thumbnail = $this->getContent($headline, 'ImgFilePath=/', '&width', true);
+				if (empty($thumbnail))
+					$thumbnail = $this->getContent($headline, 'src="', '"', true);
 				if (!empty($thumbnail))
 					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
@@ -992,6 +994,7 @@ class Crawler {
 				// $detailLink = 'http://dantri.com.vn/c741/s741-539694/u23-viet-nam-dung-buoc-tai-ban-ket-truoc-indonesia.htm';
 				// $detailLink = 'http://dantri.com.vn/c702/s702-527697/top-ba-sao-nhi-va-cau-chuyen-doi-ban-tho-rua.htm';
 				if (!News::isExist(2, $detailLink)) {
+					// die($headline);
 					$detail = $this->getURLContents($detailLink);
 					// echo $detail;die();
 					$tmp = $this->getContent($detail, '<div class="fon31 mt1">', "id='hidNextUsing'", true);
