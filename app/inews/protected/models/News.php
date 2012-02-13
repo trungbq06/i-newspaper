@@ -270,5 +270,11 @@ class News extends CActiveRecord
 			$sql = Yii::app()->db->createCommand("UPDATE news SET content = '$content' WHERE id = " . $one['id'])->execute();
 		}
 	}
+    
+    public function getApp() {
+        $data = Yii::app()->db->createCommand("SELECT * FROM app ORDER BY created_time")->queryAll();
+        
+        return $data;
+    }
 	
 }

@@ -229,5 +229,15 @@ class NewsController extends Controller
         // var_dump($data);
         echo json_encode($data);
     }
+    
+    public function actionGetApp() {
+        $apps = News::model()->getApp();
+        
+        if (!empty($apps)) {
+			$data['data'] = $apps;
+        }
+        // var_dump($data);
+        echo json_encode($data);
+    }
 
 }
