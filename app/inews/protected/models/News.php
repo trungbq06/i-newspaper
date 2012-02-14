@@ -272,7 +272,7 @@ class News extends CActiveRecord
 	}
     
     public function getApp() {
-        $data = Yii::app()->db->createCommand("SELECT * FROM app ORDER BY created_time")->queryAll();
+        $data = Yii::app()->db->createCommand("SELECT * FROM app ORDER BY created_time DESC")->queryAll();
         
         return $data;
     }
