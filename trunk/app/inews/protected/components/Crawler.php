@@ -339,12 +339,97 @@ class Crawler {
 		}
 	}
     
+    function save_image($img,$fullpath){
+        $ch = curl_init ($img);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+        $rawdata=curl_exec($ch);
+        curl_close ($ch);
+        if(file_exists($fullpath)){
+            unlink($fullpath);
+        }
+        $fp = fopen($fullpath,'x');
+        fwrite($fp, $rawdata);
+        fclose($fp);
+    }
+    
     public function getKenh14() {
         $url = 'http://kenh14.vn/thoi-trang.chn';
         $contents = $this->getURLContents($url);
         $featured = $this->getContent($contents, '<div class="featurewrapper', '<div class="listnews">', true);
         echo $featured;
-    }
+    }    
+	
+	public function getBongda() {
+		$link = 'http://www.bongda.com.vn/Rss/';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 20;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+			$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+            $data['thumbnail_url'] = '';
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+            // echo $detailLink;
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();
+            $newsContent = '';
+            if (strstr($detailLink, 'Thu-vien-Video')) {
+                $newsContent = $this->getContent($detail, "<div id='clipView'>", '</div>', true);
+                $newsContent = $this->getContent($newsContent, 'src="', '"', true);
+                $data['youtube_video'] = 1;
+                $data['headline'] = '';
+            } else {
+                $newsContent = $this->getContent($detail, 'class="read_news">', '<div id="ctl00_BD_art_pnlNewsInfo"', true);
+                $thumbnails = $this->getContent($newsContent, 'src="', '"');
+                // var_dump($thumbnails);die();
+                if (!empty($thumbnails)) {
+                    foreach ($thumbnails as $one) {
+                        // echo $one;
+                        $path = '/tmp/save_img_tmp.test';
+                        $this->save_image($one, $path);
+                        $imgSize = getimagesize($path);
+                        // echo $imgSize[0];die();
+                        if ($imgSize[0] > 100 && $imgSize[1] > 100) {
+                            $data['thumbnail_url'] = $one;
+                            break;
+                        }
+                    }
+                }
+                // echo $newsContent;die();
+            }
+            // echo $data['thumbnail_url'];die();
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+            // print_r($data);die();
+			if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
+				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+            // die();
+		}
+	}
 	
 	public function get2Sao() {
 		$link = 'http://2sao.vn/rss/trangchu.rss';
