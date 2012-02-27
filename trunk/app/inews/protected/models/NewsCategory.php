@@ -101,7 +101,7 @@ class NewsCategory extends CActiveRecord
 			$tmp = Yii::app()->db->createCommand("SELECT COUNT(id) AS total 
 					FROM news_category nc
 					INNER JOIN site_category sc ON sc.news_category_id = nc.id
-					WHERE nc.parent_id = " . $one['id'])->queryAll();
+					WHERE sc.site_id = $siteId AND nc.parent_id = " . $one['id'])->queryAll();
 			if ($tmp[0]['total'] > 0) $one['has_sub_cat'] = 1;
 		}
 		return $data;

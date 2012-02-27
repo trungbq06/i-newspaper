@@ -157,6 +157,7 @@ class Crawler {
     * @param true strip content with open - content - close
     */
 	public function stripContent($content, $open, $close, $all = false) {
+		/*
 		if (empty($content)) return '';
 		
 		$toDel = $this->getContent($content, $open, $close, true, true);
@@ -166,6 +167,20 @@ class Crawler {
             // echo $toDel.'<br/>';
         }
 		$content = str_replace($toDel, '', $content);
+		*/
+		$open = str_replace('<', '\<', $open);
+		$open = str_replace('>', '\>', $open);
+		$open = str_replace('/', '\/', $open);
+		$open = str_replace('"', '\"', $open);
+		
+		$close = str_replace('<', '\<', $close);
+		$close = str_replace('>', '\>', $close);
+		$close = str_replace('/', '\/', $close);
+		$close = str_replace('"', '\"', $close);
+		
+		// die('/(' . $open . ')(\w+)(\d+)(' . $close . ')/');
+		$content = preg_replace('/(' . $open . ')(.*)(' . $close . ')/', '', $content);
+		// $content = preg_replace('/(\<script)(.*)(\<\/script\>)/', '', $content);
 		
 		return $content;
 	}
@@ -359,7 +374,130 @@ class Crawler {
         $contents = $this->getURLContents($url);
         $featured = $this->getContent($contents, '<div class="featurewrapper', '<div class="listnews">', true);
         echo $featured;
-    }    
+    }
+	
+	public function getVietbao() {
+		// echo $this->stripContent('<link rel="stylesheet" href="http://vietbao.vn/images/v2011/css/style20120112.css" type="text/css"  media="all" />
+        // <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>     
+        // <script type="text/javascript" src="http://vietbao.vn/images/v2011/jscripts/script20120112.js"></script>', '<script', '</script>');
+		// die();
+		$link = 'http://vietbao.vn/rss2/trang-nhat.rss';
+		$link = 'http://vietbao.vn/live/Bong-da/rss.xml';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 21;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			$item = str_replace('&quot;', '"', $item);
+			// echo $item;die();
+			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+			$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+            $data['thumbnail_url'] = $this->getContent($item, 'src="', '"', true);
+			if (empty($data['thumbnail_url'])) $data['thumbnail_url'] = '';
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();
+            $newsContent = $this->getContent($detail, '<div class="content">', '<script type="text/javascript">', true);
+			if (empty($newsContent)) {
+				$newsContent = $this->getContent($detail, '<div class="box_detail">', '<div id="VnmVote">', true);
+			}
+			if (empty($newsContent)) {
+				$newsContent = $this->getContent($detail, '<div class="box_detail">', '<div style="margin-top:5px;margin-bottom:5px;">', true);
+			}
+			if (empty($newsContent)) {
+				$newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-top:5px;margin-bottom:5px;">', true);
+			}
+			if (empty($newsContent)) {
+				$newsContent = $this->getContent($detail, '<div class="detailCT">', '<div class="author">', true);
+			}
+			if (empty($newsContent)) {
+				$newsContent = $this->getContent($detail, '<div class="story-title">', '<script type="text/javascript">', true);
+			}
+			$newsContent = $this->stripContent($newsContent, '<div class="postby clearfix">', '</script>');
+			$newsContent = $this->stripContent($newsContent, '<script', '</script>');			
+			// $newsContent = $this->stripContent($newsContent, '<script', '</script>');			
+			// die($newsContent);
+			
+            // echo $data['thumbnail_url'];die();
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+            // print_r($data);die();
+			if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
+				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			} else echo $detailLink;
+            // die();
+		}
+	}
+	
+	public function getBaomoi() {
+		$link = 'http://2sao.vn/rss/trangchu.rss';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 9;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$title = $this->getContent($item, '<title>', '</title>', true);
+            $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+			$headline = $this->getContent($item, '<description>', '</description>', true);
+            $data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+            $detailLink = trim($this->getContent($detailLink, '<![CDATA[', ']]>', true));
+            $detailLink = str_replace('2sao.vietnamnet.vn', '2sao.vn', $detailLink);
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();
+            $newsContent = $this->getContent($detail, 'class="detail_content">', '<div class="sharefacebook">', true);
+            if (empty($newsContent)) {
+                $newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
+            }
+            $data['thumbnail_url'] = $this->getContent($headline, "src='", "'", true);
+            // echo $data['thumbnail_url'];die();
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+            // print_r($data);die();
+			if (!News::isExist($siteId, $detailLink)) {
+				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+            // die();
+		}
+	}
 	
 	public function getBongda() {
 		$link = 'http://www.bongda.com.vn/Rss/';
@@ -404,6 +542,56 @@ class Crawler {
                 }
                 // echo $newsContent;die();
             }
+            // echo $data['thumbnail_url'];die();
+            // echo $newsContent;die();
+            // echo $thumbnail;die();
+            // echo $detail;die();
+			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+			// echo $newsContent;die();
+            // print_r($data);die();
+			if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
+				$data['content'] = $newsContent;
+                $data['title_en'] = Utility::unicode2Anscii($data['title']);
+                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+                $data['site_id'] = $siteId;
+                // die($data['published_time']);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['original_url'] = $detailLink;
+				
+				$news = new News;
+				$news->attributes = $data;
+				if ($news->save(false)) {
+					
+				}
+			}
+            // die();
+		}
+	}
+	
+	public function getYahoonews() {
+		$link = 'http://vn.news.yahoo.com/rss/xahoi';
+		$contents = $this->getURLContents($link);
+		$items = $this->getContent($contents, '<item>', '</item>');
+        $siteId = 22;
+		// print_r($items);
+		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+		// die();
+		foreach ($items as $item) {
+			// echo $item;die();
+			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+			$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
+			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+            $data['thumbnail_url'] = $this->getContent($data['headline'], 'src="', '"', true);
+			$data['headline'] = str_replace('&lt;', '<', $data['headline']);
+			$data['headline'] = str_replace('&gt;', '>', $data['headline']);
+			// $data['headline'] = str_replace('&lt;', '<', $data['headline']);
+			$data['headline'] = strip_tags($data['headline']);
+			$detailLink = $this->getContent($item, '<link>', '</link>', true);
+			$detail = $this->getURLContents($detailLink);
+            // echo $detail;die();
+            $newsContent = $this->getContent($detail, '<div class="yom-mod yom-art-content ">', '<div class="yom-mod yom-follow"', true);
+			// die($newsContent);
             // echo $data['thumbnail_url'];die();
             // echo $newsContent;die();
             // echo $thumbnail;die();
@@ -677,42 +865,61 @@ class Crawler {
 	}
 	
 	public function getVnEconomy() {
-		$link = 'http://vneconomy.vn/rss/trang-chu';
-		$contents = $this->getURLContents($link);
-		$items = $this->getContent($contents, '<item>', '</item>');
-        $siteId = 4;
-		// print_r($items);
-		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
-		// die();
-		foreach ($items as $item) {
-			// echo $item;die();
-			$title = $this->getContent($item, '<title>', '</title>', true);
-            $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
-			$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
-			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
-			$detailLink = $this->getContent($item, '<link>', '</link>', true);
-            $detailLink = trim($this->getContent($detailLink, '<![CDATA[', ']]>', true));
-			$detail = $this->getURLContents($detailLink);
-            $thumbnail = $this->getContent($detail, '<div id="ctl00_CPH1_TinChiTiet1_divImage"', '</div>', true);
-            $data['thumbnail_url'] = $this->getContent($thumbnail, '<img src="', '"', true);
-            $newsContent = $this->getContent($detail, '600px;line-height:22px">', '</div>', true);
-            // echo $newsContent;die();
-            // echo $thumbnail;die();
-            // echo $detail;die();
-			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
-			// echo $newsContent;die();
-			if (!News::isExist($siteId, $detailLink)) {
-				$data['content'] = $newsContent;
-				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-                $data['site_id'] = $siteId;
-                // die($data['published_time']);
-				$data['created_time'] = date('Y-m-d H:i:s');
-				$data['original_url'] = $detailLink;
-				
-				$news = new News;
-				$news->attributes = $data;
-				if ($news->save(false)) {
+		$vneconomy = Yii::app()->params['site']['vneconomy'];
+		$siteId = 4;
+		
+		foreach ($vneconomy as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<item>', '</item>');
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			$i = 0;
+			foreach ($items as $item) {
+				$i++;
+				// echo $item;die();
+				$title = $this->getContent($item, '<title>', '</title>', true);
+				$data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+				$headline = $this->getContent($item, '<description>', '</description>', true);
+				$data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
+				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+				$detailLink = trim($this->getContent($detailLink, '<![CDATA[', ']]>', true));
+				$detail = $this->getURLContents($detailLink);
+				$data['thumbnail_url'] = $this->getContent($headline, 'src="', '"', true);
+				$newsContent = $this->getContent($detail, '600px;line-height:22px">', '</div>', true);
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				if (!News::isExist($siteId, $detailLink)) {
+					$data['content'] = $newsContent;
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					$data['category_id'] = $c;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
 					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						//Add first news to featured
+						if ($i <= 5) {
+							// $lastId = Yii::app()->db->getLastInsertID();
+							$lastId = $news->id;
+							// die($lastId);
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
+					}
 				}
 			}
 		}
@@ -828,9 +1035,10 @@ class Crawler {
             // echo $content;
 			$items = $this->getContent($content, '<item>', '</item>');
             // die(var_dump($items));
-			// $i = 0;
+			$i = 0;
 			// echo 'Total ' . count($items);
 			foreach ($items as $item) {				
+				$i++;
 				// echo 'New i = ' . $i . '<br/>';
 				$data = array();
 				$data['title'] = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
@@ -1025,7 +1233,7 @@ class Crawler {
 								if ($news->save(false)) {
 									//Add first news to featured
 									// echo 'I = ' . $i . '<br/>';
-									if ($c == 1) {
+									if ($i <= 5) {
 										// echo 'Add featured<br/>';
 										$lastId = $news->id;
 										$newsFeatured = new NewsFeatured;
@@ -1056,9 +1264,10 @@ class Crawler {
 		foreach ($dantri as $c => $link) {
 			$content = $this->getURLContents($link);
 			$items = $this->getContent($content, '<item>', '</item>');
-			// $i = 0;
+			$i = 0;
 			// echo $link.'<br/>';
 			foreach ($items as $item) {
+				$i++;
 				// echo $item;die();
 				$data = array();
 				$data['title'] = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
@@ -1138,7 +1347,7 @@ class Crawler {
 							if (!News::isExist(1, $detailLink)) {
 								if ($news->save(false)) {
 									//Add first news to featured
-									if ($c == 1) {
+									if ($i <= 5) {
 										// $lastId = Yii::app()->db->getLastInsertID();
 										$lastId = $news->id;
 										// die($lastId);
