@@ -192,6 +192,19 @@ return array(
 				// 27		=> 'http://dantri.com.vn/blog.rss',
 				// 28		=> 'http://dantri.com.vn/nghe-nghiep.rss',
 				// 29		=> 'http://dantri.com.vn/games_asp_.rss',
+			),
+			'vneconomy' => array(
+				1		=> 'http://vneconomy.vn/rss/trang-chu',
+				85		=> 'http://vneconomy.vn/rss/thoi-su',
+				86		=> 'http://vneconomy.vn/rss/doanh-nghiep',
+				87		=> 'http://vneconomy.vn/rss/tai-chinh',
+				88		=> 'http://vneconomy.vn/rss/chung-khoan',
+				89		=> 'http://vneconomy.vn/rss/giao-thuong',
+				90		=> 'http://vneconomy.vn/rss/thi-truong',
+				3		=> 'http://vneconomy.vn/rss/the-gioi',
+				91		=> 'http://vneconomy.vn/rss/bat-dong-san',
+				92		=> 'http://vneconomy.vn/rss/cuoc-song-so',
+				93		=> 'http://vneconomy.vn/rss/xe-360',
 			)
 		)
 	),
