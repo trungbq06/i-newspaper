@@ -243,7 +243,8 @@ class NewsController extends Controller
 	public function actionLoadUrl() {
 		$siteId = isset($_GET['sid']) ? intval($_GET['sid']) : null;
 		$categoryId = isset($_GET['cid']) ? intval($_GET['cid']) : null;
-		$url = isset($_GET['url']) ? trim($_GET['url']) : null;
+		$url = isset($_GET['url']) ? urldecode(trim($_GET['url'])) : null;
+		
 		$data = array(
 			'error'		=> 0,
 			'data'		=> array(
