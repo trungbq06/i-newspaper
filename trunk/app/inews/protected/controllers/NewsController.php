@@ -239,5 +239,42 @@ class NewsController extends Controller
         // var_dump($data);
         echo json_encode($data);
     }
+	
+	public function actionLoadUrl() {
+		$siteId = isset($_GET['sid']) ? intval($_GET['sid']) : null;
+		$categoryId = isset($_GET['cid']) ? intval($_GET['cid']) : null;
+		$url = isset($_GET['url']) ? trim($_GET['url']) : null;
+		$data = array(
+			'error'		=> 0,
+			'data'		=> array(
+				
+			)
+		);
+		
+		if (!News::model()->isExist($siteId, $url)) {
+			$function = News::model()->getSite($siteId);
+			$function = $function['crawl_function'];
+			$crawler = new Crawler();
+			$crawler->{$function}($siteId, $categoryId, $url);
+		}
+		$news = News::model()->getByUrl($siteId, $url);
+		$cat = NewsCategory::model()->findByPk($news->category_id);
+		
+		if ($news) {
+			$data['data'][] = array(
+				'id'				=> $news->id,
+				'title'				=> $news->title,
+				'thumbnail_url'		=> $news->thumbnail_url,
+				'headline'			=> $news->headline,
+				'created_time'		=> date('d/m/Y H:i:s', strtotime($news->created_time)),
+				'published_time'	=> date('d/m/Y H:i:s', strtotime($news->published_time)),
+				'content'			=> $this->parseVideo($news),
+				'category_id'		=> $news->category_id,
+				'original_url'		=> $news->original_url,
+				'category_name'		=> $cat->name
+			);
+		}
+		echo json_encode($data);
+	}
 
 }
