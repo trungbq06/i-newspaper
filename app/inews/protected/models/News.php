@@ -277,4 +277,24 @@ class News extends CActiveRecord
         return $data;
     }
 	
+	public function getByUrl($siteId, $url) {
+		$url = trim($url);
+		/*
+		$news = Yii::app()->db->createCommand()
+			->select('*')
+			->from('news')
+			->where("site_id = $siteId AND original_url = '$url'")
+			->queryRow();*/
+		$news = News::model()->findByAttributes(array('site_id' => $siteId, 'original_url' => $url));
+		
+		return $news;
+	}
+	
+	public function getSite($siteId) {
+		$sql = "SELECT * FROM site WHERE id = $siteId";
+		$site = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		return $site;
+	}
+	
 }

@@ -818,6 +818,54 @@ class Crawler {
 		}
 	}
 	
+	public function getNgoisaoDetail($siteId, $categoryId, $link) {
+		$data['category_id'] = $categoryId;
+		
+		$detail = $this->getURLContents($link);
+		
+		$data['title'] = $this->getContent($detail, '<H1 class=Title>', '</H1>', true);
+		$data['headline'] = trim(strip_tags($this->getContent($detail, '<H2 class=Lead>', '</H2>', true)));
+		$published_time = $this->getContent($detail, 'getElementById("pDateTime").innerHTML="', '"', true);
+		$published_time = explode(',', $published_time);
+		$published_time = $published_time[1] . ' ' . $published_time[2];
+		$published_time = explode(' ', trim($published_time));
+		$time = $published_time[2];
+		$published_time = $published_time[0];
+		$published_time = explode('/', $published_time);
+		$published_time = $published_time[2] . '-' . $published_time[1] . '-' . $published_time[0];
+		$published_time .= ' ' . $time;
+		$data['published_time'] = $published_time;
+		// echo $published_time;die();
+		
+		// die($data['published_time']);
+		// echo $detail;die();
+		$newsContent = $this->getContent($detail, '</H2>', '<div class="detailNS">', true);
+		$newsContent = str_replace('src="', 'src="http://ngoisao.net', $newsContent);
+		$data['thumbnail_url'] = $this->getContent($newsContent, '<img src="', '"', true);
+		// echo $newsContent;die();
+		// echo $thumbnail;die();
+		// echo $detail;die();
+		// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+		// echo $newsContent;die();
+
+		$data['content'] = $newsContent;
+		$data['title_en'] = Utility::unicode2Anscii($data['title']);
+		$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+		$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+		// die($data['published_time']);
+		$data['site_id'] = $siteId;
+		// die($data['published_time']);
+		$data['created_time'] = date('Y-m-d H:i:s');
+		$data['original_url'] = $link;
+		// var_dump($data);die();
+		$news = new News;
+		$news->attributes = $data;
+		if ($news->save(false)) {
+			
+		}
+		
+	}
+	
 	public function getNgoisao() {
 		$link = 'http://ngoisao.net/rss/hau-truong.rss';
 		$contents = $this->getURLContents($link);
