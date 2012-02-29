@@ -1298,20 +1298,18 @@ class Crawler {
 						$news = new News;
 						$news->attributes = $data;
 						try {
-							if (!News::isExist(1, $detailLink)) {
-								if ($news->save(false)) {
-									//Add first news to featured
-									// echo 'I = ' . $i . '<br/>';
-									if ($i <= 5) {
-										// echo 'Add featured<br/>';
-										$lastId = $news->id;
-										$newsFeatured = new NewsFeatured;
-										$newsFeatured->attributes = array(
-											'news_id' 		=> $lastId,
-											'created_time' 	=> date('Y-m-d H:i:s')
-										);
-										$newsFeatured->save(false);
-									}
+							if ($news->save(false)) {
+								//Add first news to featured
+								// echo 'I = ' . $i . '<br/>';
+								if ($i <= 5) {
+									// echo 'Add featured<br/>';
+									$lastId = $news->id;
+									$newsFeatured = new NewsFeatured;
+									$newsFeatured->attributes = array(
+										'news_id' 		=> $lastId,
+										'created_time' 	=> date('Y-m-d H:i:s')
+									);
+									$newsFeatured->save(false);
 								}
 							}
 							// die();
