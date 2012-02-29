@@ -898,6 +898,8 @@ class Crawler {
                 // $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
                 // echo $newsContent;die();
                 if (!News::isExist($siteId, $detailLink)) {
+					$newsContent = str_replace('<IMG', '<IMG width=290', $newsContent);
+					$newsContent = str_replace('<img', '<img width=290', $newsContent);
                     $data['content'] = $newsContent;
                     $data['title_en'] = Utility::unicode2Anscii($data['title']);
                     $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
@@ -957,6 +959,8 @@ class Crawler {
 				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
 				// echo $newsContent;die();
 				if (!News::isExist($siteId, $detailLink)) {
+					$newsContent = str_replace('<IMG', '<IMG width=290', $newsContent);
+					$newsContent = str_replace('<img', '<img width=290', $newsContent);
 					$data['content'] = $newsContent;
 					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
 					$data['site_id'] = $siteId;
