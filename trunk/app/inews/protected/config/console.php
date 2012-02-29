@@ -203,7 +203,34 @@ return array(
 				91		=> 'http://vneconomy.vn/rss/bat-dong-san',
 				92		=> 'http://vneconomy.vn/rss/cuoc-song-so',
 				93		=> 'http://vneconomy.vn/rss/xe-360',
-			)
+			),
+            'ngoisaonet' => array(
+                94      => 'http://ngoisao.net/rss/hau-truong.rss',
+                95      => 'http://ngoisao.net/rss/the-thao.rss',
+                96      => 'http://ngoisao.net/rss/thoi-cuoc.rss',
+                97      => 'http://ngoisao.net/rss/phong-cach.rss',
+                98      => 'http://ngoisao.net/rss/thu-gian.rss',
+                99      => 'http://ngoisao.net/rss/goc-doc-gia.rss',
+                100     => 'http://ngoisao.net/rss/cuoi.rss',
+                101     => 'http://ngoisao.net/rss/showbiz-viet.rss',
+                102     => 'http://ngoisao.net/rss/chau-a.rss',
+                103     => 'http://ngoisao.net/rss/hollywood.rss',
+                105     => 'http://ngoisao.net/rss/chuyen-la.rss',
+                106     => 'http://ngoisao.net/rss/hinh-su.rss',
+                107     => 'http://ngoisao.net/rss/thuong-truong.rss',
+                108     => 'http://ngoisao.net/rss/thoi-trang.rss',
+                109     => 'http://ngoisao.net/rss/tam-tinh.rss',
+                110     => 'http://ngoisao.net/rss/lam-dep.rss',
+                111     => 'http://ngoisao.net/rss/trac-nghiem.rss',
+                112     => 'http://ngoisao.net/rss/an-choi-xem.rss',
+                113     => 'http://ngoisao.net/rss/dan-choi.rss',
+                114     => 'http://ngoisao.net/rss/cuoi.rss',
+                115     => 'http://ngoisao.net/rss/game.rss',
+                116     => 'http://ngoisao.net/rss/choi-blog.rss',
+                117     => 'http://ngoisao.net/rss/thi-anh.rss',
+                118     => 'http://ngoisao.net/rss/sach-hay.rss',
+                119     => 'http://ngoisao.net/rss/go-roi.rss'
+            )
 		)
 	),
 );
