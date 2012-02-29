@@ -847,7 +847,8 @@ class Crawler {
 		// echo $detail;die();
 		// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
 		// echo $newsContent;die();
-
+		$newsContent = str_replace('<IMG', '<IMG width=290', $newsContent);
+		$newsContent = str_replace('<img', '<img width=290', $newsContent);
 		$data['content'] = $newsContent;
 		$data['title_en'] = Utility::unicode2Anscii($data['title']);
 		$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
