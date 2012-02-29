@@ -205,6 +205,16 @@ return array(
 				91		=> 'http://vneconomy.vn/rss/bat-dong-san',
 				92		=> 'http://vneconomy.vn/rss/cuoc-song-so',
 				93		=> 'http://vneconomy.vn/rss/xe-360',
+			),
+			'2sao' => array(
+				1		=> 'http://2sao.vn/rss/trangchu.rss',
+				120		=> 'http://2sao.vn/rss/sao.rss',
+				121		=> 'http://2sao.vn/rss/amnhac.rss',
+				122		=> 'http://2sao.vn/rss/phim.rss',
+				123		=> 'http://2sao.vn/rss/hoidap.rss',
+				124		=> 'http://2sao.vn/rss/sukien.rss',
+				125		=> 'http://2sao.vn/rss/doisong.rss',
+				126		=> 'http://2sao.vn/rss/congnghe.rss'
 			)
 		)
 	),

@@ -230,7 +230,17 @@ return array(
                 117     => 'http://ngoisao.net/rss/thi-anh.rss',
                 118     => 'http://ngoisao.net/rss/sach-hay.rss',
                 119     => 'http://ngoisao.net/rss/go-roi.rss'
-            )
+            ),
+			'2sao' => array(
+				1		=> 'http://2sao.vn/rss/trangchu.rss',
+				120		=> 'http://2sao.vn/rss/sao.rss',
+				121		=> 'http://2sao.vn/rss/amnhac.rss',
+				122		=> 'http://2sao.vn/rss/phim.rss',
+				123		=> 'http://2sao.vn/rss/hoidap.rss',
+				124		=> 'http://2sao.vn/rss/sukien.rss',
+				125		=> 'http://2sao.vn/rss/doisong.rss',
+				126		=> 'http://2sao.vn/rss/congnghe.rss'
+			)
 		)
 	),
 );
