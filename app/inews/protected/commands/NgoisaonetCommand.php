@@ -1,6 +1,6 @@
 <?php
 
-class VnEconomyCommand extends CConsoleCommand {
+class NgoisaonetCommand extends CConsoleCommand {
 
 	public function actionIndex($args = array()) {
 		$crawler = new Crawler();
