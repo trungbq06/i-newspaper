@@ -911,7 +911,7 @@ class Crawler {
                     $news->attributes = $data;
                     if ($news->save(false)) {
                         if ($i <= 5) {
-							$lastId = Yii::app()->db->getLastInsertID();
+							// $lastId = Yii::app()->db->getLastInsertID();
 							$lastId = $news->id;
 							// die($lastId);
 							$newsFeatured = new NewsFeatured;
@@ -972,7 +972,7 @@ class Crawler {
 					if ($news->save(false)) {
 						//Add first news to featured
 						if ($i <= 5) {
-							$lastId = Yii::app()->db->getLastInsertID();
+							// $lastId = Yii::app()->db->getLastInsertID();
 							$lastId = $news->id;
 							// die($lastId);
 							$newsFeatured = new NewsFeatured;
