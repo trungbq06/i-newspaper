@@ -908,6 +908,7 @@ class Crawler {
                     // die($data['published_time']);
                     $data['created_time'] = date('Y-m-d H:i:s');
                     $data['original_url'] = $detailLink;
+					$data['category_id'] = $c;
                     
                     $news = new News;
                     $news->attributes = $data;
