@@ -977,11 +977,13 @@ class Crawler {
 		$data['created_time'] = date('Y-m-d H:i:s');
 		$data['original_url'] = $link;
 		// var_dump($data);die();
-		$news = new News;
-		$news->attributes = $data;
-		if ($news->save(false)) {
-			
-		}
+        if (!empty($newsContent) && !empty($data['title'])) {
+            $news = new News;
+            $news->attributes = $data;
+            if ($news->save(false)) {
+                
+            }
+        }
 		
 	}
 	
