@@ -240,7 +240,7 @@ return array(
 				124		=> 'http://2sao.vn/rss/sukien.rss',
 				125		=> 'http://2sao.vn/rss/doisong.rss',
 				126		=> 'http://2sao.vn/rss/congnghe.rss'
-			)
+			),
 			'cafef' => array(
 				1		=> 'http://cafef.vn/Trang-chu.rss',
 				128		=> 'http://cafef.vn/Tin-moi.rss',
@@ -256,6 +256,13 @@ return array(
 				138		=> 'http://cafef.vn/Doanh-nghiep-gioi-thieu.rss',
 				139		=> 'http://cafef.vn/Lich-su-kien.rss',
 				140		=> 'http://cafef.vn/Tin-doanh-nghiep.rss'
+			),
+			'land_cafe' => array(
+				1		=> 'http://land.cafef.vn/Trang-chu.rss',
+				90		=> 'http://land.cafef.vn/Thi-truong.rss',
+				165		=> 'http://land.cafef.vn/Tin-tuc-du-an.rss',
+				166		=> 'http://land.cafef.vn/Chinh-sach-quy-hoach.rss',
+				167		=> 'http://land.cafef.vn/Phong-cach.rss'
 			)
 		)
 	),
