@@ -570,52 +570,56 @@ class Crawler {
 	}
 	
 	public function getYahoonews() {
-		$link = 'http://vn.news.yahoo.com/rss/xahoi';
-		$contents = $this->getURLContents($link);
-		$items = $this->getContent($contents, '<item>', '</item>');
-        $siteId = 22;
-		// print_r($items);
-		// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
-		// die();
-		foreach ($items as $item) {
-			// echo $item;die();
-			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
-			$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
-			$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
-            $data['thumbnail_url'] = $this->getContent($data['headline'], 'src="', '"', true);
-			$data['headline'] = str_replace('&lt;', '<', $data['headline']);
-			$data['headline'] = str_replace('&gt;', '>', $data['headline']);
-			// $data['headline'] = str_replace('&lt;', '<', $data['headline']);
-			$data['headline'] = strip_tags($data['headline']);
-			$detailLink = $this->getContent($item, '<link>', '</link>', true);
-			$detail = $this->getURLContents($detailLink);
-            // echo $detail;die();
-            $newsContent = $this->getContent($detail, '<div class="yom-mod yom-art-content ">', '<div class="yom-mod yom-follow"', true);
-			// die($newsContent);
-            // echo $data['thumbnail_url'];die();
-            // echo $newsContent;die();
-            // echo $thumbnail;die();
-            // echo $detail;die();
-			// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
-			// echo $newsContent;die();
-            // print_r($data);die();
-			if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
-				$data['content'] = $newsContent;
-                $data['title_en'] = Utility::unicode2Anscii($data['title']);
-                $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
-				$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-                $data['site_id'] = $siteId;
-                // die($data['published_time']);
-				$data['created_time'] = date('Y-m-d H:i:s');
-				$data['original_url'] = $detailLink;
-				
-				$news = new News;
-				$news->attributes = $data;
-				if ($news->save(false)) {
+		$yahoo = Yii::app()->params['site']['yahoo'];
+		$siteId = 9;
+		
+		foreach ($yahoo as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<item>', '</item>');
+			$siteId = 22;
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			foreach ($items as $item) {
+				// echo $item;die();
+				$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+				$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
+				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+				$data['thumbnail_url'] = $this->getContent($data['headline'], 'src="', '"', true);
+				$data['headline'] = str_replace('&lt;', '<', $data['headline']);
+				$data['headline'] = str_replace('&gt;', '>', $data['headline']);
+				// $data['headline'] = str_replace('&lt;', '<', $data['headline']);
+				$data['headline'] = strip_tags($data['headline']);
+				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				$newsContent = $this->getContent($detail, '<div class="yom-mod yom-art-content ">', '<div class="yom-mod yom-follow"', true);
+				// die($newsContent);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
+					$data['content'] = $newsContent;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
 					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						
+					}
 				}
+				// die();
 			}
-            // die();
 		}
 	}
 	
@@ -776,9 +780,78 @@ class Crawler {
 		}
 	}
 	
+	public function getTuvitrondoi() {
+		$link = 'http://www5.xemtuong.net/tuvi/tuvi_tron_doi/index.php?canchi=2013&phai=nam&xem.x=24&xem.y=8';
+		$content = $this->getURLContents($link);
+		echo $content;
+	}
+	
 	public function getCafeF() {
 		$cafeF = Yii::app()->params['site']['cafef'];
 		$siteId = 8;
+		
+		foreach ($cafeF as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<item>', '</item>');
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			$i = 0;
+			foreach ($items as $item) {
+				// echo $item;die();
+				$i++;
+				$title = $this->getContent($item, '<title>', '</title>', true);
+				$data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+				$headline = $this->getContent($item, '<description>', '</description>', true);
+				$data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
+				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				$newsContent = $this->getContent($detail, 'class="KenhF_Content_News3">', '<div style="margin-bottom: 10px;">', true);
+				if (empty($newsContent)) {
+					$newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
+				}
+				$data['thumbnail_url'] = $this->getContent($headline, 'src="', '"', true);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!News::isExist($siteId, $detailLink)) {
+					$data['content'] = $newsContent;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						if ($i <= 5) {
+							$lastId = $news->id;
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
+					}
+				}
+				// die();
+			}
+		}
+	}
+	
+	public function getLandCafe() {
+		$cafeF = Yii::app()->params['site']['land_cafe'];
+		$siteId = 30;
 		
 		foreach ($cafeF as $c => $link) {
 			$contents = $this->getURLContents($link);
