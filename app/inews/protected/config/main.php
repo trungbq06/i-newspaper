@@ -231,6 +231,18 @@ return array(
 				138		=> 'http://cafef.vn/Doanh-nghiep-gioi-thieu.rss',
 				139		=> 'http://cafef.vn/Lich-su-kien.rss',
 				140		=> 'http://cafef.vn/Tin-doanh-nghiep.rss'
+			),
+			'genk' => array(
+				1		=> 'http://genk.vn/dien-thoai.rss'
+			),
+			'zingnews' => array(
+				1		=> 'http://www.zing.vn/news/rss/new.html'
+			),
+			'24h' => array(
+				1		=> 'http://www.24h.com.vn/upload/rss/tintuctrongngay.rss'
+			),
+			'autonet' => array(
+				1		=>'http://autonet.com.vn/search/select/?q=siteid:258%20AND%20cateid:4633&start=0&rows=100&r=&wt=xml'
 			)
 		)
 	),

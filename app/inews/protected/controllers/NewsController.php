@@ -145,7 +145,7 @@ class NewsController extends Controller
 		// echo date('Y-m-d H:i:s', 1320793200);
 		// echo strtotime('+10 days', time());
 		// die();
-        // echo strip_tags($news->content, '<img>');die();
+        echo strip_tags($news->content, '<img>');die();
 		// var_dump($data);die();
 		// echo ($data['data'][0]['content']);die();
 		echo json_encode($data);

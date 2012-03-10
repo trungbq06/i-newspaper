@@ -701,6 +701,287 @@ class Crawler {
 		}
 	}
 	
+	public function getGenK() {
+		$genK = Yii::app()->params['site']['genk'];
+		$siteId = 31;
+		
+		foreach ($genK as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<item>', '</item>');
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			$i = 0;
+			foreach ($items as $item) {
+				$i++;
+				// echo $item;die();
+				$title = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
+				$data['title'] = $title;
+				$headline = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
+				$data['headline'] = strip_tags($headline);
+				$published_time = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+                $data['published_time'] = $published_time;
+				$detailLink = $this->getContent($item, '<link><![CDATA[', ']]></link>', true);
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				$newsContent = $this->getContent($detail, '<div class="assessment-main1">', '<div class="share">', true);
+				$data['thumbnail_url'] = $this->getContent($headline, "<img src='", "'", true);
+                $newsContent = str_replace('<img', '<img width=290 ', $newsContent);
+                $newsContent = str_replace('<IMG', '<img width=290 ', $newsContent);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!News::isExist($siteId, $detailLink)) {
+					$toStrip = $this->getContent($newsContent, 'style="width:', '"');
+					foreach ($toStrip as $strip) {
+						$newsContent = str_replace($strip, '290px;', $newsContent);
+					}
+					$links = $this->getContent($newsContent, '<a href="', '"');
+					foreach ($links as $strip) {
+						$newsContent = str_replace($strip, '#', $newsContent);
+					}
+					$newsContent = str_replace('<img', '<img width=290', $newsContent);
+					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
+					// die($newsContent);
+					$data['content'] = $newsContent;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					$data['category_id'] = $c;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						if ($i <= 5) {
+							// $lastId = Yii::app()->db->getLastInsertID();
+							$lastId = $news->id;
+							// die($lastId);
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
+					}
+				}				
+			}
+			// die();
+		}
+	}
+	
+	public function getZingnews() {
+		$zing = Yii::app()->params['site']['zingnews'];
+		$siteId = 32;
+		
+		foreach ($zing as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<item>', '</item>');
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			$i = 0;
+			foreach ($items as $item) {
+				$i++;
+				// echo $item;die();
+				$title = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
+				$data['title'] = $title;
+				$headline = $this->getContent($item, '<description>', '</description>', true);
+                $headline = str_replace('&#60;', '<', $headline);
+				// $data['headline'] = strip_tags($headline);
+				$data['headline'] = $this->getContent($headline, '<![CDATA[', ']]>', true);
+				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				$newsContent = $this->getContent($item, '<content><![CDATA[', ']]></content>', true);
+				$data['thumbnail_url'] = $this->getContent($headline, 'img src="', '"', true);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!News::isExist($siteId, $detailLink)) {
+					$newsContent = str_replace('<img', '<img width=290', $newsContent);
+					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
+					// die($newsContent);
+					$data['content'] = $newsContent;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					$data['category_id'] = $c;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						if ($i <= 5) {
+							// $lastId = Yii::app()->db->getLastInsertID();
+							$lastId = $news->id;
+							// die($lastId);
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
+					}
+				}				
+			}
+			// die();
+		}
+	}
+	
+	public function get24h() {
+		$b24h = Yii::app()->params['site']['24h'];
+		$siteId = 33;
+		
+		foreach ($b24h as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<item>', '</item>');
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			$i = 0;
+			foreach ($items as $item) {
+				$i++;
+				// echo $item;die();
+				$title = $this->getContent($item, '<title>', '</title>', true);
+				$data['title'] = $title;
+				$headline = $this->getContent($item, '<description>', '</description>', true);
+				$data['headline'] = strip_tags($headline);
+				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+                $detailLink = str_replace('http://www', 'http://hn', $detailLink);
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				$newsContent = $this->getContent($detail, '<div class="text-conent">', '<div class="baiviet-tags">', true);
+				$data['thumbnail_url'] = $this->getContent($headline, 'img src="', '"', true);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!News::isExist($siteId, $detailLink)) {
+					$newsContent = str_replace('<img', '<img width=290', $newsContent);
+					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
+					// die($newsContent);
+					$data['content'] = $newsContent;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					$data['category_id'] = $c;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						if ($i <= 5) {
+							// $lastId = Yii::app()->db->getLastInsertID();
+							$lastId = $news->id;
+							// die($lastId);
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
+					}
+				}				
+			}
+			// die();
+		}
+	}
+	
+	public function getAutonet() {
+		$autonet = Yii::app()->params['site']['autonet'];
+		$siteId = 10;
+		
+		foreach ($autonet as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<doc>', '</doc>');
+            // print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			$i = 0;
+			foreach ($items as $item) {
+				$i++;
+				// echo $item;die();
+				$title = $this->getContent($item, '<str name="title">', '</str>', true);
+				$data['title'] = $title;
+				$headline = $this->getContent($item, '<str name="lead">', '</str>', true);
+				$data['headline'] = strip_tags($headline);
+				$data['published_time'] = $this->getContent($item, '<date name="date">', '</date>', true);
+                // echo $data['published_time'];die();
+				$detailLink = $this->getContent($item, '<str name="url">', '</str>', true);
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				$newsContent = $this->getContent($detail, '<div id="content" class="content box">', '<div class="clear">', true);
+				$data['thumbnail_url'] = 'http://autonet.com.vn' . $this->getContent($item, '<str name="avatar">', '</str>', true);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!News::isExist($siteId, $detailLink)) {
+                    $newsContent = str_replace('src="', 'src="http://autonet.com.vn', $newsContent);
+					$newsContent = str_replace('<img', '<img width=290', $newsContent);
+					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
+                    $newsContent = str_replace('width: 460px;', 'width: 290px;', $newsContent);
+					// die($newsContent);
+					$data['content'] = $newsContent;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					$data['category_id'] = $c;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						if ($i <= 5) {
+							// $lastId = Yii::app()->db->getLastInsertID();
+							$lastId = $news->id;
+							// die($lastId);
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
+					}
+				}				
+			}
+			// die();
+		}
+	}
+	
 	public function get2Sao() {
 		$sao2 = Yii::app()->params['site']['2sao'];
 		$siteId = 9;
