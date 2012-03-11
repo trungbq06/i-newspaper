@@ -402,9 +402,38 @@ class Crawler {
 	}
 	
 	public function getITVietPhoto() {
-		$url = 'http://www.itviet.vn/thu-vien-anh';
-		$contents = $this->getURLContents($url);
-		echo $contents;die();
+		for ($page = 1;$page < 100;$page++) {
+			if ($page == 1) $url = 'http://www.itviet.vn/thu-vien-anh';
+			else $url = 'http://www.itviet.vn/thu-vien-anh/page/' . $page;
+			// echo $url;die();
+			$contents = $this->getURLContents($url);
+			$contents = $this->getContent($contents, '<div id="colorcontentwrap4">', '<div class="cb">');
+			foreach ($contents as $one) {
+				$data['title'] = $this->getContent($one, 'rel="bookmark">', '<', true);
+				$link = $this->getContent($one, 'href="', '"', true);
+				$data['thumbnail_url'] = $this->getContent($one, 'src="', '"', true);
+				$data['description'] = $this->getContent($one, '<p>', '</p>', true);
+				$data['original_url'] = $link;
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$detail = $this->getURLContents($link);
+				$detail = $this->getContent($detail, '<div id="VietAd">', "<span class='st_fblike_hcount'>", true);
+				$thumbnails = $this->getContent($detail, 'src="', '"');
+				if (!News::model()->isPhotoExist($link)) {
+					$photo = new Photo;
+					$photo->attributes = $data;
+					if ($photo->save(false)) {
+						foreach ($thumbnails as $thumb) {
+							if (strstr($thumb, 'source-news')) continue;
+							$photoDetail = new PhotoDetail;
+							$photoDetail->photo_id = $photo->id;
+							$photoDetail->created_time = date('Y-m-d H:i:s');
+							$photoDetail->thumbnail_url = $thumb;
+							$photoDetail->save(false);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public function getVietbao() {
