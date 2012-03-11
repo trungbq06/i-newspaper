@@ -303,4 +303,10 @@ class News extends CActiveRecord
 		return !empty($result) ? true : false;
 	}
 	
+	public function isPhotoExist($url) {
+		$result = Yii::app()->db->createCommand("SELECT id FROM photo WHERE original_url = '$url'")->queryRow();
+		
+		return !empty($result) ? true : false;
+	}
+	
 }

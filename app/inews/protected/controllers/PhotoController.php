@@ -30,7 +30,7 @@ class PhotoController extends Controller
 		
 	}
     
-    public function actiongetList() {
+    public function actiongetXkcnList() {
         $this->layout = false;
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -40,6 +40,39 @@ class PhotoController extends Controller
             'total'     => 0
         );
 		$news = Xkcn::model()->getAll();
+        if (!empty($news)) {
+			$data['data'] = $news;
+			$data['total'] = count($news);
+        }
+		
+		echo json_encode($data);
+    }
+    
+    public function actionGetList() {
+        $this->layout = false;
+        $data = array(
+            'error'     => 0,
+            'data'      => null,
+            'total'     => 0
+        );
+		$news = Photo::model()->getAll();
+        if (!empty($news)) {
+			$data['data'] = $news;
+			$data['total'] = count($news);
+        }
+		
+		echo json_encode($data);
+    }
+    
+    public function actionGetListByNews() {
+        $this->layout = false;
+		$nId = isset($_GET['id']) ? intval($_GET['id']) : 1;
+        $data = array(
+            'error'     => 0,
+            'data'      => null,
+            'total'     => 0
+        );
+		$news = Photo::model()->getAllByNewsId($nId);
         if (!empty($news)) {
 			$data['data'] = $news;
 			$data['total'] = count($news);
