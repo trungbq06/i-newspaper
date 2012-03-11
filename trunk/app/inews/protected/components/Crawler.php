@@ -376,6 +376,37 @@ class Crawler {
         echo $featured;
     }
 	
+	public function getXKCN() {
+		$url = 'http://xkcn.info/rss';
+		$contents = $this->getURLContents($url);
+		$items = $this->getContent($contents, '<item>', '</item>');
+		// echo '<img src="http://25.media.tumblr.com/tumblr_m0g7gkQmPl1qbd81ro1_500.jpg" width="160" height="107" />';
+		// echo '<img src="http://26.media.tumblr.com/tumblr_m0dgtj4ELf1qbd81ro1_500.jpg" width="160" height="204" />';
+		// echo '<img src="http://27.media.tumblr.com/tumblr_m0g7h0QIhE1qbd81ro1_500.jpg" width="160" height="204" />';die();
+		foreach ($items as $item) {
+			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
+			$data['thumbnail_url'] = $this->getContent($item, 'img src="', '"', true);
+			if (!News::isXKCNExist($data['thumbnail_url'])) {
+				$path = '/tmp/save_img_xkcn_tmp.test';
+				$this->save_image($data['thumbnail_url'], $path);
+				$imgSize = getimagesize($path);
+				exec('rm -f ' . $path);
+				$photo = new Xkcn;
+				$photo->attributes = $data;				
+				$photo->width = 160;
+				$photo->height = (160 * $imgSize[1]) / $imgSize[0];
+				$photo->created_time = date('Y-m-d H:i:s');
+				$photo->save(false);
+			}
+		}
+	}
+	
+	public function getITVietPhoto() {
+		$url = 'http://www.itviet.vn/thu-vien-anh';
+		$contents = $this->getURLContents($url);
+		echo $contents;die();
+	}
+	
 	public function getVietbao() {
 		// echo $this->stripContent('<link rel="stylesheet" href="http://vietbao.vn/images/v2011/css/style20120112.css" type="text/css"  media="all" />
         // <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>     

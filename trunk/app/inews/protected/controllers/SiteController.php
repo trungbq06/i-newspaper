@@ -26,7 +26,7 @@ class SiteController extends Controller
 	 * when an action is not explicitly requested by users.
 	 */
 	public function actionIndex()
-	{
+	{		
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		// echo date('Y-m-d H:i:s', strtotime('Fri, 14 Oct 2011 11:25:36 GMT'));
@@ -62,13 +62,19 @@ class SiteController extends Controller
 		// $crawler->getDothi();
 		// $crawler->getCafeF();
 		// $crawler->get2Sao();
+		// $crawler->getVietbao();
+		// $crawler->getYahoonews();
+		// $crawler->getLandCafe();
+		// $crawler->getTuvitrondoi();
 		// $crawler->getBongda();
 		// $crawler->getInfonet();
 		// $crawler->getPcWorld();
 		// $crawler->getGenK();
 		// $crawler->getZingnews();
 		// $crawler->get24h();
-		$crawler->getAutonet();
+		// $crawler->getAutonet();
+		// $crawler->getITVietPhoto();
+		$crawler->getXKCN();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
