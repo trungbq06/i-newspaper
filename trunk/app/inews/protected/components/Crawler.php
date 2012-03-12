@@ -386,9 +386,12 @@ class Crawler {
 		foreach ($items as $item) {
 			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
 			$data['thumbnail_url'] = $this->getContent($item, 'img src="', '"', true);
+            $data['small_thumbnail_url'] = str_replace('_500', '_250', $data['thumbnail_url']);
+            // echo $data['thumbnail_url'];
+            // var_dump(pathinfo($data['thumbnail_url']));die();
 			if (!News::isXKCNExist($data['thumbnail_url'])) {
 				$path = '/tmp/save_img_xkcn_tmp.test';
-				$this->save_image($data['thumbnail_url'], $path);
+				$this->save_image($data['small_thumbnail_url'], $path);
 				$imgSize = getimagesize($path);
 				exec('rm -f ' . $path);
 				$photo = new Xkcn;

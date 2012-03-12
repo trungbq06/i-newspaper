@@ -7,6 +7,7 @@
  * @property string $id
  * @property string $title
  * @property string $thumbnail_url
+ * @property string $small_thumbnail_url
  * @property string $created_time
  * @property string $width
  * @property string $height
@@ -39,11 +40,11 @@ class Xkcn extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('title, thumbnail_url, created_time, width, height', 'required'),
-			array('title, thumbnail_url', 'length', 'max'=>255),
+			array('title, thumbnail_url, small_thumbnail_url', 'length', 'max'=>255),
 			array('width, height', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, thumbnail_url, created_time, width, height', 'safe', 'on'=>'search'),
+			array('id, title, thumbnail_url, small_thumbnail_url, created_time, width, height', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +68,7 @@ class Xkcn extends CActiveRecord
 			'id' => 'ID',
 			'title' => 'Title',
 			'thumbnail_url' => 'Thumbnail Url',
+			'small_thumbnail_url' => 'Thumbnail Url',
 			'created_time' => 'Created Time',
 			'width' => 'Width',
 			'height' => 'Height',
@@ -87,6 +89,7 @@ class Xkcn extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('thumbnail_url',$this->thumbnail_url,true);
+		$criteria->compare('small_thumbnail_url',$this->small_thumbnail_url,true);
 		$criteria->compare('created_time',$this->created_time,true);
 		$criteria->compare('width',$this->width,true);
 		$criteria->compare('height',$this->height,true);
