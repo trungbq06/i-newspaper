@@ -379,6 +379,7 @@ class Crawler {
 	public function getXKCN() {
 		$url = 'http://xkcn.info/rss';
 		$contents = $this->getURLContents($url);
+        echo $contents;
 		$items = $this->getContent($contents, '<item>', '</item>');
 		// echo '<img src="http://25.media.tumblr.com/tumblr_m0g7gkQmPl1qbd81ro1_500.jpg" width="160" height="107" />';
 		// echo '<img src="http://26.media.tumblr.com/tumblr_m0dgtj4ELf1qbd81ro1_500.jpg" width="160" height="204" />';
