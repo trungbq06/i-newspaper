@@ -73,8 +73,8 @@ class SiteController extends Controller
 		// $crawler->getZingnews();
 		// $crawler->get24h();
 		// $crawler->getAutonet();
-		$crawler->getITVietPhoto();
-		// $crawler->getXKCN();
+		// $crawler->getITVietPhoto();
+		$crawler->getXKCN();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
