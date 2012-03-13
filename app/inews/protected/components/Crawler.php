@@ -395,9 +395,11 @@ class Crawler {
 				$imgSize = getimagesize($path);
 				exec('rm -f ' . $path);
 				$photo = new Xkcn;
-				$photo->attributes = $data;				
-				$photo->width = 160;
-				$photo->height = (160 * $imgSize[1]) / $imgSize[0];
+				$photo->attributes = $data;
+				$photo->width_160 = 160;
+				$photo->height_160 = (160 * $imgSize[1]) / $imgSize[0];
+				$photo->width_320 = 320;
+				$photo->height_320 = (320 * $imgSize[1]) / $imgSize[0];
 				$photo->created_time = date('Y-m-d H:i:s');
 				$photo->save(false);
 			}
