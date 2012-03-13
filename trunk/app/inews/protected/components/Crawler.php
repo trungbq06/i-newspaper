@@ -391,19 +391,59 @@ class Crawler {
             // var_dump(pathinfo($data['thumbnail_url']));die();
 			if (!News::isXKCNExist($data['thumbnail_url'])) {
 				$path = '/tmp/save_img_xkcn_tmp.test';
+                $pathFull = '/tmp/save_img_xkcn_tmp.testfull';
 				$this->save_image($data['small_thumbnail_url'], $path);
+				$this->save_image($data['thumbnail_url'], $pathFull);
 				$imgSize = getimagesize($path);
+				$imgSizeFull = getimagesize($pathFull);
 				exec('rm -f ' . $path);
+                $width320 = $imgSizeFull[0] > 320 ? 320 : $imgSizeFull[0];
+                $height320 = ($width320 * $imgSizeFull[1]) / $imgSizeFull[0];
 				$photo = new Xkcn;
 				$photo->attributes = $data;
 				$photo->width_160 = 160;
 				$photo->height_160 = (160 * $imgSize[1]) / $imgSize[0];
-				$photo->width_320 = 320;
-				$photo->height_320 = (320 * $imgSize[1]) / $imgSize[0];
+				$photo->width_320 = $width320;
+				$photo->height_320 = $height320;
 				$photo->created_time = date('Y-m-d H:i:s');
 				$photo->save(false);
 			}
 		}
+	}
+	
+	public function getXKCNFull() {
+        for ($i = 1;$i < 1000;$i++) {
+            if ($i == 1) 
+                $url = 'http://xkcn.info/';
+            else $url = 'http://xkcn.info/page/' . $i;
+            $contents = $this->getURLContents($url);
+            $items = $this->getContent($contents, "<div class='photo-wrap'>", '</div>');
+            // print_r($items);die();
+            // echo '<img src="http://25.media.tumblr.com/tumblr_m0g7gkQmPl1qbd81ro1_500.jpg" width="160" height="107" />';
+            // echo '<img src="http://26.media.tumblr.com/tumblr_m0dgtj4ELf1qbd81ro1_500.jpg" width="160" height="204" />';
+            // echo '<img src="http://27.media.tumblr.com/tumblr_m0g7h0QIhE1qbd81ro1_500.jpg" width="160" height="204" />';die();
+            foreach ($items as $item) {
+                $data['title'] = 'Photo';
+                $data['thumbnail_url'] = $this->getContent($item, 'img src=\'', '\'', true);
+                $data['small_thumbnail_url'] = str_replace('_500', '_250', $data['thumbnail_url']);
+                // echo $data['thumbnail_url'];
+                // var_dump(pathinfo($data['thumbnail_url']));die();
+                if (!News::isXKCNExist($data['thumbnail_url'])) {
+                    $path = '/tmp/save_img_xkcn_tmp.test';
+                    $this->save_image($data['small_thumbnail_url'], $path);
+                    $imgSize = getimagesize($path);
+                    exec('rm -f ' . $path);
+                    $photo = new Xkcn;
+                    $photo->attributes = $data;
+                    $photo->width_160 = 160;
+                    $photo->height_160 = (160 * $imgSize[1]) / $imgSize[0];
+                    $photo->width_320 = 320;
+                    $photo->height_320 = (320 * $imgSize[1]) / $imgSize[0];
+                    $photo->created_time = date('Y-m-d H:i:s');
+                    $photo->save(false);
+                }
+            }
+        }
 	}
 	
 	public function getITVietPhoto() {

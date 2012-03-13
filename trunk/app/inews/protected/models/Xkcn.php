@@ -9,8 +9,10 @@
  * @property string $thumbnail_url
  * @property string $small_thumbnail_url
  * @property string $created_time
- * @property string $width
- * @property string $height
+ * @property string $width_160
+ * @property string $height_160
+ * @property string $width_320
+ * @property string $height_320
  */
 class Xkcn extends CActiveRecord
 {
@@ -39,12 +41,12 @@ class Xkcn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, thumbnail_url, created_time, width, height', 'required'),
+			array('title, thumbnail_url, created_time, width_160, height_160, height_320, width_320', 'required'),
 			array('title, thumbnail_url, small_thumbnail_url', 'length', 'max'=>255),
-			array('width, height', 'length', 'max'=>10),
+			array('width_160, height_160, height_320, width_320', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, thumbnail_url, small_thumbnail_url, created_time, width, height', 'safe', 'on'=>'search'),
+			array('id, title, thumbnail_url, small_thumbnail_url, created_time, width_160, width_320, height_160, height_320', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,8 +72,10 @@ class Xkcn extends CActiveRecord
 			'thumbnail_url' => 'Thumbnail Url',
 			'small_thumbnail_url' => 'Thumbnail Url',
 			'created_time' => 'Created Time',
-			'width' => 'Width',
-			'height' => 'Height',
+			'width_160' => 'Width',
+			'width_320' => 'Width',
+			'height_160' => 'Height',
+			'height_320' => 'Height',
 		);
 	}
 
@@ -91,16 +95,19 @@ class Xkcn extends CActiveRecord
 		$criteria->compare('thumbnail_url',$this->thumbnail_url,true);
 		$criteria->compare('small_thumbnail_url',$this->small_thumbnail_url,true);
 		$criteria->compare('created_time',$this->created_time,true);
-		$criteria->compare('width',$this->width,true);
-		$criteria->compare('height',$this->height,true);
+		$criteria->compare('width_160',$this->width_160,true);
+		$criteria->compare('width_320',$this->width_320,true);
+		$criteria->compare('height_160',$this->height_160,true);
+		$criteria->compare('height_320',$this->height_320,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
 	
-	public function getAll() {
-		$data = Yii::app()->db->createCommand("SELECT * FROM xkcn ORDER BY created_time DESC")->queryAll();
+	public function getAll($page, $limit) {
+        $offset = ($page - 1) * $limit;
+		$data = Yii::app()->db->createCommand("SELECT * FROM xkcn ORDER BY created_time DESC LIMIT $offset, $limit")->queryAll();
 		
 		return $data;
 	}
