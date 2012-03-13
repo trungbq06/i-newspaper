@@ -74,7 +74,8 @@ class SiteController extends Controller
 		// $crawler->get24h();
 		// $crawler->getAutonet();
 		// $crawler->getITVietPhoto();
-		$crawler->getXKCN();
+		// $crawler->getXKCN();
+		$crawler->getXKCNFull();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
