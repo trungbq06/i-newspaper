@@ -1217,7 +1217,7 @@ class Crawler {
 				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
 				// echo $newsContent;die();
 				// print_r($data);die();
-				if (!News::isExist($siteId, $detailLink)) {
+				if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
 					$data['content'] = $newsContent;
 					$data['title_en'] = Utility::unicode2Anscii($data['title']);
 					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
