@@ -713,6 +713,7 @@ class Crawler {
 					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
 					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
 					$data['site_id'] = $siteId;
+					$data['category_id'] = $c;
 					// die($data['published_time']);
 					$data['created_time'] = date('Y-m-d H:i:s');
 					$data['original_url'] = $detailLink;
@@ -1214,6 +1215,7 @@ class Crawler {
 					// die($data['published_time']);
 					$data['created_time'] = date('Y-m-d H:i:s');
 					$data['original_url'] = $detailLink;
+					$data['category_id'] = $c;
 					
 					$news = new News;
 					$news->attributes = $data;
