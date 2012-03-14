@@ -147,7 +147,7 @@ class NewsController extends Controller
 		// die();
         // echo strip_tags($news->content, '<img>');die();
 		// var_dump($data);die();
-		// echo ($data['data'][0]['content']);die();
+		echo ($data['data'][0]['content']);die();
 		echo json_encode($data);
 	}
 	
