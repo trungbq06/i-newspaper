@@ -676,16 +676,17 @@ class Crawler {
 	
 	public function getYahoonews() {
 		$yahoo = Yii::app()->params['site']['yahoo'];
-		$siteId = 9;
+		$siteId = 22;
 		
 		foreach ($yahoo as $c => $link) {
 			$contents = $this->getURLContents($link);
 			$items = $this->getContent($contents, '<item>', '</item>');
-			$siteId = 22;
 			// print_r($items);
 			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
 			// die();
+			$i = 0;
 			foreach ($items as $item) {
+				$i++;
 				// echo $item;die();
 				$data['title'] = $this->getContent($item, '<title>', '</title>', true);
 				$data['headline'] = $this->getContent($item, '<description>', '</description>', true);
@@ -721,7 +722,17 @@ class Crawler {
 					$news = new News;
 					$news->attributes = $data;
 					if ($news->save(false)) {
-						
+						if ($i <= 5) {
+							// $lastId = Yii::app()->db->getLastInsertID();
+							$lastId = $news->id;
+							// die($lastId);
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
 					}
 				}
 				// die();
