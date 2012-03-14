@@ -412,7 +412,7 @@ class Crawler {
 	}
 	
 	public function getXKCNFull() {
-        for ($i = 1;$i < 1000;$i++) {
+        for ($i = 279;$i < 400;$i++) {
             if ($i == 1) 
                 $url = 'http://xkcn.info/';
             else $url = 'http://xkcn.info/page/' . $i;
@@ -1162,7 +1162,6 @@ class Crawler {
 					}
 				}				
 			}
-			die();
 		}
 	}
 	
