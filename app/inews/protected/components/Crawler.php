@@ -740,6 +740,51 @@ class Crawler {
 		}
 	}
 	
+	public function getSanhdieuTimnhanh() {
+		for ($i = 0;$i < 200;$i++) {
+            $link = 'http://thegioisanhdieu.timnhanh.com/m/tag/tinh_yeu/780/' . $i;
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<li class="li_ctn">', '</li>');
+            
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+            
+			foreach ($items as $item) {
+				// echo $item;die();
+				$title = $this->getContent($item, '<div class="title_name">', '</div>', true);
+                $date['title'] = $this->getContent($title, '">', '<', true);
+				$data['headline'] = $this->getContent($item, '<span class="news_intro">', '<', true);
+				$data['thumbnail_url'] = $this->getContent($item, 'background-image:url(', ')', true);
+				$detailLink = $this->getContent($item, '<a href="', '"', true);
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				$newsContent = $this->getContent($detail, '<div class="news_detail">', '</div>', true);
+				// die($newsContent);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!HandbookEva::isExist($detailLink) && !empty($newsContent)) {
+					$data['content'] = $newsContent;
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['published_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					
+					$news = new HandbookEva;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						
+					}
+				}
+				// die();
+			}
+		}
+	}
+	
 	public function getPcWorld() {
 		$pcworld = Yii::app()->params['site']['2sao'];
         $pcworld = array(
