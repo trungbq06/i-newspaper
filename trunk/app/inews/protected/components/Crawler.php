@@ -1130,7 +1130,7 @@ class Crawler {
 					}
 					$links = $this->getContent($newsContent, '<a href="', '"');
 					foreach ($links as $strip) {
-						$newsContent = str_replace($strip, '#', $newsContent);
+						$newsContent = str_replace('<a href="' . $strip . '"', '<a href="#"', $newsContent);
 					}
 					$newsContent = str_replace('<img', '<img width=290', $newsContent);
 					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
