@@ -786,10 +786,7 @@ class Crawler {
 	}
 	
 	public function getPcWorld() {
-		$pcworld = Yii::app()->params['site']['2sao'];
-        $pcworld = array(
-            1 => 'http://rss.pcworld.com.vn/articles/tin-tuc/'
-        );
+		$pcworld = Yii::app()->params['site']['pcworld'];
 		$siteId = 29;
 		
 		foreach ($pcworld as $c => $link) {
