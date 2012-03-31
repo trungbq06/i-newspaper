@@ -290,7 +290,16 @@ return array(
 				162		=> 'http://vn.news.yahoo.com/rss/vuicuoi',
 				163		=> 'http://vn.news.yahoo.com/rss/dulich',
 				164		=> 'http://vn.news.yahoo.com/rss/amthuc',
-			)
+			),
+			'pcworld'   => array(
+				127		=> 'http://rss.pcworld.com.vn/articles/tin-tuc/',
+				168		=> 'http://rss.pcworld.com.vn/articles/san-pham/',
+				169		=> 'http://rss.pcworld.com.vn/articles/tieu-dung/',
+				170		=> 'http://rss.pcworld.com.vn/articles/cong-nghe/',
+				171		=> 'http://rss.pcworld.com.vn/articles/quan-ly/',
+				172		=> 'http://rss.pcworld.com.vn/articles/chuyen-muc/',
+				173		=> 'http://rss.pcworld.com.vn/articles/su-kien/',
+			)			
 		)
 	),
 );
