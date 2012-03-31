@@ -818,7 +818,7 @@ class Crawler {
 				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
 				// echo $newsContent;die();
 				// print_r($data);die();
-				if (!News::isExist($siteId, $detailLink)) {
+				if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
 					$toStrip = $this->getContent($newsContent, 'style="width:', '"');
 					if (!empty($toStrip)) {
 						foreach ($toStrip as $strip) {
