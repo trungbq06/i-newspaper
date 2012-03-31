@@ -805,6 +805,7 @@ class Crawler {
 				$data['headline'] = $headline;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link>', '</link>', true);
+				// $detailLink = 'http://www.pcworld.com.vn/articles/cong-nghe/ung-dung/2012/03/1231421/14-website-huu-ich-tren-di-dong/';
 				$detail = $this->getURLContents($detailLink);
 				// echo $detail;die();
 				$newsContent = $this->getContent($detail, 'id="ar-content-html">', '<div style="clear: both">', true);
@@ -819,12 +820,17 @@ class Crawler {
 				// print_r($data);die();
 				if (!News::isExist($siteId, $detailLink)) {
 					$toStrip = $this->getContent($newsContent, 'style="width:', '"');
-					foreach ($toStrip as $strip) {
-						$newsContent = str_replace($strip, '290px;', $newsContent);
+					if (!empty($toStrip)) {
+						foreach ($toStrip as $strip) {
+							$newsContent = str_replace($strip, '290px;', $newsContent);
+						}
 					}
+					
 					$links = $this->getContent($newsContent, '<a href="', '"');
-					foreach ($links as $strip) {
-						$newsContent = str_replace($strip, '#', $newsContent);
+					if (!empty($links)) {
+						foreach ($links as $strip) {
+							$newsContent = str_replace($strip, '#', $newsContent);
+						}
 					}
 					$newsContent = str_replace('<img', '<img width=290', $newsContent);
 					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
