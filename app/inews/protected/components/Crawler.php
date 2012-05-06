@@ -17,23 +17,23 @@ class Crawler {
 
     //Get content of one Url
     public function getURLContents($url) {
-        $options = array(
-            CURLOPT_URL => $url,
-            CURLOPT_USERAGENT => 'require',
-            CURLOPT_HEADER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CONNECTTIMEOUT => 5,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_ENCODING => "gzip",
-        );
-        curl_setopt_array($this->_curl, $options);
-        try {
-            $contents = curl_exec($this->_curl);
-        } catch (Exception $ex) {
-            Yii::log($ex->getMessage());
-        }
+        $ch = curl_init();
+		$userAgent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
+		curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 
-        return $contents;
+		curl_setopt($ch, CURLOPT_FAILONERROR, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+		
+		$timeout = 5;
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,$timeout);
+		$data = curl_exec($ch);
+		curl_close($ch);
+		
+		return $data;
     }
 
     //Get content with fake user-agent
@@ -740,26 +740,437 @@ class Crawler {
 		}
 	}
 	
+	public function fixEbook() {
+		// $books = Book::model()->findAll();
+		// foreach ($books as $book) {
+			$chapter = Chapter::model()->findAllByAttributes(array('book_id' => 2));
+			foreach ($chapter as $one) {
+				// echo $one->heading;
+				// $one->heading = str_replace($book->title, '', $one->heading);
+				// $one->heading = str_replace("\n", ' ', $one->heading);
+				// $one->heading = str_replace("\t", '', $one->heading);
+				// $one->heading = str_replace("  ", ' ', $one->heading);
+				// $one->heading = substr($one->heading, 1);
+				// $one->content = substr($one->content, 7);
+				// $one->heading = substr($one->heading, 10);
+				// $one->heading = 'C' . $one->heading;
+				$one->heading = 'CH' . $one->heading;
+				$one->save(false);
+				// die($one->heading);
+			}
+		// }
+	}
+	
+	public function getTruyen18() {
+		// $url = 'http://www.truyenviet.com/truyen-nguoi-lon';
+		$url = 'http://truyenviet.com/trang-chu/truyen-tam-linh';
+		$content = $this->getURLContentWithFake($url, 'Firefox');
+		// die($content);
+		$content = $this->getContent($content, '<div id="main-content"', '<div class="module-body">', true);
+		// die($content);
+		$lists = $this->getContent($content, '<ul>', '</ul>', true);
+		$lists = $this->getContent($lists, '<li>', '</li>');
+		// print_r($lists);die();
+		foreach ($lists as $list) {
+			$detailUrl = 'http://truyenviet.com/' . $this->getContent($list, 'href="', '"', true);
+			$title = $this->getContent($list, '">', '</a>', true);
+			$detail = $this->getURLContentWithFake($detailUrl, 'Firefox');
+			// die($detail);
+			$detailLists = $this->getContent($detail, '<td headers="tableOrdering">', '</td>');
+			// print_r($detailLists);die();
+			foreach ($detailLists as $dList) {
+				$dUrl = 'http://truyenviet.com/' . $this->getContent($dList, 'href="', '"', true);
+				// $dUrl = 'http://truyenviet.com/truyen-nguoi-lon/5-0-9/760-tnl-1001-dem-x';
+				// $dUrl = 'http://truyenviet.com/truyen-nguoi-lon/7-b/768-tnl-ba-con-mua';
+				$title = $this->getContent($dList, '">', '</a>', true);
+				
+				$isExist = Book::model()->findByAttributes(array('title' => $title));
+				if (empty($isExist)) {
+					// die('Empty ' . $title);
+					$book = new Book;
+					$book->title = $title;
+					$book->title_vn = Utility::unicode2Anscii($title);
+					$book->thumbnail = 'cover.jpg';
+					$book->save(false);
+					$bookId = $book->id;
+					
+					$dContent = $this->getURLContents($dUrl);
+					// die($dContent);
+					$totalPage = $this->getContent($dContent, '<div class="pagenavcounter">', '/div>', true);
+					$totalPage = $this->getContent($totalPage, 'tổng số ', '<', true);
+					if (empty($totalPage)) $totalPage = 1;
+					for ($i = 0;$i < $totalPage;$i++) {
+						$cContent = $this->getURLContents($dUrl . '?start=' . $i);
+						// die($cContent);
+						$divContent = $this->getContent($cContent, '<div id="page">', 'align="center" class="pagenav">', true);
+						// die($divContent);
+						$divContent = $this->stripContent($divContent, '<div class="pagenavbar">', '<br />');
+						// die($divContent);
+						$saveContent = $this->getContent($divContent, '<p>', '<table', true);
+						die($saveContent);
+						if (!empty($saveContent)) {
+							$saveContent = strip_tags($saveContent);
+							$chapter = new Chapter;
+							$chapter->title = 'Chương ' . ($i + 1);
+							$chapter->content = $saveContent;
+							$chapter->book_id = $bookId;
+							$chapter->heading = substr($saveContent, 0, 100);
+							$chapter->page = 1;
+							$chapter->save(false);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public function parseEbooks2() {
+        $bookDir = 'E:\i-newspaper\app\inews\protected\data\Ton Tu Binh Phap\\';
+		$thumbDir = 'E:\i-newspaper\app\inews\protected\data\Ton Tu Binh Phap\thumb\\';
+        if ($handle = opendir($bookDir)) {
+            echo "Directory handle: $handle<br/>";
+            echo "Entries:<br/>";
+            
+            // $xmlParser = new simple_html_dom();
+            
+            /* This is the correct way to loop over the directory. */
+            while (false !== ($entry = readdir($handle))) {
+				$dFolder = $bookDir . $entry . DS . 'OEBPS' . DS;
+				// $dFolder = $bookDir . $entry . DS;
+                $opfFile = $dFolder . 'content.opf';
+                // echo $opfFile;
+                if (file_exists($opfFile)) {
+					$authorTmp = explode('-', $entry);
+					$authorName = trim($authorTmp[1]);
+					$author = Author::model()->findByAttributes(array('name' => $authorName));
+					$authorId = 0;
+					if (!empty($author)) $authorId = $author->id;
+					else {
+						$author = new Author;
+						$author->name = $authorName;
+						$author->name_vn = Utility::unicode2Anscii($authorName);
+						$author->save(false);
+						$authorId = $author->id;
+					}
+					// die($authorId);
+					$data = file_get_contents($opfFile);
+                    // echo 'Exists' . $opfFile;continue;
+					// echo $data;die();
+					$book = new Book;
+					$book->title = $this->getContent($data, '<dc:title>', '</dc:title>', true);
+					$book->title = $this->getContent($book->title, '<![CDATA[', ']]>', true);
+					$book->title_vn = Utility::unicode2Anscii($book->title);
+					$thumbnail = 'cover' . date('YmdHis') . '.jpg';
+					$book->thumbnail = $thumbnail;
+					// rename($dFolder . 'cover.jpg', $dFolder . $thumbnail);
+					copy($dFolder . 'cover.jpg', $thumbDir . $thumbnail);
+					// copy($dFolder . $thumbnail, $thumbDir . $thumbnail);
+					// $author = $this->getContent($data, '<dc:creator>', '</dc:creator>', true);
+					// $book->author = (!empty($author)) ? $author : '';
+					$book->author_id = $authorId;
+					$book->save(false);
+					$bookId = $book->id;
+					// echo $book->title;
+					// $chapHandle = opendir($dFolder);
+					// echo "<br/>";
+					$i = 0;
+					// echo $data;die();
+					// $chaps = $this->getContent($data, 'item href="', '" id="');
+					$chaps = $this->getContent($data, 'media-type="application/xhtml+xml" href="', '"');
+					// print_r($chaps);die();
+					// while (false !== ($chap = readdir($chapHandle))) {
+					foreach ($chaps as $chap) {
+						// echo $chap."<br/>";die();
+						// echo substr($chap, -4)."<br/>";
+						// if ($chap == '.' || $chap == '..') continue;
+						// if (substr($chap, -4) != 'html') break;
+						$info = pathinfo($chap);
+						// print_r($info);die();
+						if ($info['extension'] != 'html') continue;
+						if ($chap == 'toc.html' || $chap == 'welcome.html' || $chap == 'lastpage.html') continue;
+						$i++;
+						$chap = $dFolder . $chap;
+						// echo $chap."<br/>";die();
+						$chapContent = file_get_contents($chap);
+						// die($chapContent);
+						// $chapContent = $this->getContent($chapContent, '<body', '</body>', true);
+						$chapter = new Chapter;
+						$chapter->book_id = $book->id;
+						// $title = '<h1' .  $this->getContent($chapContent, '<h1', '</h1>', true) . '</h1>';
+						$title = strip_tags($this->getContent($chapContent, 'class="style32">', '</p>', true));
+						// $title = $this->getContent($chapContent, '<span class="calibre9">', '</span>', true);
+						// if (empty($title)) $title = $this->getContent($chapContent, '<span class="calibre19">', '</span>', true);
+						$title2 = $this->getContent($chapContent, 'class="style28">', '</p>');
+						$title2 = $title2[1];
+						$title .= ' ' . $title2;
+						// $title = $this->getContent($chapContent, '<h4 class="calibre3">', '</h4>', true);
+						// $title = $this->getContent($chapContent, '<span class="calibre12">', '</span>', true);
+						// $title = '<h2' . $this->getContent($chapContent, '<h2 class="calibre13"', '</h2>', true) . '</h2>';
+						if (!empty($title)) $title = strip_tags($title);
+						$chapter->title = (!empty($title)) ? $title : 'Chương ' . $i;
+						// $chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						// $chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						// $chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						// $chapter->title = $this->getContent($chapContent, '<h3 class="chapter_heading">', '</h3>', true);
+						// $chapContent = '<div' . $this->getContent($chapContent, '<div align="justify"', '</div>', true) . '</div>';
+						// $chapContent = str_replace('http://www.e-thuvien.com', '', $chapContent);
+						// echo $chap;
+						$chapContent = strip_tags($chapContent);
+						// $chapContent = str_replace('Unknown', '', $chapContent);
+						// echo $chapContent;die();
+						$chapter->content = $chapContent;
+						$chapter->heading = substr($chapContent, 0, 150);
+						$chapter->heading = str_replace("\n", ' ', $chapter->heading);
+						$chapter->heading = str_replace("\t", '', $chapter->heading);
+						$chapter->heading = str_replace("  ", ' ', $chapter->heading);
+						$chapter->page = 1;
+						// echo $chapter->title . 'TRUNG' . $chapter->heading . 'TRUNG' . $chapter->content;die();
+						$chapter->save(false);
+						// die();
+					}
+                    // $xmlParser->load_file($opfFile);
+                    // var_dump($xmlParser);
+                    // $title = $xmlParser->find('dc:title', 0)->plaintext;
+                    // $author = $xmlParser->find('dc:creator', 0)->plaintext;
+                    // $chapters = $xmlParser->find('item');
+                    // var_dump($chapters[0]->plaintext);
+                }
+            }
+            
+            closedir($handle);
+        }
+    }
+	
+	public function parseEbooks() {
+        $bookDir = 'E:\i-newspaper\app\inews\\protected\data\books\\';
+        if ($handle = opendir($bookDir)) {
+            echo "Directory handle: $handle<br/>";
+            echo "Entries:<br/>";
+            
+            // $xmlParser = new simple_html_dom();
+            
+            /* This is the correct way to loop over the directory. */
+            while (false !== ($entry = readdir($handle))) {
+				$dFolder = $bookDir . $entry . DS;
+                $opfFile = $dFolder . 'content.opf';
+                // echo $opfFile;
+                if (file_exists($opfFile)) {
+					$data = file_get_contents($opfFile);
+                    // echo 'Exists' . $opfFile;die();
+					// echo $data;
+					$book = new Book;
+					$book->title = $this->getContent($data, '<dc:title>', '</dc:title>', true);
+					$book->title_vn = Utility::unicode2Anscii($book->title);
+					$book->thumbnail = 'cover' . date('YmdHis') . '.jpg';
+					$author = $this->getContent($data, '<dc:creator>', '</dc:creator>', true);
+					$book->author = (!empty($author)) ? $author : '';
+					$book->save(false);
+					$bookId = $book->id;
+					// echo $book->title;
+					$chapHandle = opendir($dFolder);
+					// echo "<br/>";
+					$i = 0;
+					$chaps = $this->getContent($data, 'item href="', '" id');
+					// print_r($chaps);die();
+					// while (false !== ($chap = readdir($chapHandle))) {
+					foreach ($chaps as $chap) {
+						// echo $chap."<br/>";die();
+						// echo substr($chap, -4)."<br/>";
+						// if ($chap == '.' || $chap == '..') continue;
+						// if (substr($chap, -4) != 'html') break;
+						$info = pathinfo($chap);
+						// print_r($info);die();
+						if ($info['extension'] != 'html') continue;
+						$i++;
+						$chap = $dFolder . $chap;
+						// echo $chap."<br/>";die();
+						$chapContent = file_get_contents($chap);
+						// die($chapContent);
+						// $chapContent = $this->getContent($chapContent, '<body', '</body>', true);
+						$chapter = new Chapter;
+						$chapter->book_id = $book->id;
+						$chapter->title = 'Chương ' . $i;
+						$chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						$chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						$chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						// $chapter->title = $this->getContent($chapContent, '<h3 class="chapter_heading">', '</h3>', true);
+						
+						$chapContent = str_replace('http://www.e-thuvien.com', '', $chapContent);
+						// echo $chap;
+						// echo $chapContent;die();
+						$chapContent = strip_tags($chapContent);						
+						$chapter->content = $chapContent;
+						$chapter->heading = substr($chapContent, 0, 150);
+						$chapter->heading = str_replace("\n", ' ', $chapter->heading);
+						$chapter->heading = str_replace("\t", '', $chapter->heading);
+						$chapter->heading = str_replace("  ", ' ', $chapter->heading);
+						$chapter->page = 1;
+						$chapter->save(false);
+						// die();
+					}
+                    // $xmlParser->load_file($opfFile);
+                    // var_dump($xmlParser);
+                    // $title = $xmlParser->find('dc:title', 0)->plaintext;
+                    // $author = $xmlParser->find('dc:creator', 0)->plaintext;
+                    // $chapters = $xmlParser->find('item');
+                    // var_dump($chapters[0]->plaintext);
+                }
+            }
+            
+            closedir($handle);
+        }
+    }
+	
+	public function fixDanhnhan() {
+		$books = Book::model()->findAll();
+		foreach ($books as $book) {
+			$chapter = new Chapter;
+			$chapter->book_id = $book->id;
+			$chapter->title = 'Tiểu sử';
+			$chapter->page = 1;
+			$chapter->heading = substr($book->content, 0, 80);
+			$chapter->content = $book->content;
+			$chapter->save(false);
+			$book->content = '';
+			$book->save(false);
+			// die();
+			
+			// $book->content = strip_tags($book->content);
+			// $book->save(false);
+		}
+	}
+	
+	public function getDanhnhan() {
+		// $link = 'http://www.vinhanonline.com/index.php?option=option=com_content&view=article&id=%s:danh-nhan-viet-nam-a&catid=83:nhan-vat-lich-su&Itemid=200';
+		// $contents = $this->getURLContents($link);
+		// $urls = $this->getContent($contents, '<tr align="center">', '</tr>', true);
+		$ids = array(150, 161, 162,163,164,165,166,167,169,170,171,172,173,174,175,176,177,178,179);
+		$url = 'http://www.vinhanonline.com/index.php?option=com_content&view=article&id=%s:danh-nhan-viet-nam-a&catid=83:nhan-vat-lich-su&Itemid=200';
+		$dLink = 'http://www.vinhanonline.com/index.php?option=com_content&view=article&id=%s';
+		// print_r($urls);die();
+		foreach ($ids as $id) {
+			$tmpUrl = sprintf($url, $id);
+			$content = $this->getURLContents($tmpUrl);
+			// echo $url;die();
+			// echo $content;die();
+			$content = $this->getContent($content, '<table', '</table', true);
+			// print_r($content);die();
+			$content = $this->getContent($content, '<ul>', '</ul>', true);
+			$content = $this->getContent($content, '<li>', '</li>');
+			if (!empty($content)) {
+				foreach ($content as $one) {
+					// echo $one;
+					$link = $this->getContent($one, 'href="', '"', true);
+					$aId = $this->getContent($link, 'id=', ':', true);
+					$tmpLink = sprintf($dLink, $aId);
+					// echo $tmpLink;
+					
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$detail = $this->getURLContents($tmpLink);
+					$data['title'] = $this->getContent($detail, 'class="contentpagetitle">', '</a>', true);
+					$data['title_vn'] = Utility::unicode2Anscii($data['title']);
+					// die($detail);
+					$detail = $this->getContent($detail, '<div class="article-content">', '<div', true);
+					$data['content'] = $detail;
+					if (!empty($data['title'])) {
+						$book = new Book;
+						$book->attributes = $data;
+						$book->save(false);
+					}
+				}
+			}
+		}
+		
+	}
+	
+	public function getFood() {
+		$categories = Category::model()->findAll();
+		foreach ($categories as $category) {
+			for ($page = 1;$page < 30;$page++) {
+				$link = $category->link;
+				if ($page > 1) {
+					$link = str_replace('.html', '_' . $page . '.html', $link);
+				}
+				$contents = $this->getURLContents($link);
+				$items = $this->getContent($contents, '<!-- START DISH ITEMS -->', '<!-- END DISH ITEMS -->', true);
+				$details = $this->getContent($items, '<div style="text-align:justify">', '</div>');
+				// print_r($details);die();
+				$thumbs = $this->getContent($items, '<img class="image"', '</a>');
+				$i = 0;
+				if (!empty($details)) {
+					foreach ($details as $detail) {
+						$url = 'http://www.vnnavi.com/dishes/' . $this->getContent($detail, 'href="', '"', true);
+						if (!Food::model()->isExist($url)) {
+							$headline = $this->getContent($detail, '<span style="line-height:20px">', '<a', true);
+							$data['headline'] = trim(strip_tags(str_replace('-', '', $headline)));
+							$data['original_url'] = $url;
+							$data['title'] = $this->getContent($detail, '<strong>', '</strong>', true);
+							$thumb = $thumbs[$i];
+							$thumbnail = 'http://www.vnnavi.com/dishes/' . str_replace('./', '', $this->getContent($thumb, 'src="', '"', true));
+							// die($thumbnail);
+							/*$savePath = '/tmp/image_food.test';
+							$this->save_image($thumbnail, $savePath);
+							$handle = fopen($savePath, "rb");
+							$image = fread($handle, filesize($savePath));
+							fclose($handle);*/
+							$data['thumbnail_url'] = $thumbnail;
+							$data['title_vn'] = Utility::unicode2Anscii($data['title']);
+							$data['category_id'] = $category->id;
+							$data['created_time'] = date('Y-m-d H:i:s');
+							
+							$detailPage = $this->getURLContents($url);
+							$data['content'] = $this->getContent($detailPage, '<!-- START DISH CONTENT -->', '<!-- END DISH CONTENT -->', true);
+							$food = new Food;
+							$food->attributes = $data;
+							$food->headline = $data['headline'];
+							$food->thumbnail_url = $data['thumbnail_url'];
+							// print_r($data);die();
+							$food->save(false);
+						}
+						
+						$i++;
+					}
+				}
+			}
+		}
+		
+	}
+	
 	public function getSanhdieuTimnhanh() {
-		for ($i = 0;$i < 200;$i++) {
+		for ($i = 1;$i < 200;$i++) {
             $link = 'http://thegioisanhdieu.timnhanh.com/m/tag/tinh_yeu/780/' . $i;
 			$contents = $this->getURLContents($link);
 			$items = $this->getContent($contents, '<li class="li_ctn">', '</li>');
-            
+            // die($link);
 			// print_r($items);
 			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
 			// die();
-            
+            $j = 0;
 			foreach ($items as $item) {
 				// echo $item;die();
 				$title = $this->getContent($item, '<div class="title_name">', '</div>', true);
-                $date['title'] = $this->getContent($title, '">', '<', true);
+                $data['title'] = $this->getContent($title, '">', '<', true);
 				$data['headline'] = $this->getContent($item, '<span class="news_intro">', '<', true);
 				$data['thumbnail_url'] = $this->getContent($item, 'background-image:url(', ')', true);
 				$detailLink = $this->getContent($item, '<a href="', '"', true);
 				$detail = $this->getURLContents($detailLink);
 				// echo $detail;die();
+				$avatar = $this->getContent($detail, '<a class="img_avatar">', '</a>', true);
+				$avatar = $this->getContent($avatar, 'background-image:url(', ')"', true);
 				$newsContent = $this->getContent($detail, '<div class="news_detail">', '</div>', true);
+				$thumbnail = $data['thumbnail_url'];
+				$savePath = '/tmp/image_eva_' . $i . '_' . $j . '.test';
+				$this->save_image($thumbnail, $savePath);
+				$savePathLarge = '/tmp/image_eva_' . $i . '_' . $j . '.large_test';
+				$this->save_image($avatar, $savePathLarge);
+				// $image = chunk_split(base64_encode(file_get_contents($savePath)));
+				$largeImage = chunk_split(base64_encode(file_get_contents($savePathLarge)));
+				$handle = fopen($savePath, "rb");
+				$image = fread($handle, filesize($savePath));
+				fclose($handle);
+				$handle = fopen($savePathLarge, "rb");
+				$largeImage = fread($handle, filesize($savePathLarge));
+				fclose($handle);
 				// die($newsContent);
 				// echo $data['thumbnail_url'];die();
 				// echo $newsContent;die();
@@ -768,14 +1179,16 @@ class Crawler {
 				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
 				// echo $newsContent;die();
 				// print_r($data);die();
-				if (!HandbookEva::isExist($detailLink) && !empty($newsContent)) {
+				if (!Handbook::isExist($detailLink) && !empty($newsContent) && !empty($data['title'])) {
 					$data['content'] = $newsContent;
 					$data['created_time'] = date('Y-m-d H:i:s');
 					$data['published_time'] = date('Y-m-d H:i:s');
 					$data['original_url'] = $detailLink;
 					
-					$news = new HandbookEva;
+					$news = new Handbook;
 					$news->attributes = $data;
+					$news->thumbnail = $image;
+					
 					if ($news->save(false)) {
 						
 					}
