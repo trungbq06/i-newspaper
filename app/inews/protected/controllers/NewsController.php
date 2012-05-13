@@ -139,7 +139,7 @@ class NewsController extends Controller
 					'category_id'		=> $news->category_id,
 					'original_url'		=> $news->original_url,
 					'category_name'		=> $cat->name,
-					'source' 			=> $cat->source
+					'source' 			=> $news->source
 				);
 			}
 		}
