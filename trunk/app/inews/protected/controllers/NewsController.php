@@ -116,6 +116,7 @@ class NewsController extends Controller
 	
 	public function actionDetail() {
 		$nId = isset($_GET['id']) ? intval($_GET['id']) : null;
+		$text = isset($_GET['t']) ? true : false;
 		$data = array(
 			'error'		=> 0,
 			'data'		=> array(
@@ -148,6 +149,9 @@ class NewsController extends Controller
         // echo strip_tags($news->content, '<img>');die();
 		// var_dump($data);die();
 		// echo ($data['data'][0]['content']);die();
+		if ($text) {
+			echo $data['data'][0]['content'];die();
+		}
 		echo json_encode($data);
 	}
 	
