@@ -17,6 +17,7 @@
  * @property string $created_time
  * @property string $original_url
  * @property integer $youtube_video
+ * @property integer $source
  */
 class News extends CActiveRecord
 {
@@ -45,7 +46,7 @@ class News extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('title, title_en, headline, headline_en, content, content_en, thumbnail_url, category_id, site_id, published_time, created_time, original_url', 'required'),
+            array('title, title_en, source, headline, headline_en, content, content_en, thumbnail_url, category_id, site_id, published_time, created_time, original_url', 'required'),
             array('youtube_video', 'numerical', 'integerOnly'=>true),
             array('title, title_en, thumbnail_url, original_url', 'length', 'max'=>255),
             array('headline, headline_en, youtube_data', 'length', 'max'=>500),
@@ -83,6 +84,7 @@ class News extends CActiveRecord
             'thumbnail_url' => 'Thumbnail Url',
             'category_id' => 'Category',
             'site_id' => 'Site',
+            'source' => 'Source',
             'published_time' => 'Published Time',
             'created_time' => 'Created Time',
             'original_url' => 'Original Url',
@@ -117,6 +119,7 @@ class News extends CActiveRecord
         $criteria->compare('original_url',$this->original_url,true);
         $criteria->compare('youtube_video',$this->youtube_video);
         $criteria->compare('youtube_data',$this->youtube_data);
+        $criteria->compare('source',$this->source);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,

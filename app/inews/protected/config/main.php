@@ -49,6 +49,16 @@ return array(
 			),
 		),/**/
 		// uncomment the following to use a MySQL database
+		/*
+		'db'=>array(
+			'connectionString' => 'sqlite:protected/data/vnfood_summer.sqlite',
+			// 'connectionString' => 'mysql:host=123.30.188.115;dbname=inews',
+			'emulatePrepare' => true,
+			// 'username' => 'root',
+			// 'password' => 'ilive123312',
+			'charset' => 'utf8',
+		),
+		*/
 		
 		'db'=>array(
 			'connectionString' => 'mysql:host=123.30.188.115;dbname=inews',
@@ -232,6 +242,15 @@ return array(
 				139		=> 'http://cafef.vn/Lich-su-kien.rss',
 				140		=> 'http://cafef.vn/Tin-doanh-nghiep.rss'
 			),
+			'pcworld'   => array(
+				127		=> 'http://rss.pcworld.com.vn/articles/tin-tuc/',
+				168		=> 'http://rss.pcworld.com.vn/articles/san-pham/',
+				169		=> 'http://rss.pcworld.com.vn/articles/tieu-dung/',
+				170		=> 'http://rss.pcworld.com.vn/articles/cong-nghe/',
+				171		=> 'http://rss.pcworld.com.vn/articles/quan-ly/',
+				172		=> 'http://rss.pcworld.com.vn/articles/chuyen-muc/',
+				173		=> 'http://rss.pcworld.com.vn/articles/su-kien/',
+			),
 			'genk' => array(
 				1		=> 'http://genk.vn/dien-thoai.rss'
 			),
@@ -243,6 +262,49 @@ return array(
 			),
 			'autonet' => array(
 				1		=>'http://autonet.com.vn/search/select/?q=siteid:258%20AND%20cateid:4633&start=0&rows=100&r=&wt=xml'
+			),
+			'go_tech' => array(
+				1 => 'http://news.go.vn/rss/3/Kinh-te.htm'
+				// 1 => 'http://tech.go.vn/tech/rss/cate/972/RssDetail.rss',
+				// 2 => 'http://sao.go.vn/sao/rss/cate/976/RssDetail.rss'
+			),
+			'vnews' => array(
+				2 		=> 'http://news.go.vn/rss/1/Xa-hoi.htm',
+				176		=> 'http://news.go.vn/rss/12/Doi-noi-Doi-ngoai.htm',
+				3		=> 'http://news.go.vn/rss/2/The-gioi.htm',
+				5		=> 'http://news.go.vn/rss/6/Van-hoa.htm',
+				177		=> 'http://news.go.vn/rss/42/Chuyen-cua-sao.htm',
+				178		=> 'http://news.go.vn/rss/27/Am-nhac.htm',
+				179		=> 'http://news.go.vn/rss/16/Du-lich.htm',
+				180		=> 'http://news.go.vn/rss/14/Thoi-trang.htm',
+				8		=> 'http://news.go.vn/rss/5/Doi-song.htm',
+				181		=> 'http://news.go.vn/rss/15/Am-thuc.htm',
+				182		=> 'http://news.go.vn/rss/36/Lam-dep.htm',
+				183		=> 'http://news.go.vn/rss/37/Tinh-yeu-Hon-nhan.htm',
+				184		=> 'http://news.go.vn/rss/4/Giao-duc.htm',
+				185		=> 'http://news.go.vn/rss/34/Hoc-bong-Du-hoc.htm',
+				186		=> 'http://news.go.vn/rss/35/Tuyen-sinh.htm',
+				187		=> 'http://news.go.vn/rss/40/Dai-hoc-Van-Hien.htm',
+				6		=> 'http://news.go.vn/rss/10/The-thao.htm',
+				188		=> 'http://news.go.vn/rss/25/Bong-da.htm',
+				189		=> 'http://news.go.vn/rss/26/Quan-vot.htm',
+				190		=> 'http://news.go.vn/rss/30/The-gioi-xe.htm',
+				191		=> 'http://news.go.vn/rss/9/KH-CN.htm',
+				192		=> 'http://news.go.vn/rss/22/CNTT-Vien-thong.htm',
+				193		=> 'http://news.go.vn/rss/24/Thiet-bi-Phan-cung.htm',
+				194		=> 'http://news.go.vn/rss/23/Khoa-hoc-Tu-nhien.htm',
+				7		=> 'http://news.go.vn/rss/7/Phap-luat.htm',
+				195		=> 'http://news.go.vn/rss/33/Tu-van.htm',
+				196		=> 'http://news.go.vn/rss/32/Hinh-su.htm',
+				197		=> 'http://news.go.vn/rss/3/Kinh-te.htm',
+				198		=> 'http://news.go.vn/rss/17/Tai-chinh.htm',
+				199		=> 'http://news.go.vn/rss/18/Chung-khoan.htm',
+				200		=> 'http://news.go.vn/rss/20/Thi-truong.htm',
+				201		=> 'http://news.go.vn/rss/31/Do-thi.htm',
+				202		=> 'http://news.go.vn/rss/38/Dau-tu-Quy-hoach.htm',
+				204		=> 'http://news.go.vn/rss/8/Giai-tri.htm',
+				205		=> 'http://news.go.vn/rss/29/Truyen-cuoi.htm',
+				206		=> 'http://news.go.vn/rss/41/Game.htm',
 			)
 		)
 	),

@@ -1,7 +1,34 @@
 <?php
 
 class Utility {
-
+	
+	public static function foreignToUnicode($str) {
+		$fromStr = array(
+			'&Agrave;', '&agrave;', '&Aacute;', '&aacute;', '&Acirc;', '&acirc;', '&Atilde;', '&atilde;',
+			'&Iacute;', '&iacute;', '&Igrave;', '&igrave;', 
+			'&Egrave;', '&egrave;', '&Eacute;', '&eacute;', '&Ecirc;', '&ecirc;', 
+			'&Ograve;', '&ograve;', '&Ocirc;', '&ocirc;', '&Oacute;', '&oacute;', '&Otilde;', '&otilde;',
+			'&Ugrave;', '&ugrave;', '&Uacute;', '&uacute;', 
+			'&ETH;', '&eTH;',
+			'&Yacute;', '&yacute;', 
+			'&quot;',
+		);
+		$toStr = array(
+			'À', 'à', 'Á', 'á', 'Â', 'â', 'Ã', 'ã',
+			'Í', 'í', 'Í', 'í', 
+			'È', 'è', 'É', 'é', 'Ê', 'ê', 
+			'Ò', 'ò', 'Ô', 'ô', 'Ó', 'ó', 'Õ', 'õ',
+			'Ù', 'ù', 'Ú', 'ú', 
+			'"'
+		);
+		
+		for ($i = 0;$i < count($fromStr);$i++) {
+			$str = str_replace($fromStr[$i], $toStr[$i], $str);
+		}
+		
+		return $str;
+	}
+	
 	/*
 	*  Ham bo dau tieng Viet
 	*/

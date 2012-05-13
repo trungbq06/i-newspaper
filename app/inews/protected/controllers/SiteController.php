@@ -77,6 +77,17 @@ class SiteController extends Controller
 		// $crawler->getXKCN();
 		// $crawler->getXKCNFull();
 		// $crawler->getSanhdieuTimnhanh();
+		// $crawler->getFood();
+		// $crawler->getDanhnhan();
+		// $crawler->fixDanhnhan();
+		// $crawler->parseEbooks();
+		// $crawler->parseEbooks2();
+		// $crawler->fixEbook();
+		// $crawler->getSanhdieuTimnhanh();
+		// $crawler->getTruyen18();
+		// $crawler->fixTruyen18();
+		// $crawler->getMonngon();
+		$crawler->getGoTech();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
@@ -86,38 +97,11 @@ class SiteController extends Controller
 		// $crawler->getLotteryCity();
 		// $crawler->getTvChannel();
 		
-        $this->parseEbooks();
+        // $this->parseEbooks();
         
 		die('Hello world');
 		$this->render('index');
 	}
-    
-    public function parseEbooks() {
-        $bookDir = 'D:\i-newspaper\app\inews\\protected\data\books\\';
-        if ($handle = opendir($bookDir)) {
-            echo "Directory handle: $handle<br/>";
-            echo "Entries:<br/>";
-            
-            // $xmlParser = new simple_html_dom();
-            
-            /* This is the correct way to loop over the directory. */
-            while (false !== ($entry = readdir($handle))) {
-                $opfFile = $bookDir . $entry . DS . 'content.opf';
-                // echo $opfFile;
-                if (file_exists($opfFile)) {
-                    // echo 'Exists';
-                    // $xmlParser->load_file($opfFile);
-                    // var_dump($xmlParser);
-                    // $title = $xmlParser->find('dc:title', 0)->plaintext;
-                    // $author = $xmlParser->find('dc:creator', 0)->plaintext;
-                    // $chapters = $xmlParser->find('item');
-                    // var_dump($chapters[0]->plaintext);
-                }
-            }
-            
-            closedir($handle);
-        }
-    }
 
 	/**
 	 * This is the action to handle external exceptions.

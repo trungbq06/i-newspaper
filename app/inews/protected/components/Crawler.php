@@ -761,6 +761,19 @@ class Crawler {
 		// }
 	}
 	
+	public function fixTruyen18() {
+		Yii::app()->db->createCommand("DELETE FROM chapter WHERE content = ''")->execute();
+		die();
+		$chapters = Chapter::model()->findAll();
+		// $chapters = Chapter::model()->findAllByAttributes(array('id' => 128));
+		foreach ($chapters as $chapter) {
+			$chapter->content = Utility::foreignToUnicode($chapter->content);
+			$chapter->heading = Utility::foreignToUnicode($chapter->heading);
+			// die($chapter->content);
+			$chapter->save(false);
+		}
+	}
+	
 	public function getTruyen18() {
 		// $url = 'http://www.truyenviet.com/truyen-nguoi-lon';
 		$url = 'http://truyenviet.com/trang-chu/truyen-tam-linh';
@@ -1132,8 +1145,141 @@ class Crawler {
 					}
 				}
 			}
-		}
+		}	
+	}
+	
+	public function getGoTech() {
+		$goTech = Yii::app()->params['site']['vnews'];
+		$siteId = 35;
 		
+		foreach ($goTech as $c => $link) {
+			$contents = $this->getURLContents($link);
+			$items = $this->getContent($contents, '<item>', '</item>');
+			// print_r($items);
+			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+			// die();
+			$i = 0;
+			foreach ($items as $item) {
+				$i++;
+				// echo $item;die();
+				$title = $this->getContent($item, '<title><![CDATA[', ']]></title>', true);
+				$data['title'] = $title;
+				$headline = $this->getContent($item, '<description><![CDATA[', ']]></description>', true);
+				$thumbnailUrl = $this->getContent($headline, "src='", "' />", true);
+				// die($thumbnailUrl);
+				$headline = strip_tags($headline);
+				// die($headline);
+				$data['headline'] = $headline;
+				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+				// die($data['published_time']);
+				$detailLink = $this->getContent($item, '<link><![CDATA[', ']]></link>', true);
+				// $detailLink = 'http://www.pcworld.com.vn/articles/cong-nghe/ung-dung/2012/03/1231421/14-website-huu-ich-tren-di-dong/';
+				$detail = $this->getURLContents($detailLink);
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="shownews">', '<div class="actionnews">', true);
+				$newsContent = '<div ' . $this->getContent($detail, '<div id="ContentContainer"', '<div id="content-tag"', true);
+				$data['thumbnail_url'] = $thumbnailUrl;
+				$source = $this->getContent($detail, ' <div class="gn_info">', '</div>', true);
+				$source = strip_tags($source);
+				$source = explode('-', $source);
+				$source = trim($source[1]);
+				$data['source'] = $source;
+				// die($data['source']);
+                $newsContent = str_replace('<img', '<img width="290"', $newsContent);
+				// echo $data['thumbnail_url'];die();
+				// echo $newsContent;die();
+				// echo $thumbnail;die();
+				// echo $detail;die();
+				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+				// echo $newsContent;die();
+				// print_r($data);die();
+				if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
+					$toStrip = $this->getContent($newsContent, 'style="', '"');
+					if (!empty($toStrip)) {
+						foreach ($toStrip as $strip) {
+							$newsContent = str_replace($strip, '290px;', $newsContent);
+						}
+					}
+					
+					$toStrip = $this->getContent($newsContent, 'object style="', '"');
+					if (!empty($toStrip)) {
+						foreach ($toStrip as $strip) {
+							$newsContent = str_replace($strip, 'width:290px;height: 200px;', $newsContent);
+						}
+					}
+					$newsContent = str_replace('width="640"', 'width="290"', $newsContent);
+					$newsContent = str_replace('height="360"', 'height="200"', $newsContent);
+					
+					$links = $this->getContent($newsContent, '<a href="', '"');
+					if (!empty($links)) {
+						foreach ($links as $strip) {
+							$newsContent = str_replace($strip, '#', $newsContent);
+						}
+					}
+					$newsContent = str_replace('<img', '<img width=290', $newsContent);
+					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
+					// die($newsContent);
+					$data['content'] = $newsContent;
+					$data['title_en'] = Utility::unicode2Anscii($data['title']);
+					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+					$data['site_id'] = $siteId;
+					$data['category_id'] = $c;
+					// die($data['published_time']);
+					$data['created_time'] = date('Y-m-d H:i:s');
+					$data['original_url'] = $detailLink;
+					
+					$news = new News;
+					$news->attributes = $data;
+					if ($news->save(false)) {
+						if ($i <= 5) {
+							// $lastId = Yii::app()->db->getLastInsertID();
+							$lastId = $news->id;
+							// die($lastId);
+							$newsFeatured = new NewsFeatured;
+							$newsFeatured->attributes = array(
+								'news_id' 		=> $lastId,
+								'created_time' 	=> date('Y-m-d H:i:s')
+							);
+							$newsFeatured->save(false);
+						}
+					}
+				}				
+			}
+			// die();
+		}
+	}
+	
+	public function getMonngon() {
+		// $test = Food::model()->findByPk(5);
+		// echo $test->content;die();
+		$url = 'http://afamily.vn/tags/mon-ngon-mua-he/trang-%s.chn';
+		for ($i = 1;$i < 14;$i++) {
+			$tmpUrl = sprintf($url, $i);
+			$content = $this->getURLContents($tmpUrl);
+			$items = $this->getContent($content, '<div class="catalogiesbox_top fl">', '</div>');
+			foreach ($items as $item) {
+				$link = 'http://afamily.vn' . $this->getContent($item, 'href="', '"', true);
+				$data['original_url'] = $link;
+				$data['thumbnail'] = $this->getContent($item, 'src="', '"', true);
+				$data['title'] = $this->getContent($item, 'title="', '"', true);
+				$data['headline'] = $this->getContent($item, '<p>', '</p>', true);
+				$data['created_time'] = date('Y-m-d H:i:s');
+				$data['title_vn'] = Utility::unicode2Anscii($data['title']);
+				$detail = $this->getURLContents($link);
+				// die($detail);
+				$dContent = '<div>' . $this->getContent($detail, '<div class="detail_content fl mgt15">', '<div class="tag fl mgt20">', true);
+				$dContent = str_replace('<img', '<img width=125', $dContent);
+				$dContent = str_replace('<IMG', '<IMG width=125', $dContent);
+				$dContent = str_replace('style="MARGIN: 5px"', 'style="MARGIN: 2px"', $dContent);
+				$data['content'] = $dContent;
+				$food = new Food;
+				$food->attributes = $data;
+				// print_r($data);die();
+				$food->save(false);
+				// die($dContent);
+			}
+		}
 	}
 	
 	public function getSanhdieuTimnhanh() {
