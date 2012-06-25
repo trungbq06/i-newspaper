@@ -740,6 +740,64 @@ class Crawler {
 		}
 	}
 	
+	public function getRadioOnline() {
+		// $url = 'http://radio.vnmedia.vn/Browse.aspx?id=35';
+		$cats = RadioCategory::model()->findAll();
+		foreach ($cats as $cat) {
+			// $url = 'http://radio.vnmedia.vn/Browse.aspx?id=' . $cat->id;
+			for ($i = 1;$i < 6;$i++) {
+				$url = $cat->url . '&page=' . $i;
+				$contents = $this->getURLContents($url);
+				// die($contents);
+				// $data = $this->getContent($contents, '<div class="sub">', '</div>', true);
+				$data = $this->getContent($contents, '<ul class="radio-tracks">', '</ul>', true);
+				// print_r($data);die();
+				$data = $this->getContent($data, '<li', '</li>');
+				// $data = $this->getContent($data, '<a', '</li>');
+				/*
+				foreach ($data as $one) {
+					// die($one);
+					$name = $this->getContent($one, '">', '</a>', true);
+					$link = 'http://radio.vnmedia.vn' . $this->getContent($one, 'href="', '"', true);
+					$category = new RadioCategory;
+					$category->name = $name;
+					$category->url = $link;
+					$category->created_time = date('Y-m-d H:i:s');
+					$category->save(false);
+				}
+				print_r($data);die();*/
+				if (!empty($data)) {
+					foreach ($data as $one) {
+						$link = 'http://radio.vnmedia.vn' . $this->getContent($one, 'href="', '"', true);
+						$title = $this->getContent($one, '">', '</a>', true);
+						$title = Utility::foreignToUnicode($title);
+						// die($link);
+						$detail = $this->getURLContents($link);
+						// die($detail);
+						$mediaUrl = $this->getContent($detail, "link: '", "'", true);
+						// die($mediaUrl);
+						$thumb = $this->getContent($detail, '<div class="fl">', '</div>', true);
+						$thumb = 'http://radio.vnmedia.vn' . $this->getContent($thumb, '<img src="', '"', true);
+						$exist = Radio::model()->findByAttributes(array('original_url' => $link));
+						if (empty($exist)) {
+							$radio = new Radio;
+							$radio->title = $title;
+							$radio->title_en = Utility::unicode2Anscii($title);
+							$radio->headline = '';
+							$radio->download_file = date('YmdHis') . '.mp3';
+							$radio->original_url = $link;
+							$radio->thumbnail_url = $thumb;
+							$radio->media_url = str_replace(' ', '%20', $mediaUrl);
+							$radio->category_id = $cat->id;
+							$radio->created_time = date('Y-m-d H:i:s');
+							$radio->save(false);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public function fixEbook() {
 		// $books = Book::model()->findAll();
 		// foreach ($books as $book) {
@@ -838,8 +896,8 @@ class Crawler {
 	}
 	
 	public function parseEbooks2() {
-        $bookDir = 'E:\i-newspaper\app\inews\protected\data\Ton Tu Binh Phap\\';
-		$thumbDir = 'E:\i-newspaper\app\inews\protected\data\Ton Tu Binh Phap\thumb\\';
+        $bookDir = 'E:\i-newspaper\app\inews\protected\data\Lan dau ben nhau\\';
+		$thumbDir = 'E:\i-newspaper\app\inews\protected\data\Lan dau ben nhau\thumb\\';
         if ($handle = opendir($bookDir)) {
             echo "Directory handle: $handle<br/>";
             echo "Entries:<br/>";
@@ -848,10 +906,10 @@ class Crawler {
             
             /* This is the correct way to loop over the directory. */
             while (false !== ($entry = readdir($handle))) {
-				$dFolder = $bookDir . $entry . DS . 'OEBPS' . DS;
-				// $dFolder = $bookDir . $entry . DS;
+				// $dFolder = $bookDir . $entry . DS . 'OEBPS' . DS;
+				$dFolder = $bookDir . $entry . DS;
                 $opfFile = $dFolder . 'content.opf';
-                // echo $opfFile;
+                // echo $opfFile;die();
                 if (file_exists($opfFile)) {
 					$authorTmp = explode('-', $entry);
 					$authorName = trim($authorTmp[1]);
@@ -873,10 +931,12 @@ class Crawler {
 					$book->title = $this->getContent($data, '<dc:title>', '</dc:title>', true);
 					$book->title = $this->getContent($book->title, '<![CDATA[', ']]>', true);
 					$book->title_vn = Utility::unicode2Anscii($book->title);
+					// $thumbnail = 'cover' . date('YmdHis') . '.png';
 					$thumbnail = 'cover' . date('YmdHis') . '.jpg';
 					$book->thumbnail = $thumbnail;
-					// rename($dFolder . 'cover.jpg', $dFolder . $thumbnail);
-					copy($dFolder . 'cover.jpg', $thumbDir . $thumbnail);
+					rename($dFolder . 'cover.jpg', $dFolder . $thumbnail);
+					// copy($dFolder . 'cover.jpg', $thumbDir . $thumbnail);
+					// copy($dFolder . 'cover.png', $thumbDir . $thumbnail);
 					// copy($dFolder . $thumbnail, $thumbDir . $thumbnail);
 					// $author = $this->getContent($data, '<dc:creator>', '</dc:creator>', true);
 					// $book->author = (!empty($author)) ? $author : '';
@@ -888,8 +948,8 @@ class Crawler {
 					// echo "<br/>";
 					$i = 0;
 					// echo $data;die();
-					// $chaps = $this->getContent($data, 'item href="', '" id="');
-					$chaps = $this->getContent($data, 'media-type="application/xhtml+xml" href="', '"');
+					$chaps = $this->getContent($data, 'item href="', '" id="');
+					// $chaps = $this->getContent($data, 'media-type="application/xhtml+xml" href="', '"');
 					// print_r($chaps);die();
 					// while (false !== ($chap = readdir($chapHandle))) {
 					foreach ($chaps as $chap) {
@@ -909,11 +969,11 @@ class Crawler {
 						// $chapContent = $this->getContent($chapContent, '<body', '</body>', true);
 						$chapter = new Chapter;
 						$chapter->book_id = $book->id;
-						// $title = '<h1' .  $this->getContent($chapContent, '<h1', '</h1>', true) . '</h1>';
-						$title = strip_tags($this->getContent($chapContent, 'class="style32">', '</p>', true));
+						$title = '<h1' .  $this->getContent($chapContent, '<h1', '</h1>', true) . '</h1>';
+						// $title = strip_tags($this->getContent($chapContent, 'class="style32">', '</p>', true));
 						// $title = $this->getContent($chapContent, '<span class="calibre9">', '</span>', true);
-						// if (empty($title)) $title = $this->getContent($chapContent, '<span class="calibre19">', '</span>', true);
-						$title2 = $this->getContent($chapContent, 'class="style28">', '</p>');
+						if (empty($title)) $title = $this->getContent($chapContent, '<span class="calibre19">', '</span>', true);
+						// $title2 = $this->getContent($chapContent, 'class="style28">', '</p>');
 						$title2 = $title2[1];
 						$title .= ' ' . $title2;
 						// $title = $this->getContent($chapContent, '<h4 class="calibre3">', '</h4>', true);
@@ -921,9 +981,9 @@ class Crawler {
 						// $title = '<h2' . $this->getContent($chapContent, '<h2 class="calibre13"', '</h2>', true) . '</h2>';
 						if (!empty($title)) $title = strip_tags($title);
 						$chapter->title = (!empty($title)) ? $title : 'Chương ' . $i;
-						// $chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
-						// $chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
-						// $chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						$chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						$chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
+						$chapContent = str_replace('@page { margin-bottom: 5.000000pt; margin-top: 5.000000pt; }', '', $chapContent);
 						// $chapter->title = $this->getContent($chapContent, '<h3 class="chapter_heading">', '</h3>', true);
 						// $chapContent = '<div' . $this->getContent($chapContent, '<div align="justify"', '</div>', true) . '</div>';
 						// $chapContent = str_replace('http://www.e-thuvien.com', '', $chapContent);
