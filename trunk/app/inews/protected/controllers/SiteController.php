@@ -87,7 +87,7 @@ class SiteController extends Controller
 		// $crawler->getTruyen18();
 		// $crawler->fixTruyen18();
 		// $crawler->getMonngon();
-		$crawler->getGoTech();
+		// $crawler->getGoTech();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
@@ -98,6 +98,8 @@ class SiteController extends Controller
 		// $crawler->getTvChannel();
 		
         // $this->parseEbooks();
+		
+		$crawler->getRadioOnline();
         
 		die('Hello world');
 		$this->render('index');
