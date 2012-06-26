@@ -46,5 +46,21 @@ class RadioController extends Controller
 			echo json_encode($data);
 		}
 	}
-
+    
+    public function actionSearch() {
+        $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
+        
+        if (!empty($keyword)) {
+            $data = array(
+				'error' => 0,
+				'data' => null
+			);
+            $rows = Radio::model()->findAll('title_en LIKE :keyword', array(':keyword' => $keyword));
+            print_r($rows);
+            $data['data'] = $rows;
+            
+            echo json_encode($data);
+        }
+    }
+    
 }
