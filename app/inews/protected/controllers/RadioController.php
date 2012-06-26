@@ -55,7 +55,7 @@ class RadioController extends Controller
 				'error' => 0,
 				'data' => null
 			);
-            $rows = Radio::model()->getByKeyword($keyword);
+            $rows = Radio::model()->getByTitle($keyword);
             // print_r($rows);
             $data['data'] = $rows;
             
