@@ -55,7 +55,7 @@ class RadioController extends Controller
 				'error' => 0,
 				'data' => null
 			);
-            $rows = Radio::model()->findAll("title_en LIKE '%:keyword%'", array(':keyword' => $keyword));
+            $rows = Radio::model()->getByKeyword($keyword);
             // print_r($rows);
             $data['data'] = $rows;
             
