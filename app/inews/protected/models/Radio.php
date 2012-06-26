@@ -114,5 +114,12 @@ class Radio extends CActiveRecord
 		
 		return $rows;
 	}
+    
+    public function getByTitle($keyword) {
+        $sql = "SELECT * FROM radio WHERE title_en LIKE '%$keyword%'";
+        
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        return $rows;
+    }
 	
 }
