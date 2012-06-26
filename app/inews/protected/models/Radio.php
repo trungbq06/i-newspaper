@@ -116,7 +116,8 @@ class Radio extends CActiveRecord
 	}
     
     public function getByTitle($keyword) {
-        $sql = "SELECT * FROM radio WHERE title_en LIKE '%$keyword%'";
+        $keyword = strtolower($keyword);
+        $sql = "SELECT * FROM radio WHERE lower(title_en) LIKE '%$keyword%'";
         
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         return $rows;
