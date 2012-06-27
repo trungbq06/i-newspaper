@@ -46,21 +46,49 @@ class RadioController extends Controller
 			echo json_encode($data);
 		}
 	}
-    
-    public function actionSearch() {
+	
+	public function actionSearch() {
+		
+		// $radio = Radio::model()->findAll();
+		// foreach ($radio as $one) {
+			// $one->thumbnail_url = str_replace(' ', '%20', $one->thumbnail_url);
+			// $one->save(false);
+		// }
+		
+        $params = Yii::app()->params;
+        $page = isset($_GET['page']) ? strip_tags($_GET['page']) : 1;
         $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
         
-        if (!empty($keyword)) {
-            $data = array(
-				'error' => 0,
-				'data' => null
-			);
-            $rows = Radio::model()->getByTitle($keyword);
-            // print_r($rows);
-            $data['data'] = $rows;
-            
-            echo json_encode($data);
+        $data = array(
+            'error'     => 0,
+            'data'      => null
+        );
+        $news = array();
+        if ($keyword) {
+            $news = Radio::model()->searchText($keyword);
         }
+        
+        if (!empty($news)) {
+			$data['data'] = $news['data'];
+        }
+        // var_dump($data);
+        echo json_encode($data);
     }
+	
+    // public function actionSearch() {
+        // $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
+        
+        // if (!empty($keyword)) {
+            // $data = array(
+				// 'error' => 0,
+				// 'data' => null
+			// );
+            // $rows = Radio::model()->getByTitle($keyword);
+            print_r($rows);
+            // $data['data'] = $rows;
+            
+            // echo json_encode($data);
+        // }
+    // }
     
 }
