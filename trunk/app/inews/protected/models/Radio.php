@@ -123,4 +123,15 @@ class Radio extends CActiveRecord
         return $rows;
     }
 	
+	public function searchText($keyword) {
+        $query = Yii::app()->db->createCommand()
+            ->select("*, MATCH(title_en) AGAINST ('$keyword') AS score")
+            ->from('radio')
+            ->where("MATCH(title_en) AGAINST('$keyword')")
+            ->order("score DESC");
+        $news = $query->queryAll();
+		
+        return array('data' => $news);
+    }
+	
 }
