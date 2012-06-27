@@ -786,7 +786,7 @@ class Crawler {
 							$radio->headline = '';
 							$radio->download_file = date('YmdHis') . '.mp3';
 							$radio->original_url = $link;
-							$radio->thumbnail_url = $thumb;
+							$radio->thumbnail_url = str_replace(' ', '%20', $thumb);
 							$radio->media_url = str_replace(' ', '%20', $mediaUrl);
 							$radio->category_id = $cat->id;
 							$radio->created_time = date('Y-m-d H:i:s');
