@@ -84,7 +84,7 @@ class RadioController extends Controller
 				// 'data' => null
 			// );
             // $rows = Radio::model()->getByTitle($keyword);
-            print_r($rows);
+            // print_r($rows);
             // $data['data'] = $rows;
             
             // echo json_encode($data);
