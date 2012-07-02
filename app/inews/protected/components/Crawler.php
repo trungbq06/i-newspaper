@@ -22,6 +22,7 @@ class Crawler {
 		curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 
 		curl_setopt($ch, CURLOPT_FAILONERROR, true);
+		curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -894,6 +895,70 @@ class Crawler {
 			}
 		}
 	}
+    
+    public function getSachnoi() {
+        $url = 'http://sachnoi.vn/category/radio-show/qns/feed/';
+        $content = $this->getURLContents($url);
+        $contents = $this->getContent($content, '<item>', '</item>');
+        // print_r($contents);
+        foreach ($contents as $content) {
+            // echo $content;die();
+            $title = $this->getContent($content, '<title>', '</title>', true);
+            $link = trim($this->getContent($content, '<link>', '</link>', true));
+            $pubDate = $this->getContent($content, '<pubDate>', '</pubDate>', true);
+            $description = $this->getContent($content, '<description>', '</description>', true);
+            $thumbnail = $this->getContent($content, 'width=', 'class', true);
+            $thumbnail = $this->getContent($thumbnail, 'src="', '"', true);
+            // echo $thumbnail;die();
+            $description = strip_tags($description);
+            $mediaUrl = $this->getContent($content, '<enclosure', 'length', true);
+            $mediaUrl = $this->getContent($mediaUrl, 'url="', '"', true);
+            $description = str_replace($mediaUrl, '', $description);
+            // $description = str_replace(']]>', '', $description);
+            // echo $mediaUrl;die();
+            // echo $description;die();
+            $pos = strpos($link, '?utm_source');
+            if (!empty($pos))
+                $link = trim(substr($link, 0, strpos($link, '?utm_source')));
+            // die($link);
+            $exist = AudioBook::model()->isExist($link);
+            $link = 'http://sachnoi.vn/50/dac-nhan-tam/';
+            if (empty($exist)) {
+                $detail = $this->getURLContents($link);
+                // die($detail);
+                $media = $this->getContent($detail, '<object', '</object>', true);
+                if (empty($media)) {
+                    // Playlist
+                    $media = $this->getContent($detail, 'file:"', '"', true);
+                    $media = str_replace('%3A', ':', $media);
+                    $media = str_replace('%2F', '/', $media);
+                    $mediaD = $this->getURLContents($media);
+                    $track = $this->getContent($mediaD, '<track>', '<track>');
+                    foreach ($track as $one) {
+                        $location = $this->getContent($one, '<location>', '</location>', true);
+                        // die($location);
+                        // $c = $this->getURLContents($location);
+                        // die($c);
+                    }
+                }
+                // die($media);
+                $audio = new AudioBook;
+                $audio->title = $title;
+                $audio->title_en = Utility::unicode2Anscii($title);
+                $audio->headine = $description;
+                $audio->headine_en = Utility::unicode2Anscii($description);
+                $audio->thumbnail_url = $thumbnail;
+                $audio->media_url = $mediaUrl;
+                $audio->original_url = $link;
+                $date = date('Y-m-d H:i:s', strtotime($pubDate));
+                // die($date);
+                $audio->created_time = $date;
+                
+                
+                $audio->save(false);
+            }
+        }
+    }
 	
 	public function parseEbooks2() {
         $bookDir = 'E:\i-newspaper\app\inews\protected\data\Lan dau ben nhau\\';
