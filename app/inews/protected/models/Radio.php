@@ -124,11 +124,11 @@ class Radio extends CActiveRecord
     }
 	
 	public function searchText($keyword) {
+		$keyword = strtolower($keyword);
         $query = Yii::app()->db->createCommand()
-            ->select("*, MATCH(title_en) AGAINST ('$keyword') AS score")
+            ->select("*")
             ->from('radio')
-            ->where("MATCH(title_en) AGAINST('$keyword')")
-            ->order("score DESC");
+            ->where("LOWER(title_en) LIKE '%$keyword%'");
         $news = $query->queryAll();
 		
         return array('data' => $news);
