@@ -300,6 +300,12 @@ class News extends CActiveRecord
 		return $site;
 	}
 	
+	public function isWallpaperExist($url) {
+		$result = Yii::app()->db->createCommand("SELECT id FROM wallpaper WHERE thumbnail_url = '$url'")->queryRow();
+		
+		return !empty($result) ? true : false;
+	}
+	
 	public function isXKCNExist($url) {
 		$result = Yii::app()->db->createCommand("SELECT id FROM xkcn WHERE thumbnail_url = '$url'")->queryRow();
 		
