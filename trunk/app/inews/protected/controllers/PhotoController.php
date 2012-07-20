@@ -28,7 +28,26 @@ class PhotoController extends Controller
 	public function actionIndex()
 	{
 		
-	}
+	// }
+    
+    // public function actiongetXkcnList() {
+        // $this->layout = false;
+        // $params = Yii::app()->params;
+        // $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
+        // $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        // $data = array(
+            // 'error'     => 0,
+            // 'data'      => null,
+            // 'total'     => 0
+        // );
+		// $news = Xkcn::model()->getAll($page, $limit);
+        // if (!empty($news)) {
+			// $data['data'] = $news;
+			// $data['total'] = count($news);
+        // }
+		
+		// echo json_encode($data);
+    // }
     
     public function actiongetXkcnList() {
         $this->layout = false;
@@ -40,7 +59,7 @@ class PhotoController extends Controller
             'data'      => null,
             'total'     => 0
         );
-		$news = Xkcn::model()->getAll($page, $limit);
+		$news = Wallpaper::model()->getAll($page, $limit);
         if (!empty($news)) {
 			$data['data'] = $news;
 			$data['total'] = count($news);

@@ -17,6 +17,10 @@ class Crawler {
 
     //Get content of one Url
     public function getURLContents($url) {
+		// $strCookie = 'PHPSESSID=3k2rndan640vsv7qd8ahheo8r7; path=/';
+ 
+		// session_write_close();
+		
         $ch = curl_init();
 		$userAgent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
 		curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
@@ -31,6 +35,7 @@ class Crawler {
 		curl_setopt($ch, CURLOPT_URL,$url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,$timeout);
+		// curl_setopt($ch, CURLOPT_COOKIE, $strCookie );
 		$data = curl_exec($ch);
 		curl_close($ch);
 		
@@ -376,6 +381,48 @@ class Crawler {
         $featured = $this->getContent($contents, '<div class="featurewrapper', '<div class="listnews">', true);
         echo $featured;
     }
+	
+	public function getWallpaper() {
+		$categories = array('architecture', 'abstract', 'flowers', 'fooddrinks', 'funny');
+		foreach ($categories as $cat) {
+			for ($i = 1;$i < 200;$i++) {
+				$url = "http://wallpaper.heaveniphone.com/index.php?no=$i&category=$cat";
+				$contents = $this->getURLContents($url);
+				// echo $contents;die();
+				$items = $this->getContent($contents, '<img  class="link', 'border');
+				// print_r($items);die();
+				// echo '<img src="http://25.media.tumblr.com/tumblr_m0g7gkQmPl1qbd81ro1_500.jpg" width="160" height="107" />';
+				// echo '<img src="http://26.media.tumblr.com/tumblr_m0dgtj4ELf1qbd81ro1_500.jpg" width="160" height="204" />';
+				// echo '<img src="http://27.media.tumblr.com/tumblr_m0g7h0QIhE1qbd81ro1_500.jpg" width="160" height="204" />';die();
+				foreach ($items as $item) {
+					$data['title'] = date('YmdHis');
+					$data['small_thumbnail_url'] = 'http://wallpaper.heaveniphone.com/' . $this->getContent($item, 'src="', '"', true);
+					$data['thumbnail_url'] = str_replace('thumbs/', '', $data['small_thumbnail_url']);
+					// echo $data['thumbnail_url'];die();
+					// var_dump(pathinfo($data['thumbnail_url']));die();
+					if (!News::isWallpaperExist($data['thumbnail_url'])) {
+						$path = '/tmp/save_img_xkcn_tmp.test';
+						$pathFull = '/tmp/save_img_xkcn_tmp.testfull';
+						$this->save_image($data['small_thumbnail_url'], $path);
+						$this->save_image($data['thumbnail_url'], $pathFull);
+						$imgSize = getimagesize($path);
+						$imgSizeFull = getimagesize($pathFull);
+						exec('rm -f ' . $path);
+						$width320 = $imgSizeFull[0] > 320 ? 320 : $imgSizeFull[0];
+						$height320 = ($width320 * $imgSizeFull[1]) / $imgSizeFull[0];
+						$photo = new Wallpaper;
+						$photo->attributes = $data;
+						$photo->width_160 = 160;
+						$photo->height_160 = (160 * $imgSize[1]) / $imgSize[0];
+						$photo->width_320 = $width320;
+						$photo->height_320 = $height320;
+						$photo->created_time = date('Y-m-d H:i:s');
+						$photo->save(false);
+					}
+				}
+			}
+		}
+	}
 	
 	public function getXKCN() {
 		$url = 'http://feeds.feedburner.com/xkcn';
@@ -898,9 +945,10 @@ class Crawler {
     
     public function getSachnoi() {
         $url = 'http://sachnoi.vn/category/radio-show/qns/feed/';
+        $url = 'http://sachnoi.vn/category/sach/doanh-nhan-danh-nhan/feed/';
         $content = $this->getURLContents($url);
         $contents = $this->getContent($content, '<item>', '</item>');
-        // print_r($contents);
+        // print_r($contents);die();
         foreach ($contents as $content) {
             // echo $content;die();
             $title = $this->getContent($content, '<title>', '</title>', true);
@@ -925,23 +973,27 @@ class Crawler {
             $link = 'http://sachnoi.vn/50/dac-nhan-tam/';
             if (empty($exist)) {
                 $detail = $this->getURLContents($link);
-                // die($detail);
-                $media = $this->getContent($detail, '<object', '</object>', true);
-                if (empty($media)) {
-                    // Playlist
-                    $media = $this->getContent($detail, 'file:"', '"', true);
-                    $media = str_replace('%3A', ':', $media);
-                    $media = str_replace('%2F', '/', $media);
-                    $mediaD = $this->getURLContents($media);
-                    $track = $this->getContent($mediaD, '<track>', '<track>');
-                    foreach ($track as $one) {
-                        $location = $this->getContent($one, '<location>', '</location>', true);
-                        // die($location);
-                        // $c = $this->getURLContents($location);
-                        // die($c);
-                    }
-                }
-                // die($media);
+                die($detail);
+				if (empty($mediaUrl)) {
+					$media = $this->getContent($detail, '<object', '</object>', true);
+					if (empty($media)) {
+						// Playlist
+						$media = $this->getContent($detail, 'file:"', '"', true);
+						$media = str_replace('%3A', ':', $media);
+						$media = str_replace('%2F', '/', $media);
+						$mediaD = $this->getURLContents($media);
+						$track = $this->getContent($mediaD, '<track>', '<track>');
+						if (!empty($track)) {
+							foreach ($track as $one) {
+								$location = $this->getContent($one, '<location>', '</location>', true);
+								// die($location);
+								// $c = $this->getURLContents($location);
+								// die($c);
+							}
+						}
+					}
+					print_r($media);die();
+				}
                 $audio = new AudioBook;
                 $audio->title = $title;
                 $audio->title_en = Utility::unicode2Anscii($title);
