@@ -28,7 +28,7 @@ class PhotoController extends Controller
 	public function actionIndex()
 	{
 		
-	// }
+	}
     
     // public function actiongetXkcnList() {
         // $this->layout = false;
