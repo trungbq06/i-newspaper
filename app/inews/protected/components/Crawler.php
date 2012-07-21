@@ -382,6 +382,149 @@ class Crawler {
         echo $featured;
     }
 	
+	public function getComic() {
+		$url = 'http://vechai.info/search/';
+		$contents = $this->getURLContents($url);
+		// die($contents);
+		// $comics = $this->getContent($contents, 'tbl_body"><a', 'a>');
+		// print_r($comics);die();
+		// $comics = implode('~', $comics);
+		$f = fopen('/comics.txt', 'r');
+		$comics = fgets($f);
+		// echo $comics;die();
+		$comics = explode('~', $comics);
+		// fwrite($f, $comics);die();
+		foreach ($comics as $one) {
+			// echo $one;die();
+			$link = $this->getContent($one, '="', '"', true);
+			$comicTitle = $this->getContent($one, '">', '</', true);
+			// $link = 'http://vechai.info/Naruto/';
+			// var_dump($comicTitle);die();
+			if (!Comic::model()->isExist($comicTitle)) {
+				$comic = new Comic;
+				$comic->created_time = date('Y-m-d H:i:s');
+				$comic->name = $comicTitle;
+				$comic->name_vn = Utility::unicode2Anscii($comicTitle);
+				$comic->description = '';
+				
+				// $link = 'http://vechai.info/bac-dau-than-quyen-tien-truyen/';
+				$detail = $this->getURLContents($link);
+				// die($detail);
+				$textarea = $this->getContent($detail, '<textarea', '</textarea', true);
+				// die($textarea);
+				$chapLink = $this->getContent($textarea, 'id="vcfix"', '<div align="center">', true);
+				$thumbnailUrl = $this->getContent($chapLink, "<img src='", "'", true);
+				if (empty($thumbnailUrl)) 
+					$thumbnailUrl = $this->getContent($chapLink, "<img src=\"", "\"", true);
+				// die($thumbnailUrl);
+				$comic->thumbnail_url = $thumbnailUrl;
+				$comic->save(false);
+				$comicId = $comic->id;
+				
+				$chapLink = $this->getContent($chapLink, 'a href', '/a>');
+				// print_r($chapLink);die();
+				foreach ($chapLink as $chap) {
+					// $chap = '"http://doctruyen.vechai.info/07-ghost-chap-72/" target="_blank"><span style="font-size: 12px;"><span style="color: #DC143C;">CHAP 72</span></span><';
+					$chap = strip_tags($chap);
+					$chap .= '~';
+					// echo $chap;die();
+					$cLink = $this->getContent($chap, '"', '"', true);
+					$title = $this->getContent($chap, '">', '~', true);
+					
+					if (!strstr(strtolower($title), 'chap')) continue;
+					$title = trim($title);
+					$title = ucwords($title);
+					$chapter = new ComicChapter;
+					$chapter->comic_id = $comicId;
+					$chapter->name = $title;
+					$chapter->created_time = date('Y-m-d H:i:s');
+					$chapter->save(false);
+					$chapterId = $chapter->id;
+					
+					// die($cLink);
+					$chapDetail = $this->getURLContents($cLink);
+					$chapImage = $this->getContent($chapDetail, '<div class="entry2">', '<h2', true);
+					if (empty($chapImage)) {
+						$chapImage = $this->getContent($chapDetail, "<textarea id='vcfix'", '</textarea>', true);
+					}
+					$chapImage = $this->getContent($chapImage, '<img src', '/>');
+					// die($chapImage);
+					// Insert image to comic_image
+					if (!empty($chapImage)) {
+						foreach($chapImage as $one) {
+							$cImage = $this->getContent($one, '"', '"', true);
+							if (empty($cImage))
+								$cImage = $this->getContent($one, '\'', '\'', true);
+							// echo $cImage;die();
+							$image = new ComicImage;
+							$image->chapter_id = $chapterId;
+							$image->image = $cImage;
+							$image->created_time = date('Y-m-d H:i:s');
+							$image->save(false);
+						}
+					}
+				}
+			}
+			// die();
+		}
+	}
+	
+	public function getWallpaper2() {
+		$categories = WallpaperCategory::model()->findAll();
+		foreach ($categories as $cat) {
+			$url = "http://www.hdiphonewallpaper.com" . $cat->link;
+			$contents = $this->getURLContents($url);
+			$page = $this->getContent($contents, 'class=pages>', '</a>', true);
+			$pageId = $this->getContent($page, "href='", '2.html', true);
+			// echo $pageId;die();
+			for ($i = 1;$i < 20;$i++) {
+				$url = "http://www.hdiphonewallpaper.com" . $cat->link . '/' . $pageId . $i . '.html';
+				echo $url;
+				$contents = $this->getURLContents($url);
+				// echo $contents;die();
+				$items = $this->getContent($contents, '<td height="315" align="center">', 'border=\'0\'');
+				// print_r($items);die();
+				// echo '<img src="http://25.media.tumblr.com/tumblr_m0g7gkQmPl1qbd81ro1_500.jpg" width="160" height="107" />';
+				// echo '<img src="http://26.media.tumblr.com/tumblr_m0dgtj4ELf1qbd81ro1_500.jpg" width="160" height="204" />';
+				// echo '<img src="http://27.media.tumblr.com/tumblr_m0g7h0QIhE1qbd81ro1_500.jpg" width="160" height="204" />';die();
+				if (!empty($items)) {
+					foreach ($items as $item) {
+						$detailLink = 'http://www.hdiphonewallpaper.com' . $this->getContent($item, "href='", "'>", true);
+						$data['title'] = date('YmdHis');
+						$data['category_id'] = $cat->id;
+						$data['small_thumbnail_url'] = 'http://www.hdiphonewallpaper.com' . $this->getContent($item, "src='", "'", true);
+						// echo $data['small_thumbnail_url'];die();
+						// var_dump(pathinfo($data['thumbnail_url']));die();
+						if (!News::isWallpaperExist($data['small_thumbnail_url'])) {
+							$detail = $this->getURLContents($detailLink);
+							$data['thumbnail_url'] = $this->getContent($detail, 'border="0" src="', '"', true);
+							// echo $detailLink;
+							// print_r($data);die();
+							if (empty($data['thumbnail_url'])) continue;
+							$path = '/tmp/save_img_xkcn_tmp.test';
+							$pathFull = '/tmp/save_img_xkcn_tmp.testfull';
+							$this->save_image($data['small_thumbnail_url'], $path);
+							$this->save_image($data['thumbnail_url'], $pathFull);
+							$imgSize = getimagesize($path);
+							$imgSizeFull = getimagesize($pathFull);
+							exec('rm -f ' . $path);
+							$width320 = $imgSizeFull[0] > 320 ? 320 : $imgSizeFull[0];
+							$height320 = ($width320 * $imgSizeFull[1]) / $imgSizeFull[0];							
+							$photo = new Wallpaper;
+							$photo->attributes = $data;
+							$photo->width_160 = 160;
+							$photo->height_160 = (160 * $imgSize[1]) / $imgSize[0];
+							$photo->width_320 = $width320;
+							$photo->height_320 = $height320;
+							$photo->created_time = date('Y-m-d H:i:s');
+							$photo->save(false);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public function getWallpaper() {
 		$categories = array('architecture', 'abstract', 'flowers', 'fooddrinks', 'funny');
 		foreach ($categories as $cat) {
