@@ -11,6 +11,7 @@
  * @property string $created_time
  * @property string $category_id
  * @property string $thumbnail_url
+ * @property string $approved
  */
 class Comic extends CActiveRecord
 {
@@ -44,7 +45,7 @@ class Comic extends CActiveRecord
 			array('category_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, name_vn, description, created_time, category_id, thumbnail_url', 'safe', 'on'=>'search'),
+			array('id, name, name_vn, approved , description, created_time, category_id, thumbnail_url', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Comic extends CActiveRecord
 			'created_time' => 'Created Time',
 			'category_id' => 'Category',
 			'thumbnail_url' => 'Thumbnail Url',
+			'approved' => 'Thumbnail Url',
 		);
 	}
 
@@ -93,6 +95,7 @@ class Comic extends CActiveRecord
 		$criteria->compare('created_time',$this->created_time,true);
 		$criteria->compare('category_id',$this->category_id,true);
 		$criteria->compare('thumbnail_url',$this->thumbnail_url,true);
+		$criteria->compare('approved',$this->approved,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -110,6 +113,7 @@ class Comic extends CActiveRecord
 	public function getAll() {
 		$query = Yii::app()->db->createCommand()
 			->select('c.*')
+			->where('approved = 1')
 			->from('comic c');
 		$comics = $query->queryAll();
 		
