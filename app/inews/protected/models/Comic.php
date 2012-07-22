@@ -104,7 +104,7 @@ class Comic extends CActiveRecord
 	
 	public function isExist($title) {
 		$title = Yii::app()->db->quoteValue($title);
-		$sql = "SELECT id FROM comic WHERE name = $title";
+		$sql = "SELECT id FROM comic WHERE title = $title";
 		$row = Yii::app()->db->createCommand($sql)->queryRow();
 		
 		return !empty($row) ? true : false;
