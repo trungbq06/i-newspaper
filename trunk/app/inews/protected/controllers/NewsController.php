@@ -1,4 +1,5 @@
 <?php
+Yii::import('application.components.*');
 Yii::import('application.components.common.*');
 class NewsController extends Controller
 {
