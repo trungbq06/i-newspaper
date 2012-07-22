@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'comic_chapter':
  * @property string $id
- * @property string $name
+ * @property string $title
  * @property string $comic_id
  * @property string $created_time
  * @property string $thumbnail_url
@@ -37,12 +37,12 @@ class ComicChapter extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, comic_id, created_time, thumbnail_url', 'required'),
-			array('name, thumbnail_url', 'length', 'max'=>255),
+			array('title, comic_id, created_time, thumbnail_url', 'required'),
+			array('title, thumbnail_url', 'length', 'max'=>255),
 			array('comic_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, comic_id, created_time, thumbnail_url', 'safe', 'on'=>'search'),
+			array('id, title, comic_id, created_time, thumbnail_url', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,7 +64,7 @@ class ComicChapter extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
+			'title' => 'Name',
 			'comic_id' => 'Comic',
 			'created_time' => 'Created Time',
 			'thumbnail_url' => 'Thumbnail Url',
@@ -83,7 +83,7 @@ class ComicChapter extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('name',$this->name,true);
+		$criteria->compare('title',$this->title,true);
 		$criteria->compare('comic_id',$this->comic_id,true);
 		$criteria->compare('created_time',$this->created_time,true);
 		$criteria->compare('thumbnail_url',$this->thumbnail_url,true);
