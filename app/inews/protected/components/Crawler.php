@@ -406,8 +406,8 @@ class Crawler {
 				// die($comicTitle);
 				$comic = new Comic;
 				$comic->created_time = date('Y-m-d H:i:s');
-				$comic->name = $comicTitle;
-				$comic->name_vn = Utility::unicode2Anscii($comicTitle);
+				$comic->title = $comicTitle;
+				$comic->title_vn = Utility::unicode2Anscii($comicTitle);
 				$comic->description = '';
 				
 				// $link = 'http://vechai.info/bac-dau-than-quyen-tien-truyen/';
@@ -443,7 +443,7 @@ class Crawler {
 						$title = ucwords($title);
 						$chapter = new ComicChapter;
 						$chapter->comic_id = $comicId;
-						$chapter->name = $title;
+						$chapter->title = $title;
 						$chapter->created_time = date('Y-m-d H:i:s');
 						$chapter->save(false);
 						$chapterId = $chapter->id;
