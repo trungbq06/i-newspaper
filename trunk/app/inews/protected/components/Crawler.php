@@ -398,9 +398,12 @@ class Crawler {
 			// echo $one;die();
 			$link = $this->getContent($one, '="', '"', true);
 			$comicTitle = $this->getContent($one, '">', '</', true);
+			$comicTitle = trim($comicTitle);
 			// $link = 'http://vechai.info/Naruto/';
 			// var_dump($comicTitle);die();
+			// var_dump(Comic::model()->isExist($comicTitle));die();
 			if (!Comic::model()->isExist($comicTitle)) {
+				// die($comicTitle);
 				$comic = new Comic;
 				$comic->created_time = date('Y-m-d H:i:s');
 				$comic->name = $comicTitle;
@@ -417,52 +420,65 @@ class Crawler {
 				if (empty($thumbnailUrl)) 
 					$thumbnailUrl = $this->getContent($chapLink, "<img src=\"", "\"", true);
 				// die($thumbnailUrl);
-				$comic->thumbnail_url = $thumbnailUrl;
+				$comic->thumbnail_url = $thumbnailUrl;				
+				
+				$chapLink = $this->getContent($chapLink, 'a href', '/a>');				
+				// print_r($chapLink);die();
+				if (empty($chapLink)) continue;
+				
 				$comic->save(false);
 				$comicId = $comic->id;
-				
-				$chapLink = $this->getContent($chapLink, 'a href', '/a>');
-				// print_r($chapLink);die();
-				foreach ($chapLink as $chap) {
-					// $chap = '"http://doctruyen.vechai.info/07-ghost-chap-72/" target="_blank"><span style="font-size: 12px;"><span style="color: #DC143C;">CHAP 72</span></span><';
-					$chap = strip_tags($chap);
-					$chap .= '~';
-					// echo $chap;die();
-					$cLink = $this->getContent($chap, '"', '"', true);
-					$title = $this->getContent($chap, '">', '~', true);
-					
-					if (!strstr(strtolower($title), 'chap')) continue;
-					$title = trim($title);
-					$title = ucwords($title);
-					$chapter = new ComicChapter;
-					$chapter->comic_id = $comicId;
-					$chapter->name = $title;
-					$chapter->created_time = date('Y-m-d H:i:s');
-					$chapter->save(false);
-					$chapterId = $chapter->id;
-					
-					// die($cLink);
-					$chapDetail = $this->getURLContents($cLink);
-					$chapImage = $this->getContent($chapDetail, '<div class="entry2">', '<h2', true);
-					if (empty($chapImage)) {
-						$chapImage = $this->getContent($chapDetail, "<textarea id='vcfix'", '</textarea>', true);
-					}
-					$chapImage = $this->getContent($chapImage, '<img src', '/>');
-					// die($chapImage);
-					// Insert image to comic_image
-					if (!empty($chapImage)) {
-						foreach($chapImage as $one) {
-							$cImage = $this->getContent($one, '"', '"', true);
-							if (empty($cImage))
-								$cImage = $this->getContent($one, '\'', '\'', true);
-							// echo $cImage;die();
-							$image = new ComicImage;
-							$image->chapter_id = $chapterId;
-							$image->image = $cImage;
-							$image->created_time = date('Y-m-d H:i:s');
-							$image->save(false);
+				$i = 0;
+				if (!empty($chapLink)) {
+					foreach ($chapLink as $chap) {
+						// $chap = '"http://doctruyen.vechai.info/07-ghost-chap-72/" target="_blank"><span style="font-size: 12px;"><span style="color: #DC143C;">CHAP 72</span></span><';
+						$chap = strip_tags($chap);
+						$chap .= '~';
+						// echo $chap;die();
+						$cLink = $this->getContent($chap, '"', '"', true);
+						$title = $this->getContent($chap, '">', '~', true);
+						
+						if (!strstr(strtolower($title), 'chap')) continue;
+						$title = trim($title);
+						$title = ucwords($title);
+						$chapter = new ComicChapter;
+						$chapter->comic_id = $comicId;
+						$chapter->name = $title;
+						$chapter->created_time = date('Y-m-d H:i:s');
+						$chapter->save(false);
+						$chapterId = $chapter->id;
+						
+						// die($cLink);
+						// $cLink = 'http://vechai.info/090-eko-to-issho-chap-9/';
+						$chapDetail = $this->getURLContents($cLink);
+						$chapImage = $this->getContent($chapDetail, '<div class="entry2">', '<h2', true);
+						if (empty($chapImage)) {
+							$chapImage = $this->getContent($chapDetail, "<textarea id=", '</textarea>', true);
+						}
+						$chapImage = $this->getContent($chapImage, '<img src="', '"');
+						if (empty($chapImage)) 
+							$chapImage = $this->getContent($chapImage, '<img src=\'', '\'');
+						// print_r($chapImage);die();
+						// Insert image to comic_image						
+						if (!empty($chapImage)) {
+							foreach($chapImage as $cImage) {
+								$i++;
+								// $cImage = $this->getContent($one, '"', '"', true);
+								// if (empty($cImage))
+									// $cImage = $this->getContent($one, '\'', '\'', true);
+								// echo $cImage;die();
+								$image = new ComicImage;
+								$image->chapter_id = $chapterId;
+								$image->image = $cImage;
+								$image->created_time = date('Y-m-d H:i:s');
+								$image->save(false);
+							}
 						}
 					}
+				}
+				if ($i > 0) {
+					$comic->approved = 1;
+					$comic->save(false);
 				}
 			}
 			// die();
