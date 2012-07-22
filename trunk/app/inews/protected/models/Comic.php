@@ -5,8 +5,8 @@
  *
  * The followings are the available columns in table 'comic':
  * @property string $id
- * @property string $name
- * @property string $name_vn
+ * @property string $title
+ * @property string $title_vn
  * @property string $description
  * @property string $created_time
  * @property string $category_id
@@ -40,12 +40,12 @@ class Comic extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, name_vn, description, created_time, category_id, thumbnail_url', 'required'),
-			array('name, name_vn, description, thumbnail_url', 'length', 'max'=>255),
+			array('title, title_vn, description, created_time, category_id, thumbnail_url', 'required'),
+			array('title, title_vn, description, thumbnail_url', 'length', 'max'=>255),
 			array('category_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, name_vn, approved , description, created_time, category_id, thumbnail_url', 'safe', 'on'=>'search'),
+			array('id, title, title_vn, approved , description, created_time, category_id, thumbnail_url', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,8 +67,8 @@ class Comic extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'name_vn' => 'Name Vn',
+			'title' => 'Name',
+			'title_vn' => 'Name Vn',
 			'description' => 'Description',
 			'created_time' => 'Created Time',
 			'category_id' => 'Category',
@@ -89,8 +89,8 @@ class Comic extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('name_vn',$this->name_vn,true);
+		$criteria->compare('title',$this->title,true);
+		$criteria->compare('title_vn',$this->title_vn,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('created_time',$this->created_time,true);
 		$criteria->compare('category_id',$this->category_id,true);
