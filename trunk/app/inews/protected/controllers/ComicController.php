@@ -58,29 +58,28 @@ class ComicController extends Controller
 		echo json_encode($data);
 	}
 	
+	public function actionGetById() {
+		$ids = isset($_GET['id']) ? $_GET['id'] : null;
+		
+		if (!empty($ids)) {
+			$comics = Comic::model()->getById($ids);
+			$data['error'] = 0;
+			$data['data'] = $comics['data'];
+			
+			echo json_encode($data);
+		}
+	}
+	
 	public function actionSearch() {
-        $params = Yii::app()->params;
-        $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
-		$page = isset($_GET['page']) ? strip_tags($_GET['page']) : 1;
-        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : $params['limit'];
-        
-        $data = array(
-            'error'     => 0,
-            'data'      => null,
-            'total'     => 0
-        );
-        $clip = array();
-        if ($keyword) {
-            $clip = Clip::model()->searchText($keyword, $page, $limit);
-        }
-        
-        if (!empty($clip)) {
-			$data['data'] = $clip['data'];
-			$data['total'] = $clip['total'];
-            $data['totalPage'] = ceil($clip['total']/$limit);
-        }
-        // var_dump($data);
-        echo json_encode($data);
-    }
+		$keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
+		
+		if (!empty($keyword)) {
+			$comics = Comic::model()->searchComic($keyword);
+			$data['error'] = 0;
+			$data['data'] = $comics['data'];
+			
+			echo json_encode($data);
+		}
+	}
 	
 }
