@@ -110,6 +110,23 @@ class Comic extends CActiveRecord
 		return !empty($row) ? true : false;
 	}
 	
+	public function getById($ids) {
+		$query = Yii::app()->db->createCommand()
+			->select('c.*')
+			->where("approved = 1 AND id IN ($ids)")
+			->from('comic c')
+			->order('title_vn ASC');
+		$comics = $query->queryAll();
+		
+		foreach ($comics as &$one) {
+			$sql = "SELECT COUNT(id) AS total FROM comic_chapter WHERE comic_id = " . $one['id'];
+			$row = Yii::app()->db->createCommand($sql)->queryRow();
+			$one['total_part'] = $row['total'];
+		}
+		
+		return array('data' => $comics);
+	}
+	
 	public function getAll() {
 		$query = Yii::app()->db->createCommand()
 			->select('c.*')
@@ -117,6 +134,12 @@ class Comic extends CActiveRecord
 			->from('comic c')
 			->order('title_vn ASC');
 		$comics = $query->queryAll();
+		
+		foreach ($comics as &$one) {
+			$sql = "SELECT COUNT(id) AS total FROM comic_chapter WHERE comic_id = " . $one['id'];
+			$row = Yii::app()->db->createCommand($sql)->queryRow();
+			$one['total_part'] = $row['total'];
+		}
 		
 		return array('data' => $comics);
 	}
@@ -139,6 +162,12 @@ class Comic extends CActiveRecord
 			->where("chapter_id = $id");
 			
 		$chapters = $query->queryAll();
+		
+		foreach ($chapters as &$one) {
+			$pathInfo = pathinfo($one['image']);
+			$extension = $pathInfo['extension'];
+			$one['downloaded_file'] = date('YmdHis') . '.' . $extension;
+		}
 		
 		return $chapters;
 	}
