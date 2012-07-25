@@ -495,7 +495,7 @@ class Crawler {
 				}
 			}
 			// die();
-			if ($k > 24) die('Finished');
+			// if ($k > 24) die('Finished');
 		}
 	}
 	
