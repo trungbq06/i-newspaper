@@ -383,26 +383,31 @@ class Crawler {
     }
 	
 	public function getComic() {
-		$url = 'http://vechai.info/search/';
-		$contents = $this->getURLContents($url);
+		// $url = 'http://vechai.info/search/';
+		// $contents = $this->getURLContents($url);
 		// die($contents);
 		// $comics = $this->getContent($contents, 'tbl_body"><a', 'a>');
 		// print_r($comics);die();
 		// $comics = implode('~', $comics);
 		$f = fopen('/srv/www/i-newspaper/comics.txt', 'r');
+		// $f = fopen('/comics.txt', 'r');
 		$comics = fgets($f);
 		// echo $comics;die();
 		$comics = explode('~', $comics);
+		$k = 0;
 		// fwrite($f, $comics);die();
 		foreach ($comics as $one) {
+			$k++;
 			// echo $one;die();
 			$link = $this->getContent($one, '="', '"', true);
 			$comicTitle = $this->getContent($one, '">', '</', true);
 			$comicTitle = trim($comicTitle);
-			// $link = 'http://vechai.info/Naruto/';
+			// $link = 'http://vechai.info/angel-beats-heavens-door/';
 			// var_dump($comicTitle);die();
 			// var_dump(Comic::model()->isExist($comicTitle));die();
-			if (!Comic::model()->isExist($comicTitle)) {
+			$exist = Comic::model()->isExist($comicTitle);
+			// $exist = false;
+			if (!$exist) {
 				// die($comicTitle);
 				$comic = new Comic;
 				$comic->created_time = date('Y-m-d H:i:s');
@@ -439,6 +444,7 @@ class Crawler {
 						$title = $this->getContent($chap, '">', '~', true);
 						
 						if (!strstr(strtolower($title), 'chap')) continue;
+						if (strstr(strtolower($title), 'download')) continue;
 						$title = trim($title);
 						$title = ucwords($title);
 						$chapter = new ComicChapter;
@@ -449,19 +455,26 @@ class Crawler {
 						$chapterId = $chapter->id;
 						
 						// die($cLink);
-						// $cLink = 'http://vechai.info/090-eko-to-issho-chap-9/';
+						// $cLink = 'http://vc2.vechai.info/2011/04/anh-hung-vo-le-chap-5.html';
 						$chapDetail = $this->getURLContents($cLink);
+						// die($chapDetail);
 						$chapImage = $this->getContent($chapDetail, '<div class="entry2">', '<h2', true);
 						if (empty($chapImage)) {
 							$chapImage = $this->getContent($chapDetail, "<textarea id=", '</textarea>', true);
 						}
-						$chapImage = $this->getContent($chapImage, '<img src="', '"');
-						if (empty($chapImage)) 
-							$chapImage = $this->getContent($chapImage, '<img src=\'', '\'');
+						// echo $chapImage;die();
+						$imgList = $this->getContent($chapImage, '<img src="', '"');
 						// print_r($chapImage);die();
+						if (empty($imgList)) 
+							$imgList = $this->getContent($chapImage, "<img src='", "'");
+						if (empty($imgList))
+							$imgList = $this->getContent($chapImage, 'src="', '"');
+						if (empty($imgList))
+							$imgList = $this->getContent($chapImage, "src='", "'");
+						// var_dump($imgList);die();
 						// Insert image to comic_image						
-						if (!empty($chapImage)) {
-							foreach($chapImage as $cImage) {
+						if (!empty($imgList)) {
+							foreach($imgList as $cImage) {
 								$i++;
 								// $cImage = $this->getContent($one, '"', '"', true);
 								// if (empty($cImage))
@@ -482,6 +495,7 @@ class Crawler {
 				}
 			}
 			// die();
+			if ($k > 24) die('Finished');
 		}
 	}
 	

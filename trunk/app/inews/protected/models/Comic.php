@@ -114,7 +114,8 @@ class Comic extends CActiveRecord
 		$query = Yii::app()->db->createCommand()
 			->select('c.*')
 			->where('approved = 1')
-			->from('comic c');
+			->from('comic c')
+			->order('title_vn ASC');
 		$comics = $query->queryAll();
 		
 		return array('data' => $comics);
@@ -140,6 +141,47 @@ class Comic extends CActiveRecord
 		$chapters = $query->queryAll();
 		
 		return $chapters;
+	}
+	
+	public function searchComic($keyword, $page = 1, $limit = 1000) {
+		$offset = ($page - 1) * $limit;
+        $query = Yii::app()->db->createCommand()
+            ->select("id, title, thumbnail_url, MATCH(title_vn) AGAINST ('$keyword') AS score")
+            ->from('comic')
+            ->where("MATCH(title_vn) AGAINST('$keyword')")
+            ->order("score DESC")
+            ->limit($limit)
+            ->offset($offset);
+        $comics = $query->queryAll();
+        
+        $count = Yii::app()->db->createCommand()
+            ->select('COUNT(*)')
+            ->from('comic')
+            ->where("MATCH(title_vn) AGAINST('$keyword')")
+            ->queryScalar();
+        
+        return array('data' => $comics, 'total' => $count);
+	}
+	
+	public function fixComic() {
+		$sql = "SELECT DISTINCT(chapter_id) FROM comic_image ORDER BY id";
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+		$chapterId = array();
+		foreach ($rows as $one) {
+			$chapterId[] = $one['chapter_id'];
+		}
+		$chapterStr = implode(',', $chapterId);
+		// echo $chapterStr;
+		$sql = "SELECT DISTINCT(comic_id) FROM comic_chapter WHERE id NOT IN ($chapterStr)";
+		$comic = Yii::app()->db->createCommand($sql)->queryAll();
+		$comicId = array();
+		foreach ($comic as $one) {
+			$comicId[] = $one['comic_id'];
+		}
+		$comicStr = implode(',', $comicId);
+		$sql = "SELECT * FROM comic WHERE id IN ($comicStr)";
+		$comic = Yii::app()->db->createCommand($sql)->queryAll();
+		print_r($comic);
 	}
 	
 }
