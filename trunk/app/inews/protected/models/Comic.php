@@ -177,7 +177,7 @@ class Comic extends CActiveRecord
         $query = Yii::app()->db->createCommand()
             ->select("id, title, thumbnail_url, MATCH(title_vn) AGAINST ('$keyword') AS score")
             ->from('comic')
-            ->where("MATCH(title_vn) AGAINST('$keyword')")
+            ->where("MATCH(title_vn) AGAINST('$keyword') AND approved = 1")
             ->order("score DESC")
             ->limit($limit)
             ->offset($offset);
