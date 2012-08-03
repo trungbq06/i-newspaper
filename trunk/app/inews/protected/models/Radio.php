@@ -133,5 +133,16 @@ class Radio extends CActiveRecord
 		
         return array('data' => $news);
     }
+    
+    public function getById($ids) {
+		$query = Yii::app()->db->createCommand()
+			->select('c.*')
+			->where("id IN ($ids)")
+			->from('radio c')
+			->order('id ASC');
+		$radios = $query->queryAll();
+
+		return array('data' => $radios);
+	}
 	
 }

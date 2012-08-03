@@ -75,20 +75,16 @@ class RadioController extends Controller
         echo json_encode($data);
     }
 	
-    // public function actionSearch() {
-        // $keyword = isset($_GET['k']) ? strip_tags($_GET['k']) : null;
-        
-        // if (!empty($keyword)) {
-            // $data = array(
-				// 'error' => 0,
-				// 'data' => null
-			// );
-            // $rows = Radio::model()->getByTitle($keyword);
-            // print_r($rows);
-            // $data['data'] = $rows;
-            
-            // echo json_encode($data);
-        // }
-    // }
+    public function actionGetById() {
+		$ids = isset($_GET['id']) ? $_GET['id'] : null;
+		
+		if (!empty($ids)) {
+			$radios = Radio::model()->getById($ids);
+			$data['error'] = 0;
+			$data['data'] = $radios['data'];
+			
+			echo json_encode($data);
+		}
+	}
     
 }
