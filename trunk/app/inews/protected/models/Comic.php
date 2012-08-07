@@ -152,6 +152,12 @@ class Comic extends CActiveRecord
 			
 		$chapters = $query->queryAll();
 		
+		foreach ($chapters as &$one) {
+			$sql = "SELECT COUNT(id) AS total FROM comic_image WHERE chapter_id = " . $one['id'];
+			$row = Yii::app()->db->createCommand($sql)->queryRow();
+			$one['total_part'] = $row['total'];
+		}
+		
 		return $chapters;
 	}
 	
