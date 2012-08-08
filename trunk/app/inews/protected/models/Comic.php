@@ -167,15 +167,16 @@ class Comic extends CActiveRecord
 			->from('comic_image ci')
 			->where("chapter_id = $id");
 			
-		$chapters = $query->queryAll();
-		
-		foreach ($chapters as &$one) {
+		$images = $query->queryAll();
+		$i = 0;
+		foreach ($images as &$one) {
+			$i++;
 			$pathInfo = pathinfo($one['image']);
 			$extension = $pathInfo['extension'];
-			$one['downloaded_file'] = date('YmdHis') . '.' . $extension;
+			$one['downloaded_file'] = date('YmdHis') . '_' . $i . '.' . $extension;
 		}
 		
-		return $chapters;
+		return $images;
 	}
 	
 	public function searchComic($keyword, $page = 1, $limit = 1000) {
