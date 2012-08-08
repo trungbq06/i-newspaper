@@ -4,7 +4,8 @@ class ComicCommand extends CConsoleCommand {
 
 	public function actionIndex($args = array()) {
 		$crawler = new Crawler();
-		$crawler->getComic();
+		// $crawler->getComic();
+		$crawler->createDownloadedFile();
 	}
 
 }
