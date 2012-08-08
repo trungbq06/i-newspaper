@@ -220,4 +220,26 @@ class Comic extends CActiveRecord
 		print_r($comic);
 	}
 	
+	public function createDownloadedFile() {
+		$sql = "SELECT id FROM comic_chapter";
+		$chaps = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		foreach ($chaps as $chap) {
+			$sql = "SELECT id, chapter_id, image FROM comic_image WHERE downloaded_file = '' AND chapter_id = " . $chap['id'];
+			$images = Yii::app()->db->createCommand($sql)->queryAll();
+			// print_r($images);die();
+			if (!empty($images)) {
+				$i = 0;
+				foreach ($images as $one) {
+					$i++;
+					$imgUrl = $one['image'];
+					$pathInfo = pathinfo($imgUrl);
+					$extension = $pathInfo['extension'];
+					$downFile = date('YmdHis') . '_' . $i . '.' . $extension;
+					Yii::app()->db->createCommand("UPDATE comic_image SET downloaded_file = '$downFile' WHERE id = " . $one['id'])->execute();
+				}
+			}
+		}
+	}
+	
 }
