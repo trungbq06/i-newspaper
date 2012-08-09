@@ -168,12 +168,19 @@ class Comic extends CActiveRecord
 			->where("chapter_id = $id");
 			
 		$images = $query->queryAll();
+		// print_r($images);die();
 		$i = 0;
 		foreach ($images as &$one) {
-			$i++;
-			$pathInfo = pathinfo($one['image']);
-			$extension = $pathInfo['extension'];
-			$one['downloaded_file'] = date('YmdHis') . '_' . $i . '.' . $extension;
+			if (empty($one['downloaded_file'])) {
+				$i++;
+				$pathInfo = pathinfo($one['image']);
+				$extension = $pathInfo['extension'];
+				$file = date('YmdHis') . '_' . $i . '.' . $extension;
+				$one['downloaded_file'] = $file;
+				$sql = "UPDATE comic_image SET downloaded_file = '$file' WHERE id = " . $one['id'] . " LIMIT 1";
+				// die($sql);
+				Yii::app()->db->createCommand($sql)->execute();
+			}
 		}
 		
 		return $images;
