@@ -132,7 +132,7 @@ class Comic extends CActiveRecord
 			->select('c.*')
 			->where('approved = 1')
 			->from('comic c')
-			->order('title_vn ASC');
+			->order('first_char ASC');
 		$comics = $query->queryAll();
 		
 		foreach ($comics as &$one) {
@@ -196,6 +196,12 @@ class Comic extends CActiveRecord
             ->limit($limit)
             ->offset($offset);
         $comics = $query->queryAll();
+		
+		foreach ($comics as &$one) {
+			$sql = "SELECT COUNT(id) AS total FROM comic_chapter WHERE comic_id = " . $one['id'];
+			$row = Yii::app()->db->createCommand($sql)->queryRow();
+			$one['total_part'] = $row['total'];
+		}
         
         $count = Yii::app()->db->createCommand()
             ->select('COUNT(*)')
@@ -246,6 +252,20 @@ class Comic extends CActiveRecord
 					Yii::app()->db->createCommand("UPDATE comic_image SET downloaded_file = '$downFile' WHERE id = " . $one['id'])->execute();
 				}
 			}
+		}
+	}
+	
+	public function getFirstChar() {
+		$comics = Comic::model()->findAll();
+		
+		foreach ($comics as $one) {
+			$first = substr($one->title_vn, 0, 1);
+			if (is_numeric($first)) {
+				$first = "0-9";
+			}
+			$sql = "UPDATE comic SET first_char = '" . $first . "' WHERE id = " . $one->id;
+			// die($sql);
+			Yii::app()->db->createCommand($sql)->execute();
 		}
 	}
 	
