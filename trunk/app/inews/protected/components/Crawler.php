@@ -389,8 +389,8 @@ class Crawler {
 		// $comics = $this->getContent($contents, 'tbl_body"><a', 'a>');
 		// print_r($comics);die();
 		// $comics = implode('~', $comics);
-		$f = fopen('/srv/www/i-newspaper/comics.txt', 'r');
-		// $f = fopen('/comics.txt', 'r');
+		// $f = fopen('/srv/www/i-newspaper/comics.txt', 'r');
+		$f = fopen('/comics2.txt', 'r');
 		$comics = fgets($f);
 		// echo $comics;die();
 		$comics = explode('~', $comics);
@@ -401,6 +401,7 @@ class Crawler {
 			// echo $one;die();
 			$link = $this->getContent($one, '="', '"', true);
 			$comicTitle = $this->getContent($one, '">', '</', true);
+			if (empty($comicTitle)) continue;
 			$comicTitle = trim($comicTitle);
 			// $link = 'http://vechai.info/angel-beats-heavens-door/';
 			// var_dump($comicTitle);die();
@@ -410,10 +411,13 @@ class Crawler {
 			if (!$exist) {
 				// die($comicTitle);
 				$comic = new Comic;
-				$comic->created_time = date('Y-m-d H:i:s');
+				$comic->created_time = date('Y-m-d H:i:s');				
 				$comic->title = $comicTitle;
 				$comic->title_vn = Utility::unicode2Anscii($comicTitle);
 				$comic->description = '';
+				
+				$firstChar = substr(Utility::unicode2Anscii($comicTitle), 0, 1);
+				$comic->first_char = $firstChar;
 				
 				// $link = 'http://vechai.info/bac-dau-than-quyen-tien-truyen/';
 				$detail = $this->getURLContents($link);
