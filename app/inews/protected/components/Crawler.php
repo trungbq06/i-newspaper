@@ -389,8 +389,8 @@ class Crawler {
 		// $comics = $this->getContent($contents, 'tbl_body"><a', 'a>');
 		// print_r($comics);die();
 		// $comics = implode('~', $comics);
-		// $f = fopen('/srv/www/i-newspaper/comics.txt', 'r');
-		$f = fopen('/comics2.txt', 'r');
+		$f = fopen('/srv/www/i-newspaper/comics.txt', 'r');
+		// $f = fopen('/comics2.txt', 'r');
 		$comics = fgets($f);
 		// echo $comics;die();
 		$comics = explode('~', $comics);
