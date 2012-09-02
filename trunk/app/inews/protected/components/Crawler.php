@@ -1509,7 +1509,7 @@ class Crawler {
 		foreach ($goTech as $c => $link) {
 			$contents = $this->getURLContents($link);
 			$items = $this->getContent($contents, '<item>', '</item>');
-			// print_r($items);
+			// print_r($items);die();
 			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
 			// die();
 			$i = 0;
@@ -1526,12 +1526,15 @@ class Crawler {
 				$data['headline'] = $headline;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				// die($data['published_time']);
-				$detailLink = $this->getContent($item, '<link><![CDATA[', ']]></link>', true);
+				$detailLink = 'http://news.go.vn/' . $this->getContent($item, '<link><![CDATA[', ']]></link>', true);
+				// die($detailLink);
 				// $detailLink = 'http://www.pcworld.com.vn/articles/cong-nghe/ung-dung/2012/03/1231421/14-website-huu-ich-tren-di-dong/';
 				$detail = $this->getURLContents($detailLink);
 				// echo $detail;die();
 				// $newsContent = $this->getContent($detail, '<div class="shownews">', '<div class="actionnews">', true);
+				// echo $this->getContent($detail, '<div id="ContentContainer"', '<div id="content-tag"', true);
 				$newsContent = '<div ' . $this->getContent($detail, '<div id="ContentContainer"', '<div id="content-tag"', true);
+				// echo $newsContent;die();
 				$data['thumbnail_url'] = $thumbnailUrl;
 				$source = $this->getContent($detail, ' <div class="gn_info">', '</div>', true);
 				$source = strip_tags($source);
@@ -1540,6 +1543,8 @@ class Crawler {
 				$data['source'] = $source;
 				// die($data['source']);
                 $newsContent = str_replace('<img', '<img width="290"', $newsContent);
+                $newsContent = str_replace('visibility: hidden', '', $newsContent);
+                $newsContent = str_replace('visibility:hidden', '', $newsContent);
 				// echo $data['thumbnail_url'];die();
 				// echo $newsContent;die();
 				// echo $thumbnail;die();
