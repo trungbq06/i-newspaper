@@ -513,7 +513,7 @@ class Crawler {
 			// echo $pageId;die();
 			for ($i = 1;$i < 20;$i++) {
 				$url = "http://www.hdiphonewallpaper.com" . $cat->link . '/' . $pageId . $i . '.html';
-				echo $url;
+				// echo $url;
 				$contents = $this->getURLContents($url);
 				// echo $contents;die();
 				$items = $this->getContent($contents, '<td height="315" align="center">', 'border=\'0\'');
@@ -612,7 +612,7 @@ class Crawler {
 			$data['title'] = $this->getContent($item, '<title>', '</title>', true);
 			$data['thumbnail_url'] = $this->getContent($item, 'img src="', '"', true);
             $data['small_thumbnail_url'] = str_replace('_500', '_250', $data['thumbnail_url']);
-            // echo $data['thumbnail_url'];
+            // echo $data['thumbnail_url'];die();
             // var_dump(pathinfo($data['thumbnail_url']));die();
 			if (!News::isXKCNExist($data['thumbnail_url'])) {
 				$path = '/tmp/save_img_xkcn_tmp.test';
@@ -643,7 +643,7 @@ class Crawler {
             else $url = 'http://xkcn.info/page/' . $i;
             $contents = $this->getURLContents($url);
             $items = $this->getContent($contents, "<div class='photo-wrap'>", '</div>');
-            // print_r($items);die();
+            print_r($items);die();
             // echo '<img src="http://25.media.tumblr.com/tumblr_m0g7gkQmPl1qbd81ro1_500.jpg" width="160" height="107" />';
             // echo '<img src="http://26.media.tumblr.com/tumblr_m0dgtj4ELf1qbd81ro1_500.jpg" width="160" height="204" />';
             // echo '<img src="http://27.media.tumblr.com/tumblr_m0g7h0QIhE1qbd81ro1_500.jpg" width="160" height="204" />';die();
@@ -651,7 +651,7 @@ class Crawler {
                 $data['title'] = 'Photo';
                 $data['thumbnail_url'] = $this->getContent($item, 'img src=\'', '\'', true);
                 $data['small_thumbnail_url'] = str_replace('_500', '_250', $data['thumbnail_url']);
-                // echo $data['thumbnail_url'];
+                echo $data['thumbnail_url'];die();
                 // var_dump(pathinfo($data['thumbnail_url']));die();
                 if (!News::isXKCNExist($data['thumbnail_url'])) {
                     $path = '/tmp/save_img_xkcn_tmp.test';
