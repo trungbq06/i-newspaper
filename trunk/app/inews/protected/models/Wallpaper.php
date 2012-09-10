@@ -110,7 +110,7 @@ class Wallpaper extends CActiveRecord
 	
 	public function getAll($page, $limit) {
         $offset = ($page - 1) * $limit;
-		$data = Yii::app()->db->createCommand("SELECT * FROM wallpaper ORDER BY rand() LIMIT $offset, $limit")->queryAll();
+		$data = Yii::app()->db->createCommand("SELECT * FROM wallpaper ORDER BY created_time DESC LIMIT $offset, $limit")->queryAll();
 		
 		return $data;
 	}
