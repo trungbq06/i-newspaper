@@ -4,7 +4,32 @@ class Crawler {
 
     private $_curl = null;
     private $_parser = null;
-
+    
+    public function downloadEmotions() {
+        $url = "http://l.yimg.com/us.yimg.com/i/mesg/emoticons7/%s.gif";
+        $savePath = '/emotions2/';
+        for ($i = 1; $i < 200;$i++) {
+            $urlDown = sprintf($url, $i);
+            $this->save_image($urlDown, $savePath . $i . '.gif');
+        }
+        die();
+        $url = 'http://vn.messenger.yahoo.com/features/emoticons/';
+        $content = $this->getURLContents($url);
+        $savePath = '/emotions/';
+        $tr = $this->getContent($content, '<tr class="', '</tr>');
+        // print_r($tr);
+        $result = array();
+        $i=0;
+        foreach ($tr as $one) {
+            $i++;
+            $urlDown = $this->getContent($one, 'src="', '"', true);
+            $symbol = $this->getContent($one, '<kbd>', '</kbd>', true);
+            $this->save_image($urlDown, $savePath . $i . '.gif');
+            $result[] = $symbol;
+        }
+        print_r($result);die();
+    }
+    
     public function __construct() {
         $this->_curl = curl_init();
         $this->_parser = new Videopian();
@@ -416,6 +441,9 @@ class Crawler {
 				$comic->title = $comicTitle;
 				$comic->title_vn = Utility::unicode2Anscii($comicTitle);
 				$comic->description = '';
+                
+                $first = substr(Utility::unicode2Anscii($comicTitle), 0, 1);
+                $comic->first_char = $first;
 				
 				$firstChar = substr(Utility::unicode2Anscii($comicTitle), 0, 1);
 				$comic->first_char = $firstChar;
@@ -434,6 +462,126 @@ class Crawler {
 				
 				$chapLink = $this->getContent($chapLink, 'a href', '/a>');				
 				// print_r($chapLink);die();
+				if (empty($chapLink)) continue;
+				
+				$comic->save(false);
+				$comicId = $comic->id;
+				$i = 0;
+				if (!empty($chapLink)) {
+					foreach ($chapLink as $chap) {
+						// $chap = '"http://doctruyen.vechai.info/07-ghost-chap-72/" target="_blank"><span style="font-size: 12px;"><span style="color: #DC143C;">CHAP 72</span></span><';
+						$chap = strip_tags($chap);
+						$chap .= '~';
+						// echo $chap;die();
+						$cLink = $this->getContent($chap, '"', '"', true);
+						$title = $this->getContent($chap, '">', '~', true);
+						
+						if (!strstr(strtolower($title), 'chap')) continue;
+						if (strstr(strtolower($title), 'download')) continue;
+						$title = trim($title);
+						$title = ucwords($title);
+						$chapter = new ComicChapter;
+						$chapter->comic_id = $comicId;
+						$chapter->title = $title;
+						$chapter->created_time = date('Y-m-d H:i:s');
+						$chapter->save(false);
+						$chapterId = $chapter->id;
+						
+						// die($cLink);
+						// $cLink = 'http://vc2.vechai.info/2011/04/anh-hung-vo-le-chap-5.html';
+						$chapDetail = $this->getURLContents($cLink);
+						// die($chapDetail);
+						$chapImage = $this->getContent($chapDetail, '<div class="entry2">', '<h2', true);
+						if (empty($chapImage)) {
+							$chapImage = $this->getContent($chapDetail, "<textarea id=", '</textarea>', true);
+						}
+						// echo $chapImage;die();
+						$imgList = $this->getContent($chapImage, '<img src="', '"');
+						// print_r($chapImage);die();
+						if (empty($imgList)) 
+							$imgList = $this->getContent($chapImage, "<img src='", "'");
+						if (empty($imgList))
+							$imgList = $this->getContent($chapImage, 'src="', '"');
+						if (empty($imgList))
+							$imgList = $this->getContent($chapImage, "src='", "'");
+						// var_dump($imgList);die();
+						// Insert image to comic_image						
+						if (!empty($imgList)) {
+							foreach($imgList as $cImage) {
+								$i++;
+								// $cImage = $this->getContent($one, '"', '"', true);
+								// if (empty($cImage))
+									// $cImage = $this->getContent($one, '\'', '\'', true);
+								// echo $cImage;die();
+								$image = new ComicImage;
+								$image->chapter_id = $chapterId;
+								$image->image = $cImage;
+								$image->created_time = date('Y-m-d H:i:s');
+								$image->save(false);
+							}
+						}
+					}
+				}
+				if ($i > 0) {
+					$comic->approved = 1;
+					$comic->save(false);
+				}
+			}
+			// die();
+			// if ($k > 24) die('Finished');
+		}
+	}
+    
+    public function getComic2() {
+		// $url = 'http://truyen.comicvn.net/';
+		// $url = 'http://www.adf.ly/go/cb6602caecaaf7e08ceddc2c38ccc355/aHR0cDovL3g4LmNvbWljdm4ubmV0LzIwMTEvMDQvMjB0aC1jZW50dXJ5LWJveXMtY2hhcC0yMTAuaHRtbA';
+		$url = 'http://www.kassio.altervista.org/deadfly.php?l=http://adf.ly/1CcK5';
+		$contents = $this->getURLContents($url);
+		die($contents);
+        // $comics = $this->getContent($contents, "<div class='widget-content list-label-widget-content'>", '</div>', true);
+        // $comics = $this->getContent($comics, '<li>', '</li>');
+		// print_r($comics);die();
+		// $comics = implode('~', $comics);
+		$f = @fopen('/tmp/comics.txt', 'r');
+		// $f = fopen('/tmp/comics.txt', 'a+');
+		$comics = file_get_contents('/tmp/comics.txt');
+		// echo $comics;die();
+		$comics = explode('~', $comics);
+        // print_r($comics);die();
+		$k = 0;
+		// fwrite($f, implode('~', $comics));die();
+		foreach ($comics as $one) {
+			$k++;
+			// echo $one;die();
+			$link = $this->getContent($one, "href='", "'", true);
+			$comicTitle = $this->getContent($one, "'>", '<', true);
+			$comicTitle = trim($comicTitle);
+			// $link = 'http://vechai.info/angel-beats-heavens-door/';
+			// var_dump($comicTitle);die();
+			// var_dump(Comic::model()->isExist($comicTitle));die();
+			$exist = Comic::model()->isExist($comicTitle);
+			// $exist = false;
+			if (!$exist) {
+				// die($comicTitle);
+				$comic = new Comic;
+				$comic->created_time = date('Y-m-d H:i:s');
+				$comic->title = $comicTitle;
+				$comic->title_vn = Utility::unicode2Anscii($comicTitle);
+				$comic->description = '';
+                
+                $first = substr(Utility::unicode2Anscii($comicTitle), 0, 1);
+                $comic->first_char = $first;
+				
+				$detail = $this->getURLContents($link);
+				// die($detail);
+				$textarea = $this->getContent($detail, "<div class='tblog-postcontent'>", "<script type='text/javascript'>summary(", true);
+				// die($textarea);
+				$chapLink = $this->getContent($textarea, 'http://x1.comicvn.net', '/a>');
+				$thumbnailUrl = $this->getContent($detail, '"href="', '"', true);
+				// die($thumbnailUrl);
+				$comic->thumbnail_url = $thumbnailUrl;
+				print_r($chapLink);die();
+                
 				if (empty($chapLink)) continue;
 				
 				$comic->save(false);
@@ -559,14 +707,25 @@ class Crawler {
 			}
 		}
 	}
+    
+    public function fillTotalPart() {
+        $chapters = ComicChapter::model()->findAllByAttributes(array('total_part' => 0));
+        foreach ($chapters as $chap) {
+            echo $chap->id.'<br/>';
+            $sql = "SELECT COUNT(id) AS total FROM comic_image WHERE chapter_id = " . $chap->id;
+            $total = Yii::app()->db->createCommand($sql)->queryRow();
+            $chap->total_part = $total['total'];
+            $chap->save(false);
+        }
+    }
 	
 	public function fixComic() {
 		
 		
 		$criteria = new CDbCriteria;
-		$criteria->condition = 'approved = 1 AND id > 473';
+		$criteria->condition = "approved = 1 AND down_thumb = ''";
 		$comics = Comic::model()->findAll($criteria);
-		$basePath = '/srv/www/i-newspaper/app/inews/thumbs/';
+		$basePath = '/var/www/thumbs/';
 		$i = 0;
 		foreach ($comics as $comic) {
 			$i++;
@@ -1188,6 +1347,7 @@ class Crawler {
         $url = 'http://sachnoi.vn/category/radio-show/qns/feed/';
         $url = 'http://sachnoi.vn/category/sach/doanh-nhan-danh-nhan/feed/';
         $content = $this->getURLContents($url);
+        die($content);
         $contents = $this->getContent($content, '<item>', '</item>');
         // print_r($contents);die();
         foreach ($contents as $content) {
@@ -1235,6 +1395,7 @@ class Crawler {
 					}
 					print_r($media);die();
 				}
+                
                 $audio = new AudioBook;
                 $audio->title = $title;
                 $audio->title_en = Utility::unicode2Anscii($title);
@@ -1246,7 +1407,6 @@ class Crawler {
                 $date = date('Y-m-d H:i:s', strtotime($pubDate));
                 // die($date);
                 $audio->created_time = $date;
-                
                 
                 $audio->save(false);
             }
