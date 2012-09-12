@@ -12,6 +12,7 @@
  * @property string $category_id
  * @property string $thumbnail_url
  * @property string $approved
+ * @property string $down_thumb
  */
 class Comic extends CActiveRecord
 {
@@ -45,7 +46,7 @@ class Comic extends CActiveRecord
 			array('category_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, title_vn, approved , description, created_time, category_id, thumbnail_url', 'safe', 'on'=>'search'),
+			array('id, title, title_vn, down_thumb, approved , description, created_time, category_id, thumbnail_url', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +75,7 @@ class Comic extends CActiveRecord
 			'category_id' => 'Category',
 			'thumbnail_url' => 'Thumbnail Url',
 			'approved' => 'Thumbnail Url',
+			'down_thumb' => 'Down Thumb',
 		);
 	}
 
@@ -96,6 +98,7 @@ class Comic extends CActiveRecord
 		$criteria->compare('category_id',$this->category_id,true);
 		$criteria->compare('thumbnail_url',$this->thumbnail_url,true);
 		$criteria->compare('approved',$this->approved,true);
+		$criteria->compare('down_thumb',$this->down_thumb,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -151,12 +154,12 @@ class Comic extends CActiveRecord
 			->where("ch.comic_id = $id");
 			
 		$chapters = $query->queryAll();
-		
-		foreach ($chapters as &$one) {
-			$sql = "SELECT COUNT(id) AS total FROM comic_image WHERE chapter_id = " . $one['id'];
-			$row = Yii::app()->db->createCommand($sql)->queryRow();
-			$one['total_part'] = $row['total'];
-		}
+		// print_r($chapters);die();
+		// foreach ($chapters as &$one) {
+			// $sql = "SELECT COUNT(id) AS total FROM comic_image WHERE chapter_id = " . $one['id'];
+			// $row = Yii::app()->db->createCommand($sql)->queryRow();
+			// $one['total_part'] = $row['total'];
+		// }
 		
 		return $chapters;
 	}
