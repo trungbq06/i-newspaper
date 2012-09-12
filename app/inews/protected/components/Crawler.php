@@ -365,6 +365,7 @@ class Crawler {
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
         $rawdata=curl_exec($ch);
         curl_close ($ch);
         if(file_exists($fullpath)){
@@ -554,6 +555,69 @@ class Crawler {
 							$photo->save(false);
 						}
 					}
+				}
+			}
+		}
+	}
+	
+	public function fixComic() {
+		
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'approved = 1 AND id > 473';
+		$comics = Comic::model()->findAll($criteria);
+		$basePath = '/srv/www/i-newspaper/app/inews/thumbs/';
+		$i = 0;
+		foreach ($comics as $comic) {
+			$i++;
+			$thumb = $comic->thumbnail_url;
+			echo $thumb.'<br/>';
+			$thumb = explode('?', $thumb);
+			$thumb = $thumb[0];
+			$info = pathinfo($thumb);
+			// print_r($info);die();
+			$saveFile = date('YmdHis') . '_' . $i . '.' . $info['extension'];
+			$path = $basePath . $saveFile;
+			// echo $path;die();
+			$this->save_image($comic->thumbnail_url, $path);
+			
+			Utility::cropImage($path, array(120, 180), $path);
+			$comic->down_thumb = 'http://123.30.188.115:8688/thumbs/' . $saveFile;
+			$comic->save(false);
+		}
+	}
+	
+	public function getWallpaper3() {
+		for ($i = 1;$i < 9;$i++) {
+			$url = "http://www.iphoneretinawallpapers.com/wallpapers/Girls/page/$i";
+			$contents = $this->getURLContents($url);
+			// echo $contents;die();
+			$items = $this->getContent($contents, '<div class="wallpaper-item">', '</div>');
+			// print_r($items);die();
+			foreach ($items as $item) {
+				$data['title'] = date('YmdHis');
+				$data['small_thumbnail_url'] = 'http://www.iphoneretinawallpapers.com/' . $this->getContent($item, '<img src="', '"', true);
+				$data['thumbnail_url'] = str_replace('thumbs/', 'fullsize/', $data['small_thumbnail_url']);
+				// echo $data['thumbnail_url'];die();
+				// var_dump(pathinfo($data['thumbnail_url']));die();
+				if (!News::isWallpaperExist($data['thumbnail_url'])) {
+					$path = '/tmp/save_img_xkcn_tmp.test';
+					$pathFull = '/tmp/save_img_xkcn_tmp.testfull';
+					$this->save_image($data['small_thumbnail_url'], $path);
+					$this->save_image($data['thumbnail_url'], $pathFull);
+					$imgSize = getimagesize($path);
+					$imgSizeFull = getimagesize($pathFull);
+					exec('rm -f ' . $path);
+					$width320 = $imgSizeFull[0] > 320 ? 320 : $imgSizeFull[0];
+					$height320 = ($width320 * $imgSizeFull[1]) / $imgSizeFull[0];
+					$photo = new Wallpaper;
+					$photo->attributes = $data;
+					$photo->width_160 = 160;
+					$photo->height_160 = (160 * $imgSize[1]) / $imgSize[0];
+					$photo->width_320 = $width320;
+					$photo->height_320 = $height320;
+					$photo->created_time = date('Y-m-d H:i:s');
+					$photo->save(false);
 				}
 			}
 		}
