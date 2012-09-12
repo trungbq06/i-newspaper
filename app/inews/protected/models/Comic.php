@@ -132,7 +132,7 @@ class Comic extends CActiveRecord
 	
 	public function getAll() {
 		$query = Yii::app()->db->createCommand()
-			->select('c.id, c.down_thumb AS thumbnail_url, created_time')
+			->select('c.id, c.down_thumb AS thumbnail_url, c.created_time, c.first_char, c.category_id')
 			->where('approved = 1')
 			->from('comic c')
 			->order('first_char ASC');
