@@ -9,6 +9,7 @@
  * @property string $comic_id
  * @property string $created_time
  * @property string $thumbnail_url
+ * @property string $total_part
  */
 class ComicChapter extends CActiveRecord
 {
@@ -42,7 +43,7 @@ class ComicChapter extends CActiveRecord
 			array('comic_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, comic_id, created_time, thumbnail_url', 'safe', 'on'=>'search'),
+			array('id, title, total_part, comic_id, created_time, thumbnail_url', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,7 @@ class ComicChapter extends CActiveRecord
 			'comic_id' => 'Comic',
 			'created_time' => 'Created Time',
 			'thumbnail_url' => 'Thumbnail Url',
+			'total_part' => 'Total Part',
 		);
 	}
 
@@ -87,6 +89,7 @@ class ComicChapter extends CActiveRecord
 		$criteria->compare('comic_id',$this->comic_id,true);
 		$criteria->compare('created_time',$this->created_time,true);
 		$criteria->compare('thumbnail_url',$this->thumbnail_url,true);
+		$criteria->compare('total_part',$this->total_part,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

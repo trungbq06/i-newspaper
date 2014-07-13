@@ -51,7 +51,7 @@ class Crawler {
 		curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
 
 		curl_setopt($ch, CURLOPT_FAILONERROR, true);
-		curl_setopt($ch, CURLOPT_HEADER, true);
+		// curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -837,7 +837,7 @@ class Crawler {
             $data['small_thumbnail_url'] = str_replace('_500', '_250', $data['thumbnail_url']);
             // echo $data['thumbnail_url'];die();
             // var_dump(pathinfo($data['thumbnail_url']));die();
-			if (!News::isXKCNExist($data['thumbnail_url'])) {
+			if (!News::isWallpaperExist($data['thumbnail_url'])) {
 				$path = '/tmp/save_img_xkcn_tmp.test';
                 $pathFull = '/tmp/save_img_xkcn_tmp.testfull';
 				$this->save_image($data['small_thumbnail_url'], $path);
@@ -847,7 +847,7 @@ class Crawler {
 				exec('rm -f ' . $path);
                 $width320 = $imgSizeFull[0] > 320 ? 320 : $imgSizeFull[0];
                 $height320 = ($width320 * $imgSizeFull[1]) / $imgSizeFull[0];
-				$photo = new Xkcn;
+				$photo = new Wallpaper;
 				$photo->attributes = $data;
 				$photo->width_160 = 160;
 				$photo->height_160 = (160 * $imgSize[1]) / $imgSize[0];
@@ -1763,7 +1763,10 @@ class Crawler {
 				$source = $this->getContent($detail, ' <div class="gn_info">', '</div>', true);
 				$source = strip_tags($source);
 				$source = explode('-', $source);
-				$source = trim($source[1]);
+				if (count($source) == 2)
+					$source = trim($source[1]);
+				else 
+					$source = trim($source[0]);
 				$data['source'] = $source;
 				// die($data['source']);
                 $newsContent = str_replace('<img', '<img width="290"', $newsContent);
@@ -1816,15 +1819,19 @@ class Crawler {
 					$news->attributes = $data;
 					if ($news->save(false)) {
 						if ($i <= 5) {
-							// $lastId = Yii::app()->db->getLastInsertID();
-							$lastId = $news->id;
-							// die($lastId);
-							$newsFeatured = new NewsFeatured;
-							$newsFeatured->attributes = array(
-								'news_id' 		=> $lastId,
-								'created_time' 	=> date('Y-m-d H:i:s')
-							);
-							$newsFeatured->save(false);
+							try {
+								// $lastId = Yii::app()->db->getLastInsertID();
+								$lastId = $news->id;
+								// die($lastId);
+								$newsFeatured = new NewsFeatured;
+								$newsFeatured->attributes = array(
+									'news_id' 		=> $lastId,
+									'created_time' 	=> date('Y-m-d H:i:s')
+								);
+								$newsFeatured->save(false);
+							} catch (exception $ex) {
+								
+							}
 						}
 					}
 				}				
@@ -1951,7 +1958,7 @@ class Crawler {
 				$detail = $this->getURLContents($detailLink);
 				// echo $detail;die();
 				$newsContent = $this->getContent($detail, 'id="ar-content-html">', '<div style="clear: both">', true);
-				$data['thumbnail_url'] = $this->getContent($$item, 'thumbnail url="', "'", true);
+				$data['thumbnail_url'] = $this->getContent($item, 'thumbnail url="', '"', true);
                 $newsContent = str_replace('src="/', 'src="http://www.pcworld.com.vn/', $newsContent);
 				// echo $data['thumbnail_url'];die();
 				// echo $newsContent;die();
@@ -2313,11 +2320,12 @@ class Crawler {
 				$detailLink = str_replace('2sao.vietnamnet.vn', '2sao.vn', $detailLink);
 				$detail = $this->getURLContents($detailLink);
 				// echo $detail;die();
-				$newsContent = $this->getContent($detail, 'class="detail_content">', '<div class="sharefacebook">', true);
+				$newsContent = $this->getContent($detail, 'class="detail_content">', "<div class='tags'>", true);
 				if (empty($newsContent)) {
-					$newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
+					$newsContent = $this->getContent($detail, '<div class="content">', '<div id="Sociable"', true);
 				}
 				$data['thumbnail_url'] = $this->getContent($headline, "src='", "'", true);
+				// var_dump($newsContent);die();
 				// echo $data['thumbnail_url'];die();
 				// echo $newsContent;die();
 				// echo $thumbnail;die();
@@ -2327,16 +2335,20 @@ class Crawler {
 				// print_r($data);die();
 				if (!News::isExist($siteId, $detailLink)) {
 					$toStrip = $this->getContent($newsContent, 'style="width:', '"');
-					foreach ($toStrip as $strip) {
-						$newsContent = str_replace($strip, '290px;', $newsContent);
+					if (!empty($toStrip)) {
+						foreach ($toStrip as $strip) {
+							$newsContent = str_replace($strip, '290px;', $newsContent);
+						}
 					}
 					$links = $this->getContent($newsContent, '<a href="', '"');
-					foreach ($links as $strip) {
-						$newsContent = str_replace('<a href="' . $strip . '"', '<a href="#"', $newsContent);
+					if (!empty($links)) {
+						foreach ($links as $strip) {
+							$newsContent = str_replace('<a href="' . $strip . '"', '<a href="#"', $newsContent);
+						}
 					}
 					$newsContent = str_replace('<img', '<img width=290', $newsContent);
 					$newsContent = str_replace('<IMG', '<img width=290', $newsContent);
-					// die($newsContent);
+					// var_dump($newsContent);die();
 					$data['content'] = $newsContent;
 					$data['title_en'] = Utility::unicode2Anscii($data['title']);
 					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
@@ -2384,55 +2396,65 @@ class Crawler {
 			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
 			// die();
 			$i = 0;
-			foreach ($items as $item) {
-				// echo $item;die();
-				$i++;
-				$title = $this->getContent($item, '<title>', '</title>', true);
-				$data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
-				$headline = $this->getContent($item, '<description>', '</description>', true);
-				$data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
-				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
-				$detailLink = $this->getContent($item, '<link>', '</link>', true);
-				$detail = $this->getURLContents($detailLink);
-				// echo $detail;die();
-				$newsContent = $this->getContent($detail, 'class="KenhF_Content_News3">', '<div style="margin-bottom: 10px;">', true);
-				if (empty($newsContent)) {
-					$newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
-				}
-				$data['thumbnail_url'] = $this->getContent($headline, 'src="', '"', true);
-				// echo $data['thumbnail_url'];die();
-				// echo $newsContent;die();
-				// echo $thumbnail;die();
-				// echo $detail;die();
-				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
-				// echo $newsContent;die();
-				// print_r($data);die();
-				if (!News::isExist($siteId, $detailLink) && !empty($newsContent)) {
-					$data['content'] = $newsContent;
-					$data['title_en'] = Utility::unicode2Anscii($data['title']);
-					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
-					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-					$data['site_id'] = $siteId;
-					// die($data['published_time']);
-					$data['created_time'] = date('Y-m-d H:i:s');
-					$data['original_url'] = $detailLink;
-					$data['category_id'] = $c;
-					
-					$news = new News;
-					$news->attributes = $data;
-					if ($news->save(false)) {
-						if ($i <= 5) {
-							$lastId = $news->id;
-							$newsFeatured = new NewsFeatured;
-							$newsFeatured->attributes = array(
-								'news_id' 		=> $lastId,
-								'created_time' 	=> date('Y-m-d H:i:s')
-							);
-							$newsFeatured->save(false);
+			if (!empty($items)) {
+				foreach ($items as $item) {
+					// echo $item;die();
+					$i++;
+					$title = $this->getContent($item, '<title>', '</title>', true);
+					$data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+					$headline = $this->getContent($item, '<description>', '</description>', true);
+					$data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
+					$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+					$detailLink = $this->getContent($item, '<link>', '</link>', true);
+					$detail = $this->getURLContents($detailLink);
+					// echo $detail;die();
+					$newsContent = $this->getContent($detail, 'class="KenhF_Content_News3">', '<div style="margin-bottom: 10px;">', true);
+					if (empty($newsContent)) {
+						$newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
+					}
+					// echo $headline;die();
+					$data['thumbnail_url'] = $this->getContent($headline, 'src="', '"', true);
+					if (is_array($data['thumbnail_url']))
+						$data['thumbnail_url'] = '';
+					// echo $data['thumbnail_url'];die();
+					// echo $newsContent;die();
+					// echo $thumbnail;die();
+					// echo $detail;die();
+					// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+					// echo $newsContent;die();
+					// print_r($data);die();
+					if (!News::isExist($siteId, $detailLink) && !empty($newsContent) && !is_array($newsContent)) {
+						$data['content'] = $newsContent;
+						$data['title_en'] = Utility::unicode2Anscii($data['title']);
+						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+						$data['site_id'] = $siteId;
+						// die($data['published_time']);
+						$data['created_time'] = date('Y-m-d H:i:s');
+						$data['original_url'] = $detailLink;
+						$data['category_id'] = $c;
+						// print_r($data);die();
+						
+						$news = new News;
+						$news->attributes = $data;
+						try {
+							if ($news->save(false)) {
+								if ($i <= 5) {
+									$lastId = $news->id;
+									$newsFeatured = new NewsFeatured;
+									$newsFeatured->attributes = array(
+										'news_id' 		=> $lastId,
+										'created_time' 	=> date('Y-m-d H:i:s')
+									);
+									$newsFeatured->save(false);
+								}
+							}
+						} catch (exception $ex) {
+							print_r($data);die();
 						}
 					}
+					// die();
 				}
-				// die();
 			}
 		}
 	}
@@ -2448,55 +2470,57 @@ class Crawler {
 			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
 			// die();
 			$i = 0;
-			foreach ($items as $item) {
-				// echo $item;die();
-				$i++;
-				$title = $this->getContent($item, '<title>', '</title>', true);
-				$data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
-				$headline = $this->getContent($item, '<description>', '</description>', true);
-				$data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
-				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
-				$detailLink = $this->getContent($item, '<link>', '</link>', true);
-				$detail = $this->getURLContents($detailLink);
-				// echo $detail;die();
-				$newsContent = $this->getContent($detail, 'class="KenhF_Content_News3">', '<div style="margin-bottom: 10px;">', true);
-				if (empty($newsContent)) {
-					$newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
-				}
-				$data['thumbnail_url'] = $this->getContent($headline, 'src="', '"', true);
-				// echo $data['thumbnail_url'];die();
-				// echo $newsContent;die();
-				// echo $thumbnail;die();
-				// echo $detail;die();
-				// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
-				// echo $newsContent;die();
-				// print_r($data);die();
-				if (!News::isExist($siteId, $detailLink)) {
-					$data['content'] = $newsContent;
-					$data['title_en'] = Utility::unicode2Anscii($data['title']);
-					$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
-					$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-					$data['site_id'] = $siteId;
-					// die($data['published_time']);
-					$data['created_time'] = date('Y-m-d H:i:s');
-					$data['original_url'] = $detailLink;
-					$data['category_id'] = $c;
-					
-					$news = new News;
-					$news->attributes = $data;
-					if ($news->save(false)) {
-						if ($i <= 5) {
-							$lastId = $news->id;
-							$newsFeatured = new NewsFeatured;
-							$newsFeatured->attributes = array(
-								'news_id' 		=> $lastId,
-								'created_time' 	=> date('Y-m-d H:i:s')
-							);
-							$newsFeatured->save(false);
+			if (!empty($items)) {
+				foreach ($items as $item) {
+					// echo $item;die();
+					$i++;
+					$title = $this->getContent($item, '<title>', '</title>', true);
+					$data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
+					$headline = $this->getContent($item, '<description>', '</description>', true);
+					$data['headline'] = trim(strip_tags($this->getContent($headline, '<![CDATA[', ']]>', true)));
+					$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+					$detailLink = $this->getContent($item, '<link>', '</link>', true);
+					$detail = $this->getURLContents($detailLink);
+					// echo $detail;die();
+					$newsContent = $this->getContent($detail, 'class="KenhF_Content_News3">', '<div style="margin-bottom: 10px;">', true);
+					if (empty($newsContent)) {
+						$newsContent = $this->getContent($detail, '<div class="content">', '<div style="margin-bottom: 10px;">', true);
+					}
+					$data['thumbnail_url'] = $this->getContent($headline, 'src="', '"', true);
+					// echo $data['thumbnail_url'];die();
+					// echo $newsContent;die();
+					// echo $thumbnail;die();
+					// echo $detail;die();
+					// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+					// echo $newsContent;die();
+					// print_r($data);die();
+					if (!News::isExist($siteId, $detailLink)) {
+						$data['content'] = $newsContent;
+						$data['title_en'] = Utility::unicode2Anscii($data['title']);
+						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+						$data['site_id'] = $siteId;
+						// die($data['published_time']);
+						$data['created_time'] = date('Y-m-d H:i:s');
+						$data['original_url'] = $detailLink;
+						$data['category_id'] = $c;
+						
+						$news = new News;
+						$news->attributes = $data;
+						if ($news->save(false)) {
+							if ($i <= 5) {
+								$lastId = $news->id;
+								$newsFeatured = new NewsFeatured;
+								$newsFeatured->attributes = array(
+									'news_id' 		=> $lastId,
+									'created_time' 	=> date('Y-m-d H:i:s')
+								);
+								$newsFeatured->save(false);
+							}
 						}
 					}
+					// die();
 				}
-				// die();
 			}
 		}
 	}
@@ -2647,70 +2671,76 @@ class Crawler {
                 
             }
         }
-		
 	}
 	
 	public function getNgoisao() {
 		$ngoisao = Yii::app()->params['site']['ngoisaonet'];
 		$siteId = 5;
 		
-		foreach ($ngoisao as $c => $link) {
-            $contents = $this->getURLContents($link);
-            $items = $this->getContent($contents, '<item>', '</item>');
-            // print_r($items);
-            // echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
-            // die();
-            $i = 0;
-            foreach ($items as $item) {
-                // echo $item;die();
-                $i++;
-                $title = $this->getContent($item, '<title>', '</title>', true);
-                $data['title'] = trim($this->getContent($title, '<![CDATA[', ']]>', true));
-                $description = $this->getContent($item, '<description>', '</description>', true);
-                $data['headline'] = trim(strip_tags($this->getContent($description, '<![CDATA[', ']]>', true)));
-                $data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
-                $detailLink = $this->getContent($item, '<link>', '</link>', true);
-                $detail = $this->getURLContents($detailLink);
-                // echo $detail;die();
-                $thumbnail = $this->getContent($detail, '<div id="ctl00_CPH1_TinChiTiet1_divImage"', '</div>', true);
-                $data['thumbnail_url'] = 'http://ngoisao.net' . $this->getContent($description, '<img src="', '">', true);
-                $newsContent = $this->getContent($detail, '</H2>', '<div class="detailNS">', true);
-                $newsContent = str_replace('src="', 'src="http://ngoisao.net', $newsContent);
-                // echo $newsContent;die();
-                // echo $thumbnail;die();
-                // echo $detail;die();
-                // $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
-                // echo $newsContent;die();
-                if (!News::isExist($siteId, $detailLink)) {
-					$newsContent = str_replace('<IMG', '<IMG width=290', $newsContent);
-					$newsContent = str_replace('<img', '<img width=290', $newsContent);
-                    $data['content'] = $newsContent;
-                    $data['title_en'] = Utility::unicode2Anscii($data['title']);
-                    $data['headline_en'] = Utility::unicode2Anscii($data['headline']);
-                    $data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
-                    $data['site_id'] = $siteId;
-                    // die($data['published_time']);
-                    $data['created_time'] = date('Y-m-d H:i:s');
-                    $data['original_url'] = $detailLink;
-					$data['category_id'] = $c;
-                    
-                    $news = new News;
-                    $news->attributes = $data;
-                    if ($news->save(false)) {
-                        if ($i <= 5) {
-							// $lastId = Yii::app()->db->getLastInsertID();
-							$lastId = $news->id;
-							// die($lastId);
-							$newsFeatured = new NewsFeatured;
-							$newsFeatured->attributes = array(
-								'news_id' 		=> $lastId,
-								'created_time' 	=> date('Y-m-d H:i:s')
-							);
-							$newsFeatured->save(false);
+		if (!empty($ngoisao)) {
+			foreach ($ngoisao as $c => $link) {
+				$contents = $this->getURLContents($link);
+				$items = $this->getContent($contents, '<item>', '</item>');
+				// print_r($items);
+				// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
+				// die();
+				$i = 0;
+				foreach ($items as $item) {
+					// echo $item;die();
+					$i++;
+					$title = $this->getContent($item, '<title>', '</title>', true);
+					$data['title'] = $title;
+					$description = $this->getContent($item, '<description>', '</description>', true);
+					$data['headline'] = trim(strip_tags($this->getContent($description, '<![CDATA[', ']]>', true)));
+					$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
+					$detailLink = $this->getContent($item, '<link>', '</link>', true);
+					$detail = $this->getURLContents($detailLink);
+					// echo $detail;die();
+					$thumbnail = $this->getContent($detail, '<div id="ctl00_CPH1_TinChiTiet1_divImage"', '</div>', true);
+					// $data['thumbnail_url'] = 'http://ngoisao.net' . $this->getContent($description, 'src="', '">', true);
+					$data['thumbnail_url'] = $this->getContent($description, 'src="', '">', true);
+					$newsContent = $this->getContent($detail, '</H2>', '<div class="detailNS">', true);
+					// $newsContent = str_replace('src="', 'src="http://ngoisao.net', $newsContent);
+					// echo $newsContent;die();
+					// echo $thumbnail;die();
+					// echo $detail;die();
+					// $newsContent = $this->getContent($detail, '<div class="articleBody">', '<div class="clearDiv"></div>', true);
+					// echo $newsContent;die();
+					if (!News::isExist($siteId, $detailLink)) {
+						$newsContent = str_replace('<IMG', '<IMG width=290', $newsContent);
+						$newsContent = str_replace('<img', '<img width=290', $newsContent);						
+						$toCut = $this->getContent($newsContent, '<div class="reference_news">', '</div>', true);
+						if (!empty($toCut))
+							$newsContent = str_replace($toCut, '', $newsContent);
+						// echo $newsContent;die();
+						$data['content'] = $newsContent;
+						$data['title_en'] = Utility::unicode2Anscii($data['title']);
+						$data['headline_en'] = Utility::unicode2Anscii($data['headline']);
+						$data['published_time'] = date('Y-m-d H:i:s', strtotime($data['published_time']));
+						$data['site_id'] = $siteId;
+						// die($data['published_time']);
+						$data['created_time'] = date('Y-m-d H:i:s');
+						$data['original_url'] = $detailLink;
+						$data['category_id'] = $c;
+						
+						$news = new News;
+						$news->attributes = $data;
+						if ($news->save(false)) {
+							if ($i <= 5) {
+								// $lastId = Yii::app()->db->getLastInsertID();
+								$lastId = $news->id;
+								// die($lastId);
+								$newsFeatured = new NewsFeatured;
+								$newsFeatured->attributes = array(
+									'news_id' 		=> $lastId,
+									'created_time' 	=> date('Y-m-d H:i:s')
+								);
+								$newsFeatured->save(false);
+							}
 						}
-                    }
-                }
-            }
+					}
+				}
+			}
         }
 	}
 	
@@ -2721,9 +2751,9 @@ class Crawler {
 		foreach ($vneconomy as $c => $link) {
 			$contents = $this->getURLContents($link);
 			$items = $this->getContent($contents, '<item>', '</item>');
-			// print_r($items);
+			print_r($items);
 			// echo gmdate('Y-m-d H:i:s', strtotime('Thu, 2 Feb 2012 15:06:56 GMT'));
-			// die();
+			die();
 			$i = 0;
 			foreach ($items as $item) {
 				$i++;
@@ -3131,7 +3161,7 @@ class Crawler {
 					$data['thumbnail_url'] = $thumbnail;
 				$data['published_time'] = $this->getContent($item, '<pubDate>', '</pubDate>', true);
 				$detailLink = $this->getContent($item, '<link><![CDATA[', ']]></link>', true);
-				// echo $detailLink . '<br/>';
+				// echo $detailLink . '<br/>';die();
 				// $detailLink = 'http://dantri.com.vn/c673/s673-539159/xin-thay-dung-khoc.htm';
 				// $detailLink = 'http://dantri.com.vn/c202/s202-539449/thu-tuc-tach-khau.htm';
 				// $detailLink = 'http://dantri.com.vn/c20/s20-539679/o-to-tai-bi-tau-hoa-dam-bay-xuong-ruong.htm';
@@ -3141,10 +3171,11 @@ class Crawler {
 					// die($headline);
 					$detail = $this->getURLContents($detailLink);
 					// echo $detail;die();
-					$tmp = $this->getContent($detail, '<div class="fon31 mt1">', "id='hidNextUsing'", true);
+					$tmp = $this->getContent($detail, '<div class="fon34 mt3 mr2 fon43">', "id='hidNextUsing'", true);
 					// die($tmp);
 					if (empty($tmp))
-						$tmp = $this->getContent($detail, 'ctl00_IDContent_BlogDetail1_hplTitle">', "id='hidNextUsing'", true);
+						$tmp = $this->getContent($detail, '<div class="detail-content">', '<div class="emailprint">
+', true);
 					if (empty($tmp))
 						$tmp = $this->getContent($detail, 'ctl00_IDContent_Tin_Chi_Tiet">', "id='hidNextUsing'", true);
 					if (empty($tmp)) continue;
@@ -3154,9 +3185,9 @@ class Crawler {
 					if (strstr($detail, '<div class="blogsapo">'))
 						$startTag = '<div class="blogsapo">';
 					$data['headline'] = '';
-					$headline = $this->getContent($tmp, $startTag, '</div>', true);
-					if (!empty($headline))
-						$data['headline'] = $headline;
+					// $headline = $this->getContent($tmp, $startTag, '</div>', true);
+					// if (!empty($headline))
+					$data['headline'] = $headline;
 					// $data['headline'] = $this->stripContent($data['headline'], '<br>', '</a>');
 					// echo $headline;die();
 					$tmp = str_replace($data['title'], '', $tmp);					
@@ -3168,7 +3199,7 @@ class Crawler {
 						}
 					}
 					$data['headline'] = str_replace('<br></a>', '', $data['headline']);
-					// print_r($data);die();					
+					// print_r($data);die();
 					// echo $tmp;die();
 					// $tmp = str_replace('src="/', 'src="http://vnexpress.net/', $tmp);
 					if (!empty($tmp)) {
@@ -3177,7 +3208,7 @@ class Crawler {
 						$tmp = str_replace('width=29000%', 'width=100%', $tmp);
 						$tmp = str_replace('<img', '<img width=290', $tmp);
 						$tmp = str_replace('<IMG', '<IMG width=290', $tmp);
-						// echo $tmp;
+						// echo $tmp;die();
 						$data['content'] = $tmp;
 						$data['original_url'] = $detailLink;
 						$data['category_id'] = $c;
@@ -3194,20 +3225,18 @@ class Crawler {
 						$news = new News;
 						$news->attributes = $data;
 						try {
-							if (!News::isExist(1, $detailLink)) {
-								if ($news->save(false)) {
-									//Add first news to featured
-									if ($i <= 5) {
-										// $lastId = Yii::app()->db->getLastInsertID();
-										$lastId = $news->id;
-										// die($lastId);
-										$newsFeatured = new NewsFeatured;
-										$newsFeatured->attributes = array(
-											'news_id' 		=> $lastId,
-											'created_time' 	=> date('Y-m-d H:i:s')
-										);
-										$newsFeatured->save(false);
-									}
+							if ($news->save(false)) {
+								//Add first news to featured
+								if ($i <= 5) {
+									// $lastId = Yii::app()->db->getLastInsertID();
+									$lastId = $news->id;
+									// die($lastId);
+									$newsFeatured = new NewsFeatured;
+									$newsFeatured->attributes = array(
+										'news_id' 		=> $lastId,
+										'created_time' 	=> date('Y-m-d H:i:s')
+									);
+									$newsFeatured->save(false);
 								}
 							}
 						} catch (Exception $ex) {

@@ -92,5 +92,94 @@ class Utility {
 			}
 		return $str;
 	}
+	
+	/**
+     *
+     * @param string $imgSrc
+     * @param array $arrSize
+     * @param string $imgTarget
+     * @return mixed
+     */
+    public static function cropImage($imgSrc, $arrSize, $imgTarget = null) {
+        $thumbnail_width = $arrSize[0]; $thumbnail_height = $arrSize[1];
+
+        if (!$imgTarget) $imgTarget = $imgSrc;
+
+        $newThumb = Utility::__getThumbnailResource($imgSrc, $thumbnail_width, $thumbnail_height);
+        $ext = substr($imgTarget, -4);
+
+        if ($ext == '.gif') {
+            imagegif($newThumb, $imgTarget);
+        } elseif ($ext == '.jpg') {
+            imagejpeg($newThumb, $imgTarget);
+        } elseif ($ext == '.png') {
+            imagepng($newThumb, $imgTarget);
+        } else {
+            return false;
+        }
+
+        #die($imgTarget);
+        return $imgTarget;
+    }
+
+    public static function __getThumbnailResource($imgSrc, $thumbnail_width, $thumbnail_height) {
+        $arrInfo = getimagesize($imgSrc);
+        $width_orig = $arrInfo[0];
+        $height_orig = $arrInfo[1];
+        $lmime = strtolower($arrInfo['mime']);
+
+        if (strpos($lmime, 'gif') !== false) {
+            $myImage = imagecreatefromgif($imgSrc);
+        } elseif (strpos($lmime, 'png') !== false) {
+            $myImage = imagecreatefrompng($imgSrc);
+        } else {
+            $myImage = imagecreatefromjpeg($imgSrc);
+        }
+
+        if ($thumbnail_height >= $height_orig && $thumbnail_width >= $width_orig) {
+            return $myImage;
+        }
+
+        $ratio_orig = $width_orig/$height_orig;
+
+        if ($thumbnail_height==0)
+        {
+           $new_width = $thumbnail_width;
+           $new_height = $thumbnail_height = $thumbnail_width/$ratio_orig;
+        }
+        elseif ($thumbnail_width)
+        {
+            $new_width = $thumbnail_width = $thumbnail_height*$ratio_orig;
+            $new_height = $thumbnail_height;
+        }
+        elseif ($thumbnail_width/$thumbnail_height > $ratio_orig)
+        {
+           $new_height = $thumbnail_width/$ratio_orig;
+           $new_width = $thumbnail_width;
+        }
+        elseif ($thumbnail_width/$thumbnail_height < $ratio_orig)
+        {
+           $new_width = $thumbnail_height*$ratio_orig;
+           $new_height = $thumbnail_height;
+        }
+        else
+        {
+            $new_width = $thumbnail_width;
+            $new_height = $thumbnail_height;
+        }
+
+        $x_mid = $new_width/2;  //horizontal middle
+        $y_mid = $new_height/2; //vertical middle
+
+        $process = imagecreatetruecolor(round($new_width), round($new_height));
+
+        imagecopyresampled($process, $myImage, 0, 0, 0, 0, $new_width, $new_height, $width_orig, $height_orig);
+        $thumb = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
+        imagecopyresampled($thumb, $process, 0, 0, ($x_mid-($thumbnail_width/2)), ($y_mid-($thumbnail_height/2)), $thumbnail_width, $thumbnail_height, $thumbnail_width, $thumbnail_height);
+
+        imagedestroy($process);
+        imagedestroy($myImage);
+        return $thumb;
+    }
 
 }
