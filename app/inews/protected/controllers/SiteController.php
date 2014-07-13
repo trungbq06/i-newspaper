@@ -87,7 +87,7 @@ class SiteController extends Controller
 		// $crawler->getTruyen18();
 		// $crawler->fixTruyen18();
 		// $crawler->getMonngon();
-		// $crawler->getGoTech();
+		$crawler->getGoTech();
 		
 		// $crawler->getVnexpressVideo();
 		// $crawler->getTvCalendar();
@@ -99,7 +99,40 @@ class SiteController extends Controller
 		
         // $this->parseEbooks();
 		
-		$crawler->getRadioOnline();
+		// $crawler->getRadioOnline();
+		// $crawler->getSachnoi();
+		// $crawler->getWallpaper();
+		// $crawler->getWallpaper3();
+		// $crawler->getWallpaper2();
+		// $crawler->getComic();
+		// Comic::model()->fixComic();
+		// Comic::model()->createDownloadedFile();
+		// Comic::model()->getFirstChar();
+        // $crawler->fixComic();
+		
+		/*$memcache = new Memcache; // instantiating memcache extension class
+		$memcache->connect("localhost",11211); // try 127.0.0.1 instead of localhost
+											   // if it is not working
+	 
+		echo "Server's version: " . $memcache->getVersion() . "<br />\n";
+	 
+		// we will create an array which will be stored in cache serialized
+		$testArray = array('horse', 'cow', 'pig');
+		$tmp       = serialize($testArray);
+	 
+		$memcache->add("key", $tmp, 30);
+	 
+		echo "Data from the cache:<br />\n";
+		print_r(unserialize($memcache->get("key")));*/
+		
+		// $sql = "SELECT * FROM bank_atm";
+		// $rows = Yii::app()->db->createCommand($sql)->queryAll();
+		// foreach ($rows as $row) {
+			// $id = $row['id'];
+			// $location = Utility::composite2Unicode(trim($row['location']));
+			// $sql = "UPDATE bank_atm SET location = '$location' WHERE id = $id";
+			// Yii::app()->db->createCommand($sql)->execute();
+		// }
         
 		die('Hello world');
 		$this->render('index');

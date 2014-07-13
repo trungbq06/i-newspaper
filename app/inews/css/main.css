@@ -227,3 +227,15 @@ div.search-form
 {
 	background: #80CFFF;
 }
+
+.even {
+	background-color: #EDEDED;
+}
+
+table tr:hover {
+	background-color: #D3EBB9;
+}
+
+table {
+	max-width: 100%;
+}

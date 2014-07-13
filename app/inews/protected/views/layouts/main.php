@@ -13,8 +13,9 @@
 
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
-
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="/js/jquery.json.js"></script>
+	<title>TopApp Corporation</title>
 </head>
 
 <body>
@@ -22,9 +23,9 @@
 <div class="container" id="page">
 
 	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
+		<div id="logo">TopApp Corporation</div>
 	</div><!-- header -->
-
+	<!--
 	<div id="mainmenu">
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
@@ -45,9 +46,8 @@
 	<?php echo $content; ?>
 
 	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
+		Copyright &copy; <?php echo date('Y'); ?> by TopApp Corporation.<br/>
 		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
 	</div><!-- footer -->
 
 </div><!-- page -->
